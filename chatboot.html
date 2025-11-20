@@ -3471,16 +3471,16 @@
         return subjects; 
       } 
       
-      // Função para calcular intervalo baseado em desempenho 
+     // Função para calcular intervalo baseado em desempenho 
       getPerformanceBasedInterval(accuracy) { 
         accuracy = Math.max(0, Math.min(100, accuracy)); 
         
-        if (accuracy >= 100) return 30; 
-        if (accuracy >= 80) return 25; 
-        if (accuracy >= 60) return 15; 
-        if (accuracy >= 40) return 7; 
-        return 3; 
-      } 
+        if (accuracy >= 100) return 12;  // novo máximo
+        if (accuracy >= 80) return 9;    // intermediário alto
+        if (accuracy >= 60) return 6;    // intermediário médio
+        if (accuracy >= 40) return 3;    // intermediário baixo
+        return 1;                        // novo mínimo
+      }
       
       // Algoritmo SM-2 
       calculateNextReviewSM2(q, currentEF, currentInterval, repetitions) { 
