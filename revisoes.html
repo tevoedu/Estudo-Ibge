@@ -1711,18 +1711,18 @@
             showToast("Não foi possível restaurar os dados. Iniciando novo sistema.");
         }
         
-        // Função para calcular intervalo baseado em desempenho
-        function getPerformanceBasedInterval(accuracy) {
-            // Limitar a precisão entre 0 e 100
-            accuracy = Math.max(0, Math.min(100, accuracy));
-            
-            // Definir intervalos conforme solicitação
-            if (accuracy >= 100) return 30;
-            if (accuracy >= 80) return 25;
-            if (accuracy >= 60) return 15;
-            if (accuracy >= 40) return 7;
-            return 3; // Para qualquer percentual abaixo de 40
-        }
+         // Função para calcular intervalo baseado em desempenho
+function getPerformanceBasedInterval(accuracy) {
+    // Limitar a precisão entre 0 e 100
+    accuracy = Math.max(0, Math.min(100, accuracy));
+    
+    // Definir intervalos conforme solicitação
+    if (accuracy >= 100) return 12;   // Máximo de 12 dias
+    if (accuracy >= 80) return 10;
+    if (accuracy >= 60) return 7;
+    if (accuracy >= 40) return 4;
+    return 2; // Mínimo de 2 dias para percentual abaixo de 40
+}
         
         // Algoritmo SM-2 modificado (corrigido)
         function calculateNextReviewSM2(q, currentEF, currentInterval, repetitions) {
