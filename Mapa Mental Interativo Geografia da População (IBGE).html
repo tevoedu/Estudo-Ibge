@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Mental: Geografia da População (IBGE)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f7ff;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .concept-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 6px solid;
+        }
+        
+        .concept-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .card-icon {
+            font-size: 2rem;
+            margin-right: 15px;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            color: #1e3c72;
+            font-weight: 700;
+        }
+        
+        .card-content {
+            margin-bottom: 15px;
+        }
+        
+        .card-subtitle {
+            font-weight: 600;
+            color: #2a5298;
+            margin: 15px 0 8px 0;
+            font-size: 1.1rem;
+        }
+        
+        .card-list {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .card-list li {
+            margin-bottom: 8px;
+            position: relative;
+        }
+        
+        .card-list li::before {
+            content: "•";
+            color: #2a5298;
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .comparison-table th {
+            background-color: #2a5298;
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+        }
+        
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .comparison-table tr:hover {
+            background-color: #f0f7ff;
+        }
+        
+        .pyramid-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 200px;
+            margin: 20px 0;
+            gap: 20px;
+        }
+        
+        .pyramid {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 120px;
+        }
+        
+        .pyramid-base {
+            width: 100%;
+            background-color: #ff9966;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .pyramid-middle {
+            width: 80%;
+            background-color: #ffcc66;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .pyramid-top {
+            width: 50%;
+            background-color: #66cc99;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border-radius: 0 0 5px 5px;
+        }
+        
+        .pyramid-label {
+            margin-top: 10px;
+            font-weight: 600;
+            color: #2a5298;
+        }
+        
+        .data-highlight {
+            background-color: #e6f7ff;
+            border-left: 4px solid #2a5298;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .highlight-title {
+            font-weight: 700;
+            color: #1e3c72;
+            margin-bottom: 8px;
+        }
+        
+        .color-box {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+        }
+        
+        .phase-container {
+            display: flex;
+            flex-direction: column;
+            margin: 20px 0;
+        }
+        
+        .phase {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 12px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 5px solid;
+        }
+        
+        .phase-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background-color: #2a5298;
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .phase-content {
+            flex-grow: 1;
+        }
+        
+        .phase-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #1e3c72;
+        }
+        
+        .key-points {
+            background-color: #fff9e6;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 40px;
+            border: 2px dashed #ffcc66;
+        }
+        
+        .key-points-title {
+            font-size: 1.6rem;
+            color: #e67e22;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .key-point {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .key-point-icon {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .pyramid-container {
+                flex-direction: column;
+                align-items: center;
+                height: auto;
+            }
+            
+            .pyramid {
+                width: 80%;
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🧠 Geografia da População</h1>
+        <p class="subtitle">Mapa Mental Completo - Conteúdo baseado no material do IBGE</p>
+    </header>
+    
+    <div class="main-grid">
+        <!-- Card 1: Conceitos Básicos -->
+        <div class="concept-card" style="border-color: #3498db;">
+            <div class="card-header">
+                <div class="card-icon">📍</div>
+                <h2 class="card-title">Conceitos Básicos</h2>
+            </div>
+            <div class="card-content">
+                <div class="card-subtitle">População Absoluta</div>
+                <p>Número total de habitantes de uma área.</p>
+                <ul class="card-list">
+                    <li>Base para planejamento urbano</li>
+                    <li>Distribuição de recursos públicos</li>
+                    <li>Obtido com precisão através de censos</li>
+                </ul>
+                
+                <div class="card-subtitle">População Relativa (Densidade Demográfica)</div>
+                <p>Relação entre população absoluta e área do território (hab/km²).</p>
+                <ul class="card-list">
+                    <li>Revela distribuição espacial da população</li>
+                    <li>Indica desequilíbrios regionais</li>
+                </ul>
+                
+                <div class="data-highlight">
+                    <div class="highlight-title">Densidade Demográfica no Brasil</div>
+                    <p>Média: 23,8 hab/km² - Esconde concentração no litoral e grandes centros urbanos.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Card 2: Dinâmica Demográfica -->
+        <div class="concept-card" style="border-color: #2ecc71;">
+            <div class="card-header">
+                <div class="card-icon">📊</div>
+                <h2 class="card-title">Dinâmica Demográfica</h2>
+            </div>
+            <div class="card-content">
+                <div class="card-subtitle">Crescimento Populacional</div>
+                <ul class="card-list">
+                    <li><strong>Crescimento Vegetativo:</strong> TN - TM (taxa de natalidade menos taxa de mortalidade)</li>
+                    <li><strong>Crescimento Total:</strong> CV + Saldo Migratório</li>
+                </ul>
+                
+                <div class="card-subtitle">Taxas Demográficas</div>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Taxa</th>
+                            <th>O que mede</th>
+                            <th>Fórmula/Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Natalidade</td>
+                            <td>Nascimentos por mil habitantes/ano</td>
+                            <td>(nascimentos / habitantes) × 1000</td>
+                        </tr>
+                        <tr>
+                            <td>Mortalidade</td>
+                            <td>Óbitos por mil habitantes/ano</td>
+                            <td>(óbitos / habitantes) × 1000</td>
+                        </tr>
+                        <tr>
+                            <td>Fecundidade</td>
+                            <td>Nº médio de filhos por mulher</td>
+                            <td>Brasil: 1,76 filhos/mulher</td>
+                        </tr>
+                        <tr>
+                            <td>Expectativa de Vida</td>
+                            <td>Média de anos que uma pessoa pode viver</td>
+                            <td>Brasil: ~76 anos (1950: ~50 anos)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="data-highlight">
+                    <div class="highlight-title">Nível de Reposição</div>
+                    <p>Taxa de fecundidade necessária para manter população estável: <strong>2,1 filhos por mulher</strong></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Card 3: Transição Demográfica -->
+        <div class="concept-card" style="border-color: #e74c3c;">
+            <div class="card-header">
+                <div class="card-icon">📈</div>
+                <h2 class="card-title">Transição Demográfica</h2>
+            </div>
+            <div class="card-content">
+                <div class="phase-container">
+                    <div class="phase" style="border-color: #e74c3c;">
+                        <div class="phase-number">1</div>
+                        <div class="phase-content">
+                            <div class="phase-title">Pré-transição</div>
+                            <p>Altas taxas de natalidade e mortalidade. Crescimento lento ou nulo.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="phase" style="border-color: #f39c12;">
+                        <div class="phase-number">2</div>
+                        <div class="phase-content">
+                            <div class="phase-title">Transição Inicial</div>
+                            <p>Queda da mortalidade, natalidade alta. "Boom demográfico".</p>
+                        </div>
+                    </div>
+                    
+                    <div class="phase" style="border-color: #3498db;">
+                        <div class="phase-number">3</div>
+                        <div class="phase-content">
+                            <div class="phase-title">Transição Plena</div>
+                            <p>Queda da natalidade, crescimento mais lento.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="phase" style="border-color: #2ecc71;">
+                        <div class="phase-number">4</div>
+                        <div class="phase-content">
+                            <div class="phase-title">Pós-transição</div>
+                            <p>Baixas taxas de natalidade e mortalidade. Estabilização ou declínio populacional.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-subtitle">Fatores que Influenciam</div>
+                <ul class="card-list">
+                    <li>Urbanização</li>
+                    <li>Escolarização feminina</li>
+                    <li>Acesso a contraceptivos</li>
+                    <li>Inserção da mulher no mercado de trabalho</li>
+                </ul>
+                
+                <div class="data-highlight">
+                    <div class="highlight-title">Brasil: Transição Rápida</div>
+                    <p>1950-60: Fase 2 (alto crescimento) → 1980: Fase 3 → Hoje: Aproxima-se da Fase 4.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Card 4: Distribuição e Estrutura -->
+        <div class="concept-card" style="border-color: #9b59b6;">
+            <div class="card-header">
+                <div class="card-icon">🏙️</div>
+                <h2 class="card-title">Distribuição e Estrutura</h2>
+            </div>
+            <div class="card-content">
+                <div class="card-subtitle">Distribuição no Brasil</div>
+                <ul class="card-list">
+                    <li><strong>Mais de 80%</strong> em áreas urbanas</li>
+                    <li>Concentração no Sudeste e Nordeste (litoral)</li>
+                    <li>Macrocefalia urbana: poucas cidades concentram população e economia</li>
+                </ul>
+                
+                <div class="card-subtitle">Pirâmides Populacionais</div>
+                
+                <div class="pyramid-container">
+                    <div class="pyramid">
+                        <div class="pyramid-top">Idosos</div>
+                        <div class="pyramid-middle">Adultos</div>
+                        <div class="pyramid-base">Jovens</div>
+                        <div class="pyramid-label">Países Desenvolvidos</div>
+                    </div>
+                    
+                    <div class="pyramid">
+                        <div class="pyramid-base" style="height: 80px;">Jovens</div>
+                        <div class="pyramid-middle" style="height: 40px;">Adultos</div>
+                        <div class="pyramid-top" style="height: 20px;">Idosos</div>
+                        <div class="pyramid-label">Países em Desenvolvimento</div>
+                    </div>
+                </div>
+                
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="color-box" style="background-color: #ff9966;"></div>
+                        <span>Jovens (0-14 anos)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="color-box" style="background-color: #ffcc66;"></div>
+                        <span>Adultos (15-64 anos)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="color-box" style="background-color: #66cc99;"></div>
+                        <span>Idosos (65+ anos)</span>
+                    </div>
+                </div>
+                
+                <div class="data-highlight">
+                    <div class="highlight-title">Brasil: Estrutura Híbrida</div>
+                    <p><strong>Sul/Sudeste:</strong> similar a países desenvolvidos (base mais estreita)</p>
+                    <p><strong>Norte/Nordeste:</strong> estrutura mais jovem (base mais larga)</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Card 5: Movimentos Populacionais -->
+        <div class="concept-card" style="border-color: #e67e22;">
+            <div class="card-header">
+                <div class="card-icon">🔄</div>
+                <h2 class="card-title">Movimentos Populacionais</h2>
+            </div>
+            <div class="card-content">
+                <div class="card-subtitle">Tipos de Movimentos</div>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Características</th>
+                            <th>Exemplo no Brasil</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Êxodo Rural</td>
+                            <td>Mecanização do campo → cidades</td>
+                            <td>1950-1980: Industrialização</td>
+                        </tr>
+                        <tr>
+                            <td>Movimento Pendular</td>
+                            <td>Deslocamento diário periferia-centro</td>
+                            <td>São Paulo, Rio, BH</td>
+                        </tr>
+                        <tr>
+                            <td>Transumância</td>
+                            <td>Movimento sazonal por ciclos naturais</td>
+                            <td>Criadores de gado no sertão</td>
+                        </tr>
+                        <tr>
+                            <td>Nomadismo</td>
+                            <td>Tradicional ou moderno/involuntário</td>
+                            <td>Povos indígenas; sem-terra</td>
+                        </tr>
+                        <tr>
+                            <td>Êxodo Urbano</td>
+                            <td>Saída de grandes cidades (pós-pandemia)</td>
+                            <td>Classe média para cidades médias</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="card-subtitle">Consequências Sociais</div>
+                <ul class="card-list">
+                    <li>Segregação socioespacial</li>
+                    <li>Sobrecarga urbana</li>
+                    <li>Perda de horas em deslocamentos</li>
+                    <li>Ciclos de pobreza</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Card 6: Envelhecimento Populacional -->
+        <div class="concept-card" style="border-color: #1abc9c;">
+            <div class="card-header">
+                <div class="card-icon">🧓</div>
+                <h2 class="card-title">Envelhecimento Populacional</h2>
+            </div>
+            <div class="card-content">
+                <div class="card-subtitle">Causas</div>
+                <ul class="card-list">
+                    <li>Queda da natalidade</li>
+                    <li>Aumento da expectativa de vida</li>
+                </ul>
+                
+                <div class="card-subtitle">Consequências</div>
+                <ul class="card-list">
+                    <li>Pressão sobre previdência e saúde</li>
+                    <li>Escassez de mão de obra</li>
+                    <li>Mudança nos padrões de consumo</li>
+                    <li>Adaptação urbana necessária</li>
+                </ul>
+                
+                <div class="card-subtitle">Respostas Possíveis</div>
+                <ul class="card-list">
+                    <li>Reforma previdenciária (aumento idade mínima)</li>
+                    <li>Incentivo à natalidade</li>
+                    <li>Migração seletiva</li>
+                    <li>Promoção do envelhecimento ativo</li>
+                </ul>
+                
+                <div class="data-highlight">
+                    <div class="highlight-title">Envelhecimento Precoce no Brasil</div>
+                    <p>Envelhece rapidamente sem desenvolvimento econômico/institucional adequado para lidar com essa realidade.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Card 7: PEA e PEI -->
+        <div class="concept-card" style="border-color: #34495e;">
+            <div class="card-header">
+                <div class="card-icon">💼</div>
+                <h2 class="card-title">PEA e PEI</h2>
+            </div>
+            <div class="card-content">
+                <div class="card-subtitle">Definições</div>
+                <ul class="card-list">
+                    <li><strong>PEA:</strong> População Economicamente Ativa (trabalha ou busca emprego)</li>
+                    <li><strong>PEI:</strong> População Economicamente Inativa (fora do mercado)</li>
+                </ul>
+                
+                <div class="card-subtitle">Desafios no Brasil</div>
+                <ul class="card-list">
+                    <li>Alta informalidade</li>
+                    <li>Desemprego estrutural</li>
+                    <li>Jovens "nem-nem" (não estudam nem trabalham)</li>
+                    <li>Desigualdade de gênero na PEA</li>
+                </ul>
+                
+                <div class="card-subtitle">Mulheres na PEA</div>
+                <ul class="card-list">
+                    <li>Maiores dificuldades de inserção</li>
+                    <li>Salários menores (2021: 20,5% menos que homens)</li>
+                    <li>Conciliação trabalho remunerado + cuidados domésticos</li>
+                </ul>
+                
+                <div class="data-highlight">
+                    <div class="highlight-title">Fluidez da Classificação</div>
+                    <p>Transformações sociais e econômicas podem fazer pessoas desistirem de procurar emprego (inativas), mesmo em idade de trabalhar.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Card 8: Contextos Internacionais -->
+        <div class="concept-card" style="border-color: #16a085;">
+            <div class="card-header">
+                <div class="card-icon">🌍</div>
+                <h2 class="card-title">Contextos Internacionais</h2>
+            </div>
+            <div class="card-content">
+                <div class="card-subtitle">Países Desenvolvidos</div>
+                <ul class="card-list">
+                    <li>Baixa natalidade, envelhecimento</li>
+                    <li>Crescimento próximo de zero ou negativo</li>
+                    <li>Políticas pró-natalidade</li>
+                    <li>Imigração seletiva</li>
+                    <li>Ex.: Japão, Alemanha, Itália</li>
+                </ul>
+                
+                <div class="card-subtitle">Países em Desenvolvimento</div>
+                <ul class="card-list">
+                    <li>Natalidade mais alta</li>
+                    <li>Crescimento acelerado</li>
+                    <li>Estrutura jovem</li>
+                    <li>Políticas de planejamento familiar</li>
+                    <li>Ex.: Nigéria, Índia, Brasil</li>
+                </ul>
+                
+                <div class="card-subtitle">Densidade vs. Desenvolvimento</div>
+                <p>Não é indicador direto:</p>
+                <ul class="card-list">
+                    <li><strong>Alta densidade + desenvolvidos:</strong> Países Baixos</li>
+                    <li><strong>Alta densidade + em desenvolvimento:</strong> Bangladesh</li>
+                    <li><strong>Baixa densidade + desenvolvidos:</strong> Canadá, Austrália</li>
+                    <li><strong>Baixa densidade + em desenvolvimento:</strong> vários países africanos</li>
+                </ul>
+                
+                <div class="data-highlight">
+                    <div class="highlight-title">Dados ONU 2024</div>
+                    <p><strong>País mais populoso:</strong> Índia (1.444.436 mil hab.)</p>
+                    <p><strong>Projeção China 2100:</strong> Queda drástica (1.420.909 mil → 638.685 mil)</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Card 9: Interpretação de Dados -->
+        <div class="concept-card" style="border-color: #8e44ad;">
+            <div class="card-header">
+                <div class="card-icon">🧩</div>
+                <h2 class="card-title">Interpretação de Dados</h2>
+            </div>
+            <div class="card-content">
+                <div class="card-subtitle">Importância da Análise Contextual</div>
+                <p>Dados devem ser lidos com contexto social, econômico e cultural:</p>
+                <ul class="card-list">
+                    <li>Revelam transformações sociais</li>
+                    <li>Mostram desigualdades</li>
+                    <li>Apontam necessidades específicas</li>
+                </ul>
+                
+                <div class="card-subtitle">Aplicações</div>
+                <ul class="card-list">
+                    <li><strong>Governos:</strong> Planejamento de políticas públicas (saúde, educação, infraestrutura)</li>
+                    <li><strong>Empresas:</strong> Estratégias de mercado, planejamento de força de trabalho</li>
+                    <li><strong>Sociedade civil:</strong> Defesa de direitos, mobilização por mudanças</li>
+                </ul>
+                
+                <div class="card-subtitle">Taxas como Retrato Social</div>
+                <p>As taxas demográficas revelam aspectos profundos da vida social, econômica e cultural:</p>
+                <ul class="card-list">
+                    <li>Condições de saúde</li>
+                    <li>Papel da mulher na sociedade</li>
+                    <li>Estrutura etária</li>
+                    <li>Políticas públicas</li>
+                    <li>Visões de mundo predominantes</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Seção de Pontos-Chave -->
+    <div class="key-points">
+        <h2 class="key-points-title">✅ Resumo das Ideias-Chave</h2>
+        
+        <div class="key-point">
+            <div class="key-point-icon">📌</div>
+            <div>
+                <p><strong>População = número + distribuição + estrutura + dinâmica</strong></p>
+                <p>Análise completa requer considerar todos esses aspectos interligados.</p>
+            </div>
+        </div>
+        
+        <div class="key-point">
+            <div class="key-point-icon">🔄</div>
+            <div>
+                <p><strong>Transição demográfica explica mudanças nas taxas ao longo do tempo</strong></p>
+                <p>Modelo teórico que ajuda a entender evolução das populações.</p>
+            </div>
+        </div>
+        
+        <div class="key-point">
+            <div class="key-point-icon">🧓</div>
+            <div>
+                <p><strong>Envelhecimento é um desafio global</strong></p>
+                <p>Com impactos econômicos (previdência) e sociais (saúde, cuidados).</p>
+            </div>
+        </div>
+        
+        <div class="key-point">
+            <div class="key-point-icon">🚶‍♂️</div>
+            <div>
+                <p><strong>Movimentos populacionais refletem e reforçam desigualdades</strong></p>
+                <p>Êxodo rural, movimento pendular, migrações têm causas e consequências sociais.</p>
+            </div>
+        </div>
+        
+        <div class="key-point">
+            <div class="key-point-icon">⚖️</div>
+            <div>
+                <p><strong>Políticas devem ser adaptadas a cada realidade demográfica</strong></p>
+                <p>Não existe solução única; contexto regional e local é fundamental.</p>
+            </div>
+        </div>
+        
+        <div class="key-point">
+            <div class="key-point-icon">📊</div>
+            <div>
+                <p><strong>Dados demográficos são ferramentas para planejamento e justiça social</strong></p>
+                <p>Permitem antecipar necessidades e criar soluções adequadas.</p>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 25px; font-size: 1.1rem; color: #1e3c72; font-weight: 600;">
+            🎯 <em>Objetivo do estudo demográfico: Compreender as mudanças populacionais para planejar um futuro mais equilibrado, justo e sustentável.</em>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Mapa Mental de Geografia da População - Baseado em conteúdo do IBGE</p>
+        <p>Desenvolvido para fins educacionais • Todos os conceitos explicados de forma didática</p>
+    </footer>
+</body>
+</html>

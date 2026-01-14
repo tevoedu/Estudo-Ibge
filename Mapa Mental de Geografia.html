@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Mental - Geografia IBGE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #3949ab 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-left: 10px solid #ff9800;
+        }
+        
+        h1 {
+            color: #1a237e;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        h1 i {
+            color: #ff9800;
+        }
+        
+        .subtitle {
+            color: #5c6bc0;
+            font-size: 1.4rem;
+            font-weight: 500;
+        }
+        
+        .mind-map {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .branch {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-top: 6px solid;
+        }
+        
+        .branch:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+        
+        .branch-1 { border-color: #ff5722; }
+        .branch-2 { border-color: #4caf50; }
+        .branch-3 { border-color: #2196f3; }
+        .branch-4 { border-color: #9c27b0; }
+        .branch-5 { border-color: #ff9800; }
+        .branch-6 { border-color: #009688; }
+        .branch-7 { border-color: #673ab7; }
+        .branch-8 { border-color: #3f51b5; }
+        
+        .branch-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+        }
+        
+        .branch-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.8rem;
+            color: white;
+        }
+        
+        .branch-1 .branch-icon { background: #ff5722; }
+        .branch-2 .branch-icon { background: #4caf50; }
+        .branch-3 .branch-icon { background: #2196f3; }
+        .branch-4 .branch-icon { background: #9c27b0; }
+        .branch-5 .branch-icon { background: #ff9800; }
+        .branch-6 .branch-icon { background: #009688; }
+        .branch-7 .branch-icon { background: #673ab7; }
+        .branch-8 .branch-icon { background: #3f51b5; }
+        
+        .branch-title {
+            font-size: 1.6rem;
+            color: #1a237e;
+            font-weight: 700;
+        }
+        
+        .branch-content {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .sub-topic {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 4px solid;
+            transition: background 0.3s;
+        }
+        
+        .sub-topic:hover {
+            background: #f0f0f0;
+        }
+        
+        .branch-1 .sub-topic { border-left-color: #ff5722; }
+        .branch-2 .sub-topic { border-left-color: #4caf50; }
+        .branch-3 .sub-topic { border-left-color: #2196f3; }
+        .branch-4 .sub-topic { border-left-color: #9c27b0; }
+        .branch-5 .sub-topic { border-left-color: #ff9800; }
+        .branch-6 .sub-topic { border-left-color: #009688; }
+        .branch-7 .sub-topic { border-left-color: #673ab7; }
+        .branch-8 .sub-topic { border-left-color: #3f51b5; }
+        
+        .sub-topic-title {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .sub-topic-title i {
+            font-size: 1rem;
+        }
+        
+        .sub-topic-content {
+            color: #555;
+            font-size: 0.95rem;
+        }
+        
+        .sub-topic-content ul {
+            padding-left: 20px;
+        }
+        
+        .sub-topic-content li {
+            margin-bottom: 5px;
+        }
+        
+        .highlight {
+            background-color: #fffde7;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        .mneumonic {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 0 6px 6px 0;
+            font-style: italic;
+        }
+        
+        .mneumonic i {
+            color: #4caf50;
+            margin-right: 8px;
+        }
+        
+        .concept-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .concept-table th, .concept-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        .concept-table th {
+            background-color: #f2f2f2;
+            font-weight: 600;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        @media (max-width: 1200px) {
+            .mind-map {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .mind-map {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .branch {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-globe-americas"></i> Mapa Mental - Geografia IBGE</h1>
+            <p class="subtitle">Caderno de Erros - Conteúdo Completo e Organizado</p>
+        </header>
+        
+        <div class="mind-map">
+            <!-- RAMO 1: COORDENADAS GEOGRÁFICAS -->
+            <div class="branch branch-1">
+                <div class="branch-header">
+                    <div class="branch-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <h2 class="branch-title">Coordenadas Geográficas</h2>
+                </div>
+                <div class="branch-content">
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-ruler"></i> Latitude</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li>Distância angular em relação ao <span class="highlight">Equador (0°)</span></li>
+                                <li>Varia de <span class="highlight">0° a 90° N ou S</span></li>
+                                <li>Determina posição norte-sul</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-ruler-combined"></i> Longitude</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li>Distância angular em relação a <span class="highlight">Greenwich (0°)</span></li>
+                                <li>Varia de <span class="highlight">0° a 180° E ou W</span></li>
+                                <li>Determina posição leste-oeste</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-edit"></i> Representação Correta</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li>Formato: <span class="highlight">Latitude (N/S)</span> primeiro, depois <span class="highlight">Longitude (E/W)</span></li>
+                                <li>Exemplo: <span class="highlight">20°N, 40°W</span></li>
+                                <li>❌ Erro comum: trocar direções (ex: "latitude leste")</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-globe"></i> Linhas de Referência</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li><span class="highlight">Paralelos</span>: círculos paralelos ao Equador</li>
+                                <li><span class="highlight">Meridianos</span>: semicírculos de polo a polo</li>
+                                <li>Hemisférios: Brasil está totalmente no <span class="highlight">Hemisfério Ocidental</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mneumonic">
+                        <i class="fas fa-lightbulb"></i> <strong>Macete:</strong> "Latitude N/S, Longitude E/W - nunca troque!"
+                    </div>
+                </div>
+            </div>
+            
+            <!-- RAMO 2: CARTOGRAFIA -->
+            <div class="branch branch-2">
+                <div class="branch-header">
+                    <div class="branch-icon"><i class="fas fa-map"></i></div>
+                    <h2 class="branch-title">Cartografia</h2>
+                </div>
+                <div class="branch-content">
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-list-alt"></i> Elementos Obrigatórios</div>
+                        <div class="sub-topic-content">
+                            Título, Legenda, Orientação, Escala, Fonte
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-balance-scale"></i> Escala Cartográfica</div>
+                        <div class="sub-topic-content">
+                            <table class="concept-table">
+                                <tr>
+                                    <th>Escala Grande (ex: 1:1.000)</th>
+                                    <th>Escala Pequena (ex: 1:10.000.000)</th>
+                                </tr>
+                                <tr>
+                                    <td>Denominador pequeno</td>
+                                    <td>Denominador grande</td>
+                                </tr>
+                                <tr>
+                                    <td>Área representada: MENOR</td>
+                                    <td>Área representada: MAIOR</td>
+                                </tr>
+                                <tr>
+                                    <td>Nível de detalhe: MAIOR</td>
+                                    <td>Nível de detalhe: MENOR</td>
+                                </tr>
+                                <tr>
+                                    <td>Ex: mapa de bairro</td>
+                                    <td>Ex: mapa-múndi</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-layer-group"></i> Tipos de Mapas Temáticos</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li><span class="highlight">Hipsométrico</span>: altitudes (cores)</li>
+                                <li><span class="highlight">Batimétrico</span>: profundidades de corpos d'água</li>
+                                <li><span class="highlight">Cartograma</span>: distorce áreas para dados estatísticos</li>
+                                <li><span class="highlight">Político-administrativo</span>: limites de países/estados</li>
+                                <li><span class="highlight">Hidrográfico</span>: rios e bacias</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mneumonic">
+                        <i class="fas fa-lightbulb"></i> <strong>Macete:</strong> "Escala GRANDE = Detalhe GRANDE = Área PEQUENA"
+                    </div>
+                </div>
+            </div>
+            
+            <!-- RAMO 3: GEOGRAFIA FÍSICA E AMBIENTAL -->
+            <div class="branch branch-3">
+                <div class="branch-header">
+                    <div class="branch-icon"><i class="fas fa-mountain"></i></div>
+                    <h2 class="branch-title">Geografia Física e Ambiental</h2>
+                </div>
+                <div class="branch-content">
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-tree"></i> Biomas Brasileiros</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li><span class="highlight">Cerrado</span> (Savana brasileira)</li>
+                                <li><span class="highlight">Amazônia</span> (Floresta Ombrófila = "que ama chuva")</li>
+                                <li><span class="highlight">Pampa</span> (campos temperados no RS)</li>
+                                <li><span class="highlight">Caatinga</span> (Savana Estépica)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-water"></i> Vegetação Amazônica</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li><span class="highlight">Igapó</span>: alagado PERMANENTE</li>
+                                <li><span class="highlight">Várzea</span>: alagado SAZONAL (cheias)</li>
+                                <li><span class="highlight">Terra Firme</span>: NUNCA alaga</li>
+                                <li>Diversidade: Terra Firme > Várzea > Igapó</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-cloud-sun"></i> Clima e Fenômenos</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li><span class="highlight">Friagem</span>: invasão de massa polar na Amazônia</li>
+                                <li>Fatores do Centro-Oeste: Continentalidade, Massas de Ar, Latitude Tropical</li>
+                                <li>Correntes Marítimas: Fria = SECA; Quente = CHUVA</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-tint"></i> Recursos Hídricos</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li>Setor Agrícola: maior consumidor global (≈70%)</li>
+                                <li>Industrial: ≈20%, Doméstico: ≈10%</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mneumonic">
+                        <i class="fas fa-lightbulb"></i> <strong>Macete:</strong> "Savana Brasileira = Cerrado"
+                    </div>
+                </div>
+            </div>
+            
+            <!-- RAMO 4: GEOGRAFIA HUMANA -->
+            <div class="branch branch-4">
+                <div class="branch-header">
+                    <div class="branch-icon"><i class="fas fa-users"></i></div>
+                    <h2 class="branch-title">Geografia Humana</h2>
+                </div>
+                <div class="branch-content">
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-city"></i> Processos Urbanos</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li><span class="highlight">Gentrificação</span>: revitalização + elitização</li>
+                                <li><span class="highlight">Metropolização</span>: formação de região metropolitana</li>
+                                <li><span class="highlight">Conurbação</span>: fusão física de cidades</li>
+                                <li><span class="highlight">Megalópolis</span>: conurbação de duas ou mais metrópoles</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-chart-line"></i> Demografia</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li><span class="highlight">Transição Demográfica</span> (Brasil: "acentuada e rápida")</li>
+                                <li>Fase 1: alta natalidade e mortalidade</li>
+                                <li>Fase 2: mortalidade cai, natalidade alta (explosão)</li>
+                                <li>Fase 3: natalidade cai (desacelera)</li>
+                                <li>Fase 4: ambas baixas (envelhecimento)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-chart-bar"></i> Indicadores Demográficos</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li><span class="highlight">Densidade Demográfica</span>: hab/km²</li>
+                                <li><span class="highlight">Crescimento Vegetativo</span>: nascimentos - mortes</li>
+                                <li><span class="highlight">Taxa de Fecundidade</span>: filhos por mulher</li>
+                                <li><span class="highlight">Taxa de Urbanização</span>: % em áreas urbanas</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-exchange-alt"></i> Migração</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li><span class="highlight">Êxodo Rural</span>: mudança definitiva campo→cidade</li>
+                                <li><span class="highlight">Migração Pendular</span>: deslocamento regular</li>
+                                <li><span class="highlight">Solicitante de Refúgio</span>: busca documentação, integração</li>
+                                <li><span class="highlight">Transumância</span>: movimento sazonal com rebanhos</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mneumonic">
+                        <i class="fas fa-lightbulb"></i> <strong>Macete:</strong> "Morte Cai, Nascimento Atrasado, População Envelhece"
+                    </div>
+                </div>
+            </div>
+            
+            <!-- RAMO 5: GEOGRAFIA ECONÔMICA -->
+            <div class="branch branch-5">
+                <div class="branch-header">
+                    <div class="branch-icon"><i class="fas fa-chart-pie"></i></div>
+                    <h2 class="branch-title">Geografia Econômica</h2>
+                </div>
+                <div class="branch-content">
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-industry"></i> Setores Econômicos</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li><span class="highlight">Primário</span>: extração/coleta (agricultura, mineração)</li>
+                                <li><span class="highlight">Secundário</span>: transformação (indústria)</li>
+                                <li><span class="highlight">Terciário</span>: serviços (comércio, transporte, educação)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-bolt"></i> Matriz Energética</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li><span class="highlight">Brasil</span>: muito renovável (hidrelétrica, biomassa, eólica, solar)</li>
+                                <li><span class="highlight">Mundial</span>: predominantemente não renovável (petróleo, carvão, gás)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-seedling"></i> Agricultura e Expansão Territorial</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li><span class="highlight">Soja</span>: Brasil é maior produtor mundial (MT); EUA segundo (Illinois)</li>
+                                <li>Expansão (1980+): borda sul/leste da Amazônia (Cerrado)</li>
+                                <li><span class="highlight">Agricultura familiar</span>: maior contingente no NE</li>
+                                <li><span class="highlight">Revolução Verde</span> (1950+): tecnologia → produtividade ↑</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-truck-moving"></i> Redes de Transporte</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li><span class="highlight">Aéreo</span>: alta conectividade, polarização em SP</li>
+                                <li><span class="highlight">Hidroviário</span>: granéis sólidos (grãos, minérios) - mais barato</li>
+                                <li><span class="highlight">Portos</span>: tendência à regionalização</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mneumonic">
+                        <i class="fas fa-lightbulb"></i> <strong>Macete:</strong> "Primário tira, Secundário transforma, Terciário serve"
+                    </div>
+                </div>
+            </div>
+            
+            <!-- RAMO 6: BRASIL - FORMAÇÃO TERRITORIAL -->
+            <div class="branch branch-6">
+                <div class="branch-header">
+                    <div class="branch-icon"><i class="fas fa-flag"></i></div>
+                    <h2 class="branch-title">Brasil: Formação Territorial</h2>
+                </div>
+                <div class="branch-content">
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-file-contract"></i> Tratados de Limites</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li><span class="highlight">Tordesilhas (1494)</span>: linha meridiana → NÃO respeitado</li>
+                                <li><span class="highlight">Madri (1750)</span>: aplicou "uti possidetis" (posse efetiva)</li>
+                                <li><span class="highlight">Petrópolis (1903)</span>: incorporação do Acre</li>
+                                <li>Princípio: "Ocupação prática precedeu formalização jurídica"</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-map-marked-alt"></i> Regionalização</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li><span class="highlight">IBGE (5 regiões)</span>: político-administrativa</li>
+                                <li><span class="highlight">Geiger (3 complexos)</span>: geoeconômica</li>
+                                <li>Complexos: Amazônia, Centro-Sul, Nordeste</li>
+                                <li>Estado pode estar em mais de 1 complexo (ex: MA, TO, PI, BA, MG, MT)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-history"></i> Formação Territorial</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li>Característica: configuração desigual desde colonização</li>
+                                <li>"História territorial": sociedade se forma a partir da relação com o espaço</li>
+                                <li>Agentes internos: bandeirantes, tropeiros → ocupação prática do interior</li>
+                                <li><span class="highlight">Company towns</span>: núcleos controlados por uma empresa</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-mountain"></i> Geografia Física do Território</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li><span class="highlight">Escudos Cristalinos</span> (36% do território): rochas antigas</li>
+                                <li>Importância econômica: mineração (Quadrilátero Ferrífero, Carajás)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mneumonic">
+                        <i class="fas fa-lightbulb"></i> <strong>Macete:</strong> "Ocupação prática veio antes dos tratados"
+                    </div>
+                </div>
+            </div>
+            
+            <!-- RAMO 7: CONCEITOS GEOGRÁFICOS -->
+            <div class="branch branch-7">
+                <div class="branch-header">
+                    <div class="branch-icon"><i class="fas fa-brain"></i></div>
+                    <h2 class="branch-title">Conceitos Geográficos</h2>
+                </div>
+                <div class="branch-content">
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-map-pin"></i> Espaço Geográfico</div>
+                        <div class="sub-topic-content">
+                            <table class="concept-table">
+                                <tr>
+                                    <th>Conceito</th>
+                                    <th>Definição</th>
+                                </tr>
+                                <tr>
+                                    <td><span class="highlight">Lugar</span></td>
+                                    <td>Espaço com significado afetivo/cultural (experiência vivida)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="highlight">Território</span></td>
+                                    <td>Espaço apropriado/controlado (relações de poder, identidade)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="highlight">Região</span></td>
+                                    <td>Área com características homogêneas (Vidal de La Blache)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="highlight">Territorialidade</span></td>
+                                    <td>Processo de afirmação de controle sobre espaço</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-university"></i> Abordagem de Limonad</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li>Espaço urbano: produção dialética → desigualdade/hierarquia</li>
+                                <li>Desenvolvimento desigual e combinado em diferentes escalas</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-tools"></i> Instrumentos de Monitoramento</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li>Cota do rio: régua linimétrica/linígrafo</li>
+                                <li>Chuva: pluviômetro</li>
+                                <li>Temperatura do ar: termômetro</li>
+                                <li>Temperatura do solo: geotermômetro</li>
+                                <li>Velocidade da corrente: molinete hidrométrico</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- RAMO 8: MACETES E ESTRATÉGIAS -->
+            <div class="branch branch-8">
+                <div class="branch-header">
+                    <div class="branch-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <h2 class="branch-title">Macetes e Estratégias</h2>
+                </div>
+                <div class="branch-content">
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-tasks"></i> Análise de Questões</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li>Identificar palavra-chave da finalidade</li>
+                                <li>Descartar alternativas com erros conceituais graves primeiro</li>
+                                <li>Cruzar informações com mapa/gráfico quando fornecido</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-chart-area"></i> Interpretação de Dados</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li>Gráficos populacionais: diferenciar números absolutos vs. densidade</li>
+                                <li>Tabelas com faixas etárias: envelhecimento = jovens ↓ + idosos ↑</li>
+                                <li>Pirâmides etárias: base larga (jovem) vs. topo largo (envelhecida)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-globe-americas"></i> Relações Globais</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li>Regiões em desenvolvimento: alta fecundidade → crescimento rápido → população jovem</li>
+                                <li>Regiões desenvolvidas: baixa fecundidade → crescimento lento/negativo → população idosa</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <div class="sub-topic-title"><i class="fas fa-hard-hat"></i> Impactos de Grandes Obras</div>
+                        <div class="sub-topic-content">
+                            <ul>
+                                <li>Analisar sempre: dimensão demográfica, econômica, espacial/ambiental, político-cultural</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mneumonic">
+                        <i class="fas fa-lightbulb"></i> <strong>Resumo de Macetes:</strong> "Coordenadas: Latitude N/S, Longitude E/W • Escala: GRANDE detalhe, PEQUENA área • Setores: Primário tira, Secundário transforma, Terciário serve"
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Mapa Mental de Geografia (IBGE) - Caderno de Erros</p>
+            <p>Conteúdo completo e organizado para estudo</p>
+        </footer>
+    </div>
+</body>
+</html>
