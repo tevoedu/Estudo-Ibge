@@ -20,6 +20,14 @@
             --border-light: #333333;
             --success: #10b981;
             --warning: #f59e0b;
+            --error-color: #ef4444;
+            --geo-color: #06b6d4;
+            --portuguese-color: #f59e0b;
+            --legislation-color: #10b981;
+            --security-color: #8b5cf6;
+            --cartography-color: #3b82f6;
+            --brazil-color: #84cc16;
+            --errors-color: #ec4899;
             --radius-lg: 24px;
             --radius-md: 16px;
             --radius-sm: 12px;
@@ -390,7 +398,6 @@
         .file-icon {
             width: 70px;
             height: 70px;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             border-radius: var(--radius-md);
             display: flex;
             align-items: center;
@@ -398,7 +405,7 @@
             color: white;
             font-size: 1.8rem;
             flex-shrink: 0;
-            box-shadow: 0 10px 20px var(--accent-glow);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
 
         .file-title {
@@ -412,12 +419,10 @@
         .file-category {
             display: inline-block;
             padding: 8px 18px;
-            background-color: rgba(124, 58, 237, 0.15);
-            color: var(--accent-primary);
             border-radius: 50px;
             font-size: 0.9rem;
             font-weight: 600;
-            border: 1px solid rgba(124, 58, 237, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .file-info {
@@ -439,7 +444,6 @@
 
         .file-date i {
             font-size: 1rem;
-            color: var(--accent-primary);
         }
 
         .file-size {
@@ -447,7 +451,6 @@
             padding: 10px 20px;
             border-radius: 50px;
             font-weight: 700;
-            color: var(--accent-primary);
             font-size: 0.95rem;
             border: 1px solid var(--border);
         }
@@ -602,6 +605,21 @@
             -webkit-text-fill-color: transparent;
         }
 
+        /* Badge for error notebook */
+        .error-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--errors-color);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         /* Responsive */
         @media (max-width: 1200px) {
             .main-layout {
@@ -732,7 +750,11 @@
                         </div>
                         <div class="filter-option" data-filter="geografia">
                             <i class="fas fa-globe filter-icon"></i>
-                            <span>Geografia</span>
+                            <span>Geografia Geral</span>
+                        </div>
+                        <div class="filter-option" data-filter="brasil">
+                            <i class="fas fa-map-pin filter-icon"></i>
+                            <span>Geografia do Brasil</span>
                         </div>
                         <div class="filter-option" data-filter="cartografia">
                             <i class="fas fa-map filter-icon"></i>
@@ -742,6 +764,10 @@
                             <i class="fas fa-shield-alt filter-icon"></i>
                             <span>Segurança</span>
                         </div>
+                        <div class="filter-option" data-filter="erros">
+                            <i class="fas fa-exclamation-circle filter-icon"></i>
+                            <span>Caderno de Erros</span>
+                        </div>
                     </div>
                 </div>
                 
@@ -749,15 +775,15 @@
                     <div class="stats-title">Estatísticas</div>
                     <div class="stats-grid">
                         <div class="stat-item">
-                            <span class="stat-value">8</span>
+                            <span class="stat-value">13</span>
                             <span class="stat-label">Arquivos</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-value">6</span>
-                            <span class="stat-label">Matérias</span>
+                            <span class="stat-value">8</span>
+                            <span class="stat-label">Categorias</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-value">284</span>
+                            <span class="stat-value">332</span>
                             <span class="stat-label">KB Total</span>
                         </div>
                         <div class="stat-item">
@@ -827,8 +853,18 @@
     </div>
 
     <script>
-        // Files data
+        // Files data - TODOS OS 13 ARQUIVOS
         const files = [
+            {
+                title: "Mapa Mental - Geografia e Formação Territorial do Brasil (Caderno de Erros)",
+                file: "Mapa Mental - Geografia e Formação Territorial do Brasil caderno de erros.html",
+                date: "15/01/2026 02:05",
+                size: "23 KB",
+                category: "erros",
+                icon: "fas fa-exclamation-triangle",
+                color: "#ec4899",
+                isErrorNotebook: true
+            },
             {
                 title: "Mapa Mental Completo Código de Ética do IBGE",
                 file: "Mapa Mental Completo Código de Ética do IBGE.html",
@@ -837,15 +873,6 @@
                 category: "etica",
                 icon: "fas fa-balance-scale",
                 color: "#7c3aed"
-            },
-            {
-                title: "Mapa Mental do Código de Ética do IBGE",
-                file: "Mapa Mental do Código de Ética do IBGE.html",
-                date: "11/01/2026 19:46",
-                size: "26 KB",
-                category: "etica",
-                icon: "fas fa-scale-balanced",
-                color: "#8b5cf6"
             },
             {
                 title: "Mapa Mental Completo Lei 8.112/90",
@@ -866,6 +893,16 @@
                 color: "#f59e0b"
             },
             {
+                title: "Mapa Mental de Cartografia e Coordenadas Geográficas (Caderno de Erros)",
+                file: "Mapa Mental de Cartografia e Coordenadas Geográficas caderno de erros.html",
+                date: "15/01/2026 01:50",
+                size: "25 KB",
+                category: "erros",
+                icon: "fas fa-exclamation-triangle",
+                color: "#ec4899",
+                isErrorNotebook: true
+            },
+            {
                 title: "Mapa Mental de Cartografia e Orientação Geográfica",
                 file: "Mapa Mental de Cartografia e Orientação Geográfica.html",
                 date: "11/01/2026 17:22",
@@ -884,34 +921,75 @@
                 color: "#06b6d4"
             },
             {
-                title: "Mapa Mental Interativo Geografia da População (IBGE)",
-                file: "Mapa Mental Interativo Geografia da População (IBGE).html",
-                date: "11/01/2026 17:27",
-                size: "31 KB",
-                category: "geografia",
-                icon: "fas fa-users",
-                color: "#8b5cf6"
-            },
-            {
                 title: "Mapa Mental de Segurança da Informação",
                 file: "Mapa Mental de Segurança da Informação.html",
                 date: "11/01/2026 17:34",
                 size: "29 KB",
                 category: "seguranca",
                 icon: "fas fa-shield-halved",
-                color: "#ef4444"
+                color: "#8b5cf6"
+            },
+            {
+                title: "Mapa Mental Dinâmica Populacional (Caderno de Erros)",
+                file: "Mapa Mental Dinâmica Populacional caderno de erros.html",
+                date: "15/01/2026 01:56",
+                size: "20 KB",
+                category: "erros",
+                icon: "fas fa-exclamation-triangle",
+                color: "#ec4899",
+                isErrorNotebook: true
+            },
+            {
+                title: "Mapa Mental do Código de Ética do IBGE",
+                file: "Mapa Mental do Código de Ética do IBGE.html",
+                date: "11/01/2026 19:46",
+                size: "26 KB",
+                category: "etica",
+                icon: "fas fa-scale-balanced",
+                color: "#7c3aed"
+            },
+            {
+                title: "Mapa Mental Geografia Física do Brasil (Caderno de Erros)",
+                file: "Mapa Mental Geografia Física do Brasil caderno de erros.html",
+                date: "15/01/2026 01:41",
+                size: "29 KB",
+                category: "erros",
+                icon: "fas fa-exclamation-triangle",
+                color: "#ec4899",
+                isErrorNotebook: true
+            },
+            {
+                title: "Mapa Mental Interativo Geografia da População (IBGE)",
+                file: "Mapa Mental Interativo Geografia da População (IBGE).html",
+                date: "11/01/2026 17:27",
+                size: "31 KB",
+                category: "geografia",
+                icon: "fas fa-users",
+                color: "#06b6d4"
+            },
+            {
+                title: "Mapa Mental Organização do Espaço Brasileiro (Caderno de Erros)",
+                file: "Mapa Mental Organização do Espaço Brasileiro caderno de erros.html",
+                date: "15/01/2026 02:14",
+                size: "26 KB",
+                category: "erros",
+                icon: "fas fa-exclamation-triangle",
+                color: "#ec4899",
+                isErrorNotebook: true
             }
         ];
 
-        // Category data
+        // Category data - ATUALIZADO COM NOVAS CATEGORIAS
         const categories = {
             "all": { name: "Todos os Mapas", color: "#7c3aed" },
             "etica": { name: "Código de Ética", color: "#7c3aed" },
             "legislacao": { name: "Legislação", color: "#10b981" },
             "portugues": { name: "Português", color: "#f59e0b" },
-            "geografia": { name: "Geografia", color: "#06b6d4" },
+            "geografia": { name: "Geografia Geral", color: "#06b6d4" },
+            "brasil": { name: "Geografia do Brasil", color: "#84cc16" },
             "cartografia": { name: "Cartografia", color: "#3b82f6" },
-            "seguranca": { name: "Segurança", color: "#ef4444" }
+            "seguranca": { name: "Segurança", color: "#8b5cf6" },
+            "erros": { name: "Caderno de Erros", color: "#ec4899" }
         };
 
         // DOM Elements
@@ -935,6 +1013,27 @@
         function init() {
             renderFiles();
             setupEventListeners();
+            
+            // Categorize files with "Brasil" in title into brasil category
+            files.forEach(file => {
+                if (file.title.toLowerCase().includes('brasil') && !file.title.toLowerCase().includes('caderno de erros') && file.category !== 'erros') {
+                    file.category = 'brasil';
+                    file.color = categories.brasil.color;
+                }
+                
+                // Categorize files with "Geografia" in title into geografia category if not already categorized
+                if (file.title.toLowerCase().includes('geografia') && file.category === 'all' && !file.title.toLowerCase().includes('caderno de erros')) {
+                    if (file.title.toLowerCase().includes('brasil') || file.title.toLowerCase().includes('brasileiro')) {
+                        file.category = 'brasil';
+                        file.color = categories.brasil.color;
+                    } else {
+                        file.category = 'geografia';
+                        file.color = categories.geografia.color;
+                    }
+                }
+            });
+            
+            renderFiles(); // Re-render with updated categories
         }
 
         // Render files
@@ -964,24 +1063,41 @@
                 emptyState.style.display = 'none';
                 filesGrid.style.display = 'grid';
                 
+                // Sort files: error notebooks first, then by date (newest first)
+                filteredFiles.sort((a, b) => {
+                    if (a.isErrorNotebook && !b.isErrorNotebook) return -1;
+                    if (!a.isErrorNotebook && b.isErrorNotebook) return 1;
+                    
+                    // Parse dates for comparison
+                    const dateA = parseDate(a.date);
+                    const dateB = parseDate(b.date);
+                    return dateB - dateA; // Newest first
+                });
+                
                 // Render file cards
                 filteredFiles.forEach(file => {
                     const fileCard = document.createElement('div');
                     fileCard.className = 'file-card';
                     fileCard.dataset.file = file.file;
                     
+                    let badgeHTML = '';
+                    if (file.isErrorNotebook) {
+                        badgeHTML = '<div class="error-badge">Erros</div>';
+                    }
+                    
                     fileCard.innerHTML = `
+                        ${badgeHTML}
                         <div class="file-header">
                             <div class="file-icon" style="background: linear-gradient(135deg, ${file.color}, ${adjustColor(file.color, 30)})">
                                 <i class="${file.icon}"></i>
                             </div>
                             <div>
                                 <h3 class="file-title">${file.title}</h3>
-                                <span class="file-category" style="border-color: ${file.color}40; color: ${file.color}">${categories[file.category].name}</span>
+                                <span class="file-category" style="background-color: ${file.color}20; border-color: ${file.color}40; color: ${file.color}">${categories[file.category].name}</span>
                             </div>
                         </div>
                         <div class="file-info">
-                            <div class="file-date">
+                            <div class="file-date" style="color: ${file.color}">
                                 <i class="far fa-calendar"></i>
                                 ${file.date}
                             </div>
@@ -997,6 +1113,16 @@
             sectionTitle.textContent = currentFilter === 'all' 
                 ? (currentSearch ? `Resultados para "${currentSearch}"` : categories[currentFilter].name)
                 : categories[currentFilter].name;
+        }
+
+        // Helper function to parse date string
+        function parseDate(dateStr) {
+            // Format: "DD/MM/YYYY HH:mm"
+            const [datePart, timePart] = dateStr.split(' ');
+            const [day, month, year] = datePart.split('/').map(Number);
+            const [hour, minute] = timePart.split(':').map(Number);
+            
+            return new Date(year, month - 1, day, hour, minute);
         }
 
         // Helper function to adjust color
