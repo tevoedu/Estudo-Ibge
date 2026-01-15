@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Mental - Cartografia e Coordenadas Geográficas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f9ff;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a5fb4 0%, #2d87c8 100%);
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .map-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .mind-map-section {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .mind-map-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            color: #1a5fb4;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e6f0ff;
+        }
+        
+        .section-title i {
+            margin-right: 12px;
+            font-size: 1.5rem;
+        }
+        
+        .section-title h2 {
+            font-size: 1.6rem;
+        }
+        
+        .topic {
+            margin-bottom: 20px;
+        }
+        
+        .topic-title {
+            color: #2d87c8;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .topic-title i {
+            margin-right: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .subtopic {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .subtopic-title {
+            color: #555;
+            font-weight: 500;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .subtopic-title i {
+            margin-right: 6px;
+            font-size: 0.8rem;
+            color: #1a5fb4;
+        }
+        
+        .content {
+            background-color: #f8fbff;
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #2d87c8;
+        }
+        
+        .content p {
+            margin-bottom: 8px;
+        }
+        
+        .content ul, .content ol {
+            padding-left: 20px;
+            margin-bottom: 8px;
+        }
+        
+        .content li {
+            margin-bottom: 5px;
+        }
+        
+        .highlight {
+            background-color: #e6f0ff;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: 500;
+            color: #1a5fb4;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #d0e2ff;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .comparison-table th {
+            background-color: #e6f0ff;
+            color: #1a5fb4;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background-color: #f8fbff;
+        }
+        
+        .tip-box {
+            background-color: #fff8e6;
+            border-left: 4px solid #ffc400;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+        }
+        
+        .tip-box .tip-title {
+            color: #b88600;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .error-box {
+            background-color: #ffe6e6;
+            border-left: 4px solid #ff4d4d;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+        }
+        
+        .error-box .error-title {
+            color: #cc0000;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border-radius: 4px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        @media (max-width: 768px) {
+            .map-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><i class="fas fa-globe-americas"></i> Mapa Mental de Cartografia</h1>
+        <p>Coordenadas Geográficas, Escalas, Projeções e Tipos de Mapas</p>
+    </div>
+    
+    <div class="map-container">
+        <!-- Seção 1: Coordenadas Geográficas -->
+        <section class="mind-map-section">
+            <div class="section-title">
+                <i class="fas fa-map-marked-alt"></i>
+                <h2>Coordenadas Geográficas</h2>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">
+                    <i class="fas fa-ruler-combined"></i>
+                    <h3>Latitude</h3>
+                </div>
+                <div class="content">
+                    <p><span class="highlight">Definição:</span> Distância angular em graus em relação ao Equador.</p>
+                    <p><span class="highlight">Referência:</span> Linha do Equador (0°).</p>
+                    <p><span class="highlight">Variação:</span> 0° a 90° Norte (N) ou Sul (S).</p>
+                    <p><span class="highlight">Função:</span> Determina posição norte-sul.</p>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">
+                    <i class="fas fa-ruler-horizontal"></i>
+                    <h3>Longitude</h3>
+                </div>
+                <div class="content">
+                    <p><span class="highlight">Definição:</span> Distância angular em graus em relação ao Meridiano de Greenwich.</p>
+                    <p><span class="highlight">Referência:</span> Meridiano de Greenwich (0°).</p>
+                    <p><span class="highlight">Variação:</span> 0° a 180° Leste (E) ou Oeste (W).</p>
+                    <p><span class="highlight">Função:</span> Determina posição leste-oeste.</p>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">
+                    <i class="fas fa-pencil-alt"></i>
+                    <h3>Formato Correto</h3>
+                </div>
+                <div class="content">
+                    <p><span class="highlight">Ordem:</span> Latitude primeiro, longitude depois.</p>
+                    <p><span class="highlight">Exemplo:</span> 20°N, 40°W</p>
+                    <p><span class="highlight">Erro comum:</span> Nunca use "latitude leste/oeste" ou "longitude norte/sul".</p>
+                </div>
+            </div>
+            
+            <div class="tip-box">
+                <div class="tip-title">
+                    <i class="fas fa-lightbulb"></i>
+                    Dica para Provas
+                </div>
+                <p>Para verificar coordenadas: 1) Direções corretas? (N/S para lat, E/W para long) 2) Valores possíveis? (lat ≤ 90°, long ≤ 180°) 3) Confere com o mapa?</p>
+            </div>
+        </section>
+        
+        <!-- Seção 2: Linhas de Referência e Hemisférios -->
+        <section class="mind-map-section">
+            <div class="section-title">
+                <i class="fas fa-drafting-compass"></i>
+                <h2>Linhas de Referência e Hemisférios</h2>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">
+                    <i class="fas fa-circle-notch"></i>
+                    <h3>Paralelos</h3>
+                </div>
+                <div class="content">
+                    <p><span class="highlight">Definição:</span> Linhas circulares paralelas ao Equador.</p>
+                    <p><span class="highlight">Função:</span> Determinam a latitude.</p>
+                    <p><span class="highlight">Principais:</span></p>
+                    <ul>
+                        <li>Equador (0°)</li>
+                        <li>Trópico de Câncer (23°27'N)</li>
+                        <li>Trópico de Capricórnio (23°27'S)</li>
+                        <li>Círculo Polar Ártico (66°33'N)</li>
+                        <li>Círculo Polar Antártico (66°33'S)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">
+                    <i class="fas fa-long-arrow-alt-up"></i>
+                    <h3>Meridianos</h3>
+                </div>
+                <div class="content">
+                    <p><span class="highlight">Definição:</span> Linhas semicirculares de polo a polo.</p>
+                    <p><span class="highlight">Função:</span> Determinam a longitude.</p>
+                    <p><span class="highlight">Principais:</span></p>
+                    <ul>
+                        <li>Meridiano de Greenwich (0°)</li>
+                        <li>Antimeridiano: Linha Internacional da Data (180°)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">
+                    <i class="fas fa-globe-americas"></i>
+                    <h3>Hemisférios</h3>
+                </div>
+                <div class="content">
+                    <p><span class="highlight">Hemisfério Ocidental:</span> Longitudes de 0° a 180°W (Brasil está aqui).</p>
+                    <p><span class="highlight">Hemisfério Oriental:</span> Longitudes de 0° a 180°E.</p>
+                    <p><span class="highlight">Macete:</span> "Brasil fica a Oeste de Greenwich".</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Seção 3: Escala Cartográfica -->
+        <section class="mind-map-section">
+            <div class="section-title">
+                <i class="fas fa-weight-hanging"></i>
+                <h2>Escala Cartográfica</h2>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">
+                    <i class="fas fa-balance-scale"></i>
+                    <h3>Definição e Formas</h3>
+                </div>
+                <div class="content">
+                    <p><span class="highlight">Definição:</span> Relação entre dimensões no mapa e na realidade.</p>
+                    <p><span class="highlight">Elemento obrigatório</span> do mapa.</p>
+                    <p><span class="highlight">Formas de representação:</span></p>
+                    <ul>
+                        <li><strong>Numérica:</strong> 1:100.000</li>
+                        <li><strong>Gráfica:</strong> Barra segmentada (ajusta ao ampliar/reduzir)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">
+                    <i class="fas fa-expand-arrows-alt"></i>
+                    <h3>Escala Grande vs. Pequena</h3>
+                </div>
+                <div class="content">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Característica</th>
+                                <th>Escala Grande (ex: 1:1.000)</th>
+                                <th>Escala Pequena (ex: 1:10.000.000)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Denominador</td>
+                                <td>PEQUENO</td>
+                                <td>GRANDE</td>
+                            </tr>
+                            <tr>
+                                <td>Área representada</td>
+                                <td>PEQUENA</td>
+                                <td>GRANDE</td>
+                            </tr>
+                            <tr>
+                                <td>Nível de detalhe</td>
+                                <td>ALTO (ruas, casas)</td>
+                                <td>BAIXO (países, estados)</td>
+                            </tr>
+                            <tr>
+                                <td>Exemplo</td>
+                                <td>Mapa de bairro</td>
+                                <td>Mapa-múndi</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="tip-box">
+                <div class="tip-title">
+                    <i class="fas fa-lightbulb"></i>
+                    Regra Prática
+                </div>
+                <p><strong>MAIOR número depois do ":" → MENOR escala</strong></p>
+                <p>Mais detalhes = Escala GRANDE | Mais área = Escala PEQUENA</p>
+                <p>Memorize: "Escala GRANDE = Detalhe GRANDE = Área PEQUENA"</p>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">
+                    <i class="fas fa-calculator"></i>
+                    <h3>Cálculos com Escala</h3>
+                </div>
+                <div class="content">
+                    <p><span class="highlight">Conversão:</span> 1:50.000 → 1 cm = 50.000 cm = 0,5 km</p>
+                    <p><span class="highlight">Cálculo de área:</span> Converter medidas do mapa → multiplicar</p>
+                    <p><span class="highlight">Exemplo:</span> Retângulo 4cm × 7cm em escala 1:50.000</p>
+                    <ul>
+                        <li>4 cm = 2.000 m (4 × 50.000 ÷ 100)</li>
+                        <li>7 cm = 3.500 m (7 × 50.000 ÷ 100)</li>
+                        <li>Área real = 2.000 m × 3.500 m = 7.000.000 m² = 700 ha</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Seção 4: Tipos de Mapas Temáticos -->
+        <section class="mind-map-section">
+            <div class="section-title">
+                <i class="fas fa-layer-group"></i>
+                <h2>Tipos de Mapas Temáticos</h2>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">
+                    <i class="fas fa-mountain"></i>
+                    <h3>Mapa Hipsométrico (Altimétrico)</h3>
+                </div>
+                <div class="content">
+                    <p><span class="highlight">Função:</span> Representa <strong>altitude</strong> com cores.</p>
+                    <p><span class="highlight">Cores:</span> Frias (baixa altitude) → Quentes (alta altitude).</p>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">
+                    <i class="fas fa-water"></i>
+                    <h3>Mapa Batimétrico</h3>
+                </div>
+                <div class="content">
+                    <p><span class="highlight">Função:</span> Representa <strong>profundidade</strong> de águas.</p>
+                    <p>"Altitudes negativas" abaixo do nível do mar.</p>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">
+                    <i class="fas fa-chart-bar"></i>
+                    <h3>Cartograma</h3>
+                </div>
+                <div class="content">
+                    <p><span class="highlight">Função:</span> Distorce áreas proporcionalmente a uma variável.</p>
+                    <p><span class="highlight">Exemplos:</span> PIB, população, produção agrícola.</p>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">
+                    <i class="fas fa-landmark"></i>
+                    <h3>Outros Mapas</h3>
+                </div>
+                <div class="content">
+                    <ul>
+                        <li><strong>Político-Administrativo:</strong> Limites de países, estados, municípios.</li>
+                        <li><strong>Hidrográfico:</strong> Rios, bacias, redes de drenagem.</li>
+                        <li><strong>Físico:</strong> Relevo, hidrografia, vegetação natural.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">
+                    <i class="fas fa-palette"></i>
+                    <h3>Regras Visuais</h3>
+                </div>
+                <div class="content">
+                    <p><span class="highlight">Variações quantitativas</span> (mais/menos): <strong>TAMANHO</strong> ou <strong>TOM</strong> (intensidade).</p>
+                    <p><span class="highlight">Variações qualitativas</span> (tipos diferentes): <strong>FORMA</strong> ou <strong>COR</strong> (hue).</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Seção 5: Projeções Cartográficas -->
+        <section class="mind-map-section">
+            <div class="section-title">
+                <i class="fas fa-project-diagram"></i>
+                <h2>Projeções Cartográficas</h2>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">
+                    <i class="fas fa-cube"></i>
+                    <h3>Definição</h3>
+                </div>
+                <div class="content">
+                    <p>Método para projetar a Terra (esférica) em um plano.</p>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">
+                    <i class="fas fa-shapes"></i>
+                    <h3>Três Tipos Principais</h3>
+                </div>
+                <div class="content">
+                    <ol>
+                        <li><strong>Cilíndrica</strong> (usa cilindro) – ex: Mercator</li>
+                        <li><strong>Cônica</strong> (usa cone) – ex: para latitudes médias</li>
+                        <li><strong>Azimutal/Plana</strong> (usa plano) – ex: para polos</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">
+                    <i class="fas fa-ruler"></i>
+                    <h3>Classificação por Propriedade</h3>
+                </div>
+                <div class="content">
+                    <ul>
+                        <li><strong>Conforme:</strong> Preserva ângulos/formas, distorce áreas (ex: Mercator).</li>
+                        <li><strong>Equivalente:</strong> Preserva áreas, distorce formas (ex: Peters).</li>
+                        <li><strong>Equidistante:</strong> Preserva distâncias em certas direções.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">
+                    <i class="fas fa-dot-circle"></i>
+                    <h3>Tangente vs. Secante</h3>
+                </div>
+                <div class="content">
+                    <p><span class="highlight">Tangente:</span> Toca a Terra em um ponto/linha.</p>
+                    <p><span class="highlight">Secante:</span> Corta a Terra (dois pontos/linhas) – menos distorção.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Seção 6: Elementos e Erros Comuns -->
+        <section class="mind-map-section">
+            <div class="section-title">
+                <i class="fas fa-tools"></i>
+                <h2>Elementos e Erros Comuns</h2>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">
+                    <i class="fas fa-list-alt"></i>
+                    <h3>Elementos Obrigatórios do Mapa</h3>
+                </div>
+                <div class="content">
+                    <ol>
+                        <li>Título</li>
+                        <li>Escala</li>
+                        <li>Legenda</li>
+                        <li>Orientação (Rosa dos Ventos)</li>
+                        <li>Coordenadas</li>
+                        <li>Projeção</li>
+                        <li>Fonte</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="error-box">
+                <div class="error-title">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Erros Mais Comuns em Provas
+                </div>
+                <ol>
+                    <li>Trocar direções das coordenadas.</li>
+                    <li>Inverter ordem (longitude antes da latitude).</li>
+                    <li>Usar valores impossíveis (ex: longitude 200°).</li>
+                    <li>Confundir hemisférios (ex: Brasil a leste de Greenwich).</li>
+                    <li>Confundir escala grande/pequena.</li>
+                </ol>
+            </div>
+            
+            <div class="tip-box">
+                <div class="tip-title">
+                    <i class="fas fa-key"></i>
+                    Pilares para Resolução de Questões
+                </div>
+                <ol>
+                    <li>Verificar direções das coordenadas.</li>
+                    <li>Confirmar valores máximos (90° lat, 180° long).</li>
+                    <li>Cruzamento com mapa (se fornecido).</li>
+                    <li>Identificar tipo de mapa pela palavra-chave.</li>
+                    <li>Analisar escala (denominador vs. detalhe).</li>
+                </ol>
+            </div>
+        </section>
+    </div>
+    
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #e6f0ff;"></div>
+            <span>Conceito principal</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #fff8e6;"></div>
+            <span>Dicas importantes</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #ffe6e6;"></div>
+            <span>Erros comuns</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #f8fbff;"></div>
+            <span>Conteúdo detalhado</span>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Mapa Mental de Cartografia e Coordenadas Geográficas - Baseado no material do IBGE</p>
+        <p>© 2023 - Estudo de Geografia e Cartografia</p>
+    </div>
+</body>
+</html>

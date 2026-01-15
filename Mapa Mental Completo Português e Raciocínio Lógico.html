@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Mental - Português e Raciocínio Lógico</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-left: 8px solid #4a6fa5;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+        
+        .mind-map {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .branch {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .branch:hover {
+            transform: translateY(-5px);
+        }
+        
+        .branch::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 100%;
+        }
+        
+        .branch-1::before { background: #3498db; }
+        .branch-2::before { background: #2ecc71; }
+        .branch-3::before { background: #e74c3c; }
+        .branch-4::before { background: #f39c12; }
+        .branch-5::before { background: #9b59b6; }
+        .branch-6::before { background: #1abc9c; }
+        .branch-7::before { background: #d35400; }
+        .branch-8::before { background: #34495e; }
+        
+        .branch-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .branch-icon {
+            font-size: 1.8rem;
+        }
+        
+        .topic {
+            margin-bottom: 20px;
+            position: relative;
+            padding-left: 15px;
+        }
+        
+        .topic::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #3498db;
+            font-size: 1.5rem;
+            line-height: 0.8;
+        }
+        
+        .topic-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+        
+        .subtopic {
+            margin-left: 20px;
+            margin-bottom: 10px;
+            padding-left: 10px;
+            border-left: 2px dashed #bdc3c7;
+        }
+        
+        .subtopic-title {
+            font-weight: 500;
+            color: #34495e;
+            margin-bottom: 5px;
+        }
+        
+        .detail {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 5px;
+            padding-left: 5px;
+        }
+        
+        .example {
+            background: #f8f9fa;
+            border-left: 3px solid #3498db;
+            padding: 10px;
+            margin: 8px 0;
+            font-size: 0.9rem;
+            color: #444;
+        }
+        
+        .tip {
+            background: #fffde7;
+            border-left: 3px solid #f1c40f;
+            padding: 10px;
+            margin: 8px 0;
+            font-size: 0.9rem;
+            color: #444;
+        }
+        
+        .warning {
+            background: #ffebee;
+            border-left: 3px solid #e74c3c;
+            padding: 10px;
+            margin: 8px 0;
+            font-size: 0.9rem;
+            color: #444;
+        }
+        
+        .success {
+            background: #e8f5e9;
+            border-left: 3px solid #2ecc71;
+            padding: 10px;
+            margin: 8px 0;
+            font-size: 0.9rem;
+            color: #444;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        .comparison-table th {
+            background-color: #f2f2f2;
+            font-weight: 600;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 12px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+        
+        .flow-chart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        .flow-step {
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin: 5px 0;
+            width: 80%;
+            text-align: center;
+            position: relative;
+        }
+        
+        .flow-step::after {
+            content: '↓';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #3498db;
+            font-weight: bold;
+        }
+        
+        .flow-step:last-child::after {
+            display: none;
+        }
+        
+        .summary-box {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-top: 5px solid #9b59b6;
+        }
+        
+        .summary-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            border-top: 1px solid #ecf0f1;
+        }
+        
+        @media (max-width: 768px) {
+            .mind-map {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .branch {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌳 Mapa Mental Completo</h1>
+        <div class="subtitle">Português e Raciocínio Lógico - Conteúdo Abrangente</div>
+    </div>
+    
+    <div class="mind-map">
+        <!-- RAMO 1: GRAMÁTICA -->
+        <div class="branch branch-1">
+            <div class="branch-title">
+                <span class="branch-icon">📘</span> 1. GRAMÁTICA
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Pronome Relativo "Cujo"</div>
+                <div class="detail">• Função: Pronome relativo possessivo</div>
+                <div class="detail">• Concorda com termo possuído (depois)</div>
+                <div class="detail">• NUNCA tem artigo antes</div>
+                <div class="detail">• Termo anterior = possuidor</div>
+                
+                <div class="tip">
+                    <strong>Macete:</strong> Substituir por "do qual/das quais"
+                </div>
+                
+                <div class="example">
+                    <strong>Exemplo:</strong> "A mulher, cujo filho é médico"<br>
+                    "cujo" concorda com "filho" (possuído)<br>
+                    Mulher = possuidor
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Análise Sintática</div>
+                
+                <div class="subtopic">
+                    <div class="subtopic-title">Sujeito</div>
+                    <div class="detail">• Oculto/Elíptico: Identificado pela desinência verbal</div>
+                    <div class="detail">• Indeterminado: 3ª pessoa plural sem referente OU 3ª pessoa singular + "se"</div>
+                    <div class="detail">• Anteposto: Antes do verbo (ordem direta)</div>
+                </div>
+                
+                <div class="subtopic">
+                    <div class="subtopic-title">Frases Impessoais</div>
+                    <div class="detail">• Verbos de fenômeno natural (chover, nevar)</div>
+                    <div class="detail">• "Haver" = existir</div>
+                    <div class="detail">• "Fazer" = tempo</div>
+                    <div class="detail">• "Ser" = hora/data</div>
+                </div>
+                
+                <div class="subtopic">
+                    <div class="subtopic-title">Voz Passiva</div>
+                    <div class="detail">• Analítica: Auxiliar (ser/estar/ficar) + particípio</div>
+                    <div class="detail">• Sintética: "se" + verbo 3ª pessoa</div>
+                    <div class="detail">• Agente: introduzido por "por" ou "de"</div>
+                </div>
+                
+                <div class="subtopic">
+                    <div class="subtopic-title">Verbo de Ligação</div>
+                    <div class="detail">• Teste: Substituir por "ser/estar"</div>
+                    <div class="detail">• Principais: ser, estar, ficar, parecer, andar</div>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Concordância</div>
+                <div class="detail">• Silepse: Concordância com ideia, não forma</div>
+                <div class="example">
+                    <strong>Exemplo:</strong> "A equipe estavam animadas"<br>
+                    "equipe" (singular) → concordância com ideia de plural (membros)
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Colocação Pronominal</div>
+                <div class="detail">• Norma culta: Pronome átono não inicia frase</div>
+                <div class="example">
+                    ✓ "Diga-me" (culta)<br>
+                    ✗ "Me diga" (informal)
+                </div>
+            </div>
+        </div>
+        
+        <!-- RAMO 2: INTERPRETAÇÃO DE TEXTO -->
+        <div class="branch branch-2">
+            <div class="branch-title">
+                <span class="branch-icon">📖</span> 2. INTERPRETAÇÃO
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Intertextualidade</div>
+                <div class="detail">• Diálogo entre textos</div>
+                <div class="detail">• Formas: citação, paráfrase, alusão, paródia, pastiche</div>
+                <div class="example">
+                    <strong>Exemplo:</strong> "nem tudo que reluz é ouro"<br>
+                    Provérbio popular frequentemente reapropriado
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Tipologia Textual</div>
+                
+                <table class="comparison-table">
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Função</th>
+                        <th>Características</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Descritivo</strong></td>
+                        <td>Caracterizar</td>
+                        <td>Detalhes físicos/psicológicos</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Narrativo</strong></td>
+                        <td>Contar eventos</td>
+                        <td>Sequência temporal</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Expositivo</strong></td>
+                        <td>Explicar</td>
+                        <td>Informações, ideias</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Argumentativo</strong></td>
+                        <td>Persuadir</td>
+                        <td>Tese + argumentos</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Injuntivo</strong></td>
+                        <td>Instruir</td>
+                        <td>Verbais no imperativo</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Estratégias Argumentativas</div>
+                
+                <div class="subtopic">
+                    <div class="subtopic-title">Afetivo vs Lógico</div>
+                    <div class="detail">• Afetivo: Apela a emoções</div>
+                    <div class="detail">• Lógico: Fatos, dados, evidências</div>
+                </div>
+                
+                <div class="subtopic">
+                    <div class="subtopic-title">Generalização</div>
+                    <div class="detail">Caso específico → conclusão ampla</div>
+                    <div class="warning">
+                        <strong>Cuidado:</strong> Pode ser falaciosa se amostra for insuficiente
+                    </div>
+                </div>
+                
+                <div class="subtopic">
+                    <div class="subtopic-title">Simplificação Exagerada</div>
+                    <div class="detail">Reduz fenômeno complexo a causa única</div>
+                </div>
+                
+                <div class="subtopic">
+                    <div class="subtopic-title">Intimidação</div>
+                    <div class="detail">Usa ameaças/coação para convencer</div>
+                    <div class="example">
+                        <strong>Exemplo:</strong> "Não siga opiniões de loucos, ou se arrependerá"
+                    </div>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Estrutura do Texto</div>
+                <div class="detail">• Parágrafo: Geral → Particular</div>
+                <div class="detail">• Introdução por divisão: "De um lado... de outro"</div>
+                <div class="detail">• Introdução por citação: Aspas, fala de outro</div>
+            </div>
+        </div>
+        
+        <!-- RAMO 3: COESÃO TEXTUAL -->
+        <div class="branch branch-3">
+            <div class="branch-title">
+                <span class="branch-icon">🔗</span> 3. COESÃO TEXTUAL
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Coesão Referencial</div>
+                
+                <div class="subtopic">
+                    <div class="subtopic-title">Anáfora</div>
+                    <div class="detail">Retoma termo anterior</div>
+                    <div class="example">
+                        "João chegou. Ele está cansado."<br>
+                        "Ele" retoma "João"
+                    </div>
+                </div>
+                
+                <div class="subtopic">
+                    <div class="subtopic-title">Catáfora</div>
+                    <div class="detail">Antecipa termo posterior</div>
+                    <div class="example">
+                        "Escute isto: você precisa estudar."<br>
+                        "isto" antecipa "você precisa estudar"
+                    </div>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Coesão Lexical</div>
+                <div class="detail">• Nominalização: Verbo/adjetivo → substantivo</div>
+                <div class="detail">• Sinonímia/Antonímia</div>
+                <div class="detail">• Hiperonímia/Hiponímia (geral-específico)</div>
+                <div class="detail">• Meronímia: Relação parte-todo</div>
+                
+                <div class="example">
+                    <strong>Exemplo Meronímia:</strong> "Eu moro numa casa... Esse teto me abriga"<br>
+                    "teto" (parte) retoma "casa" (todo)
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Figuras de Linguagem</div>
+                <div class="detail">• Antítese: Oposição de ideias</div>
+                <div class="example">
+                    <strong>Exemplo:</strong> "Quanto menos tempo se tem, mais tempo se encontra"
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Mecanismos de Coesão</div>
+                
+                <table class="comparison-table">
+                    <tr>
+                        <th>Mecanismo</th>
+                        <th>Função</th>
+                    </tr>
+                    <tr>
+                        <td>Repetição</td>
+                        <td>Manter referência constante</td>
+                    </tr>
+                    <tr>
+                        <td>Substituição</td>
+                        <td>Evitar repetição (pronomes)</td>
+                    </tr>
+                    <tr>
+                        <td>Elipse</td>
+                        <td>Omissão de termo subentendido</td>
+                    </tr>
+                    <tr>
+                        <td>Conjunções</td>
+                        <td>Relacionar orações/ideias</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <!-- RAMO 4: RACIOCÍNIO LÓGICO -->
+        <div class="branch branch-4">
+            <div class="branch-title">
+                <span class="branch-icon">🧠</span> 4. RACIOCÍNIO LÓGICO
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Silogismo</div>
+                
+                <div class="code-block">
+                    Premissa Maior: Todos A são B<br>
+                    Premissa Menor: C é A<br>
+                    Conclusão: C é B
+                </div>
+                
+                <div class="example">
+                    <strong>Exemplo:</strong><br>
+                    Todos os homens são mortais.<br>
+                    Sócrates é homem.<br>
+                    Logo, Sócrates é mortal.
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Regras de Validade</div>
+                
+                <div class="flow-chart">
+                    <div class="flow-step">1. Deve ter 3 termos (maior, médio, menor)</div>
+                    <div class="flow-step">2. Termo médio NÃO aparece na conclusão</div>
+                    <div class="flow-step">3. Conclusão não pode ser mais ampla que premissas</div>
+                    <div class="flow-step">4. Premissas afirmativas → conclusão não pode ser negativa</div>
+                    <div class="flow-step">5. Termo médio deve ser "todo" em pelo menos 1 premissa</div>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Falácias Comuns</div>
+                
+                <div class="subtopic">
+                    <div class="subtopic-title">Afirmação do Consequente</div>
+                    <div class="detail">Inverter premissa é inválido</div>
+                    <div class="example">
+                        Se A então B<br>
+                        B é verdade<br>
+                        Portanto, A é verdade (FALSO!)
+                    </div>
+                </div>
+                
+                <div class="subtopic">
+                    <div class="subtopic-title">Generalização Apressada</div>
+                    <div class="detail">Conclusão ampla baseada em amostra pequena</div>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Macetes FGV</div>
+                <div class="detail">• Conte os termos: Se >3 → inválido</div>
+                <div class="detail">• Conclusão mais ampla que premissas? → inválido</div>
+                <div class="detail">• Premissas afirmativas + conclusão negativa? → inválido</div>
+                <div class="detail">• Termo médio aparece na conclusão? → inválido</div>
+            </div>
+        </div>
+        
+        <!-- RAMO 5: GÊNEROS TEXTUAIS -->
+        <div class="branch branch-5">
+            <div class="branch-title">
+                <span class="branch-icon">📰</span> 5. GÊNEROS TEXTUAIS
+            </div>
+            
+            <div class="topic">
+                <table class="comparison-table">
+                    <tr>
+                        <th>Gênero</th>
+                        <th>Função</th>
+                        <th>Exemplo</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Normativo</strong></td>
+                        <td>Prescrever regras</td>
+                        <td>Leis, regulamentos</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Didático</strong></td>
+                        <td>Ensinar</td>
+                        <td>Livro escolar</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Informativo</strong></td>
+                        <td>Informar</td>
+                        <td>Notícia</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Publicitário</strong></td>
+                        <td>Persuadir</td>
+                        <td>Propaganda</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Preflitivo</strong></td>
+                        <td>Prever</td>
+                        <td>Horóscopo</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Crônica</strong></td>
+                        <td>Refletir cotidiano</td>
+                        <td>Crônica jornalística</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Características Específicas</div>
+                
+                <div class="subtopic">
+                    <div class="subtopic-title">Linguagem Jornalística</div>
+                    <div class="detail">• Frases curtas</div>
+                    <div class="detail">• Ordem direta (SUVECA)</div>
+                    <div class="detail">• Objetividade</div>
+                </div>
+                
+                <div class="subtopic">
+                    <div class="subtopic-title">Texto Normativo</div>
+                    <div class="detail">• Verbos de obrigação: "deve", "é proibido"</div>
+                    <div class="detail">• Linguagem prescritiva</div>
+                </div>
+                
+                <div class="subtopic">
+                    <div class="subtopic-title">Crônica</div>
+                    <div class="detail">• Linguagem coloquial</div>
+                    <div class="detail">• Reflexão sobre cotidiano</div>
+                    <div class="detail">• Entre jornalismo e literatura</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- RAMO 6: ESTRATÉGIAS DE PROVA -->
+        <div class="branch branch-6">
+            <div class="branch-title">
+                <span class="branch-icon">🎯</span> 6. ESTRATÉGIAS DE PROVA
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Macetes Rápidos</div>
+                
+                <div class="subtopic">
+                    <div class="subtopic-title">Identificação</div>
+                    <div class="detail">• Intertextualidade: "Parece familiar?"</div>
+                    <div class="detail">• Texto injuntivo: Procure verbos no imperativo</div>
+                    <div class="detail">• Ordem direta: SUVECA (Sujeito-Verbo-Complemento-Adjunto)</div>
+                    <div class="detail">• Catáfora vs Anáfora: Ana (anterior) | Cata (próximo)</div>
+                </div>
+                
+                <div class="subtopic">
+                    <div class="subtopic-title">Análise de Alternativas</div>
+                    
+                    <div class="flow-chart">
+                        <div class="flow-step">1. Teste de substituição mental</div>
+                        <div class="flow-step">2. Elimine as claramente erradas</div>
+                        <div class="flow-step">3. Confronte com texto original</div>
+                        <div class="flow-step">4. Verifique concordância</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Norma Culta - Pontos Chave</div>
+                <div class="detail">• Pronome não inicia frase</div>
+                <div class="detail">• Verbo concorda com sujeito</div>
+                <div class="detail">• "Mim" só após preposição</div>
+                <div class="detail">• "Eu" como sujeito</div>
+                <div class="detail">• Advérbio de negação antes do verbo</div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Para Questões FGV</div>
+                
+                <div class="flow-chart">
+                    <div class="flow-step">Identifique tipo textual e tese</div>
+                    <div class="flow-step">Analise alternativas eliminando erros factuais</div>
+                    <div class="flow-step">Use lógica das relações (causa, consequência)</div>
+                    <div class="flow-step">Volte ao objetivo principal se houver dúvida</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- RAMO 7: EQUIVALÊNCIA LINGUÍSTICA -->
+        <div class="branch branch-7">
+            <div class="branch-title">
+                <span class="branch-icon">🔄</span> 7. EQUIVALÊNCIA
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Princípios Gerais</div>
+                <div class="detail">• Substituição: Mesmo valor semântico + mesma função</div>
+                <div class="detail">• Sinônimos: São contextuais, não absolutos</div>
+                <div class="detail">• Locuções: "de fato" = "realmente"</div>
+                
+                <div class="example">
+                    <strong>Exemplo:</strong><br>
+                    "O futebol está, de fato, em crise"<br>
+                    "O futebol está, realmente, em crise"
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Cuidados Especiais</div>
+                
+                <div class="subtopic">
+                    <div class="subtopic-title">"Ignorar" ≠ "Desconhecer"</div>
+                    <div class="detail">"Ignorar" tem ambiguidade: não saber OU desprezar</div>
+                    <div class="detail">"Desconhecida" fixa apenas sentido de não saber</div>
+                </div>
+                
+                <div class="subtopic">
+                    <div class="subtopic-title">Posição do Adjetivo</div>
+                    <div class="detail">• Anteposto → subjetivo/figurativo</div>
+                    <div class="detail">• Posposto → objetivo/classificatório</div>
+                    
+                    <div class="example">
+                        "biscoito fino" (fino como espessura)<br>
+                        "fino biscoito" (fino como qualidade, requintado)
+                    </div>
+                </div>
+                
+                <div class="subtopic">
+                    <div class="subtopic-title">Agente vs Paciente</div>
+                    <div class="detail">• Agente: quem pratica ação</div>
+                    <div class="detail">• Paciente: quem sofre ação</div>
+                    
+                    <div class="example">
+                        "educação de condutores" → condutores são agentes<br>
+                        "gerenciamento dos sistemas" → sistemas são pacientes
+                    </div>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Substituição de Orações Adjetivas</div>
+                <div class="detail">• Oração adjetiva → adjetivo único</div>
+                <div class="detail">• Preservar sentido integralmente</div>
+                <div class="detail">• Concordar com substantivo</div>
+            </div>
+        </div>
+        
+        <!-- RAMO 8: ESTRUTURAÇÃO DO RACIOCÍNIO -->
+        <div class="branch branch-8">
+            <div class="branch-title">
+                <span class="branch-icon">📊</span> 8. ESTRUTURAÇÃO
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Quadro Síntese: Diferenciação Chave</div>
+                
+                <table class="comparison-table">
+                    <tr>
+                        <th>Conceito</th>
+                        <th>Diferenciador Principal</th>
+                    </tr>
+                    <tr>
+                        <td>Anáfora vs Catáfora</td>
+                        <td>Anterior vs Posterior</td>
+                    </tr>
+                    <tr>
+                        <td>Argumentativo vs Injuntivo</td>
+                        <td>Convencer vs Ordenar</td>
+                    </tr>
+                    <tr>
+                        <td>Voz Passiva vs Indeterminado</td>
+                        <td>"Quem?" tem resposta vs não tem</td>
+                    </tr>
+                    <tr>
+                        <td>Adjetivo anteposto vs posposto</td>
+                        <td>Subjetivo vs Objetivo</td>
+                    </tr>
+                    <tr>
+                        <td>Premissa vs Conclusão</td>
+                        <td>Razão vs Resultado</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Fluxo Decisório para Provas</div>
+                
+                <div class="flow-chart">
+                    <div class="flow-step">Leia a pergunta → Identifique o que pede</div>
+                    <div class="flow-step">Classifique o conteúdo → Gramática? Interpretação?</div>
+                    <div class="flow-step">Aplique macete específico → Use siglas e testes</div>
+                    <div class="flow-step">Elimine alternativas → Descarte as impossíveis</div>
+                    <div class="flow-step">Confira com contexto → Volte ao texto se necessário</div>
+                    <div class="flow-step">Marque e siga → Não fique revisitando</div>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Para Não Errar</div>
+                <div class="detail">• Domine definições puras de cada conceito</div>
+                <div class="detail">• Relacione função com intenção do autor</div>
+                <div class="detail">• Pratique com exemplos clássicos</div>
+                <div class="detail">• Reescreva explicações com suas palavras</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="summary-box">
+        <div class="summary-title">📋 Síntese de Aplicação Prática</div>
+        
+        <div class="mind-map" style="grid-template-columns: repeat(2, 1fr); margin-bottom: 0;">
+            <div>
+                <div class="topic-title" style="color: #2c3e50; margin-bottom: 10px;">Ao Encontrar Questão Sobre:</div>
+                <div class="detail">• "Cujo" → Teste "do qual/das quais"</div>
+                <div class="detail">• Intertextualidade → Procure expressão familiar</div>
+                <div class="detail">• Silogismo → Conte termos e verifique estrutura</div>
+                <div class="detail">• Coesão → Identifique referente (antes/depois)</div>
+                <div class="detail">• Gênero textual → Associe a função (ensinar, persuadir, etc.)</div>
+            </div>
+            
+            <div>
+                <div class="topic-title" style="color: #2c3e50; margin-bottom: 10px;">Sinais de Alerta</div>
+                <div class="detail">• Pronome iniciando frase → Provavelmente erro</div>
+                <div class="detail">• Conclusão mais ampla que premissas → Silogismo inválido</div>
+                <div class="detail">• Adjetivo anteposto → Sentido pode ser subjetivo</div>
+                <div class="detail">• "Se" + verbo 3ª pessoa → Identifique se é voz passiva ou indeterminação</div>
+                <div class="detail">• Verbos no imperativo → Texto injuntivo</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Mapa Mental Completo de Português e Raciocínio Lógico</p>
+        <p>Baseado no caderno de erros IBGE - Organizado didaticamente para estudo</p>
+    </div>
+</body>
+</html>

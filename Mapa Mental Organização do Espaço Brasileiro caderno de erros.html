@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Mental: Organização do Espaço Brasileiro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: linear-gradient(90deg, #1a5f7a 0%, #2a9d8f 100%);
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .header h1 i {
+            color: #ffde59;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .topic {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 6px solid;
+            height: 100%;
+        }
+        
+        .topic:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .topic h2 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            color: #1a5f7a;
+            padding-bottom: 10px;
+            border-bottom: 2px dashed #e0e0e0;
+        }
+        
+        .topic h2 i {
+            font-size: 1.6rem;
+        }
+        
+        .topic-content {
+            padding-left: 10px;
+        }
+        
+        .subtopic {
+            margin-bottom: 20px;
+            padding-left: 15px;
+            border-left: 3px solid;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+        
+        .subtopic h3 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: #2a9d8f;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .subtopic h3 i {
+            font-size: 1.1rem;
+        }
+        
+        .subtopic p {
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 1rem;
+        }
+        
+        .subtopic ul, .subtopic ol {
+            padding-left: 20px;
+            margin-top: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .subtopic li {
+            margin-bottom: 6px;
+            color: #555;
+        }
+        
+        .highlight {
+            background-color: #f0f9ff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin: 10px 0;
+            border-left: 4px solid #4d96ff;
+        }
+        
+        .note {
+            background-color: #fff8e1;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin: 10px 0;
+            border-left: 4px solid #ffcc00;
+            font-style: italic;
+        }
+        
+        .warning {
+            background-color: #ffebee;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin: 10px 0;
+            border-left: 4px solid #ff5252;
+        }
+        
+        .comparison {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            gap: 15px;
+        }
+        
+        .comparison-item {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .comparison-item h4 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #1a5f7a;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #666;
+            border-top: 1px solid #ddd;
+            font-size: 0.9rem;
+        }
+        
+        /* Cores diferentes para cada tópico */
+        .topic:nth-child(1) { border-left-color: #1a5f7a; }
+        .topic:nth-child(2) { border-left-color: #2a9d8f; }
+        .topic:nth-child(3) { border-left-color: #e9c46a; }
+        .topic:nth-child(4) { border-left-color: #f4a261; }
+        .topic:nth-child(5) { border-left-color: #e76f51; }
+        .topic:nth-child(6) { border-left-color: #9d4edd; }
+        .topic:nth-child(7) { border-left-color: #3a86ff; }
+        .topic:nth-child(8) { border-left-color: #ff006e; }
+        .topic:nth-child(9) { border-left-color: #fb5607; }
+        .topic:nth-child(10) { border-left-color: #8338ec; }
+        .topic:nth-child(11) { border-left-color: #3a86ff; }
+        .topic:nth-child(12) { border-left-color: #ff006e; }
+        
+        .subtopic:nth-child(1) { border-left-color: #1a5f7a; }
+        .subtopic:nth-child(2) { border-left-color: #2a9d8f; }
+        .subtopic:nth-child(3) { border-left-color: #e9c46a; }
+        .subtopic:nth-child(4) { border-left-color: #f4a261; }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .comparison {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><i class="fas fa-globe-americas"></i> Mapa Mental: Organização do Espaço Brasileiro</h1>
+        <p>Geografia - Conteúdo completo e organizado para estudo</p>
+    </div>
+    
+    <div class="container">
+        <!-- Tópico 1: Matriz Energética -->
+        <div class="topic">
+            <h2><i class="fas fa-bolt"></i> Matriz Energética</h2>
+            <div class="topic-content">
+                <div class="subtopic">
+                    <h3><i class="fas fa-balance-scale"></i> Brasil vs. Mundial</h3>
+                    <div class="comparison">
+                        <div class="comparison-item">
+                            <h4>Brasil</h4>
+                            <p><strong>Alta participação renovável:</strong></p>
+                            <ul>
+                                <li>Hidrelétrica</li>
+                                <li>Biomassa (etanol da cana)</li>
+                                <li>Eólica e solar (crescimento)</li>
+                            </ul>
+                        </div>
+                        <div class="comparison-item">
+                            <h4>Mundo</h4>
+                            <p><strong>Predominância não renovável:</strong></p>
+                            <ul>
+                                <li>Petróleo</li>
+                                <li>Carvão mineral</li>
+                                <li>Gás natural</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="subtopic">
+                    <h3><i class="fas fa-lightbulb"></i> Macete</h3>
+                    <div class="highlight">
+                        <p><strong>"Brasil: Água e Planta. Mundo: Petróleo e Carvão."</strong></p>
+                    </div>
+                </div>
+                
+                <div class="subtopic">
+                    <h3><i class="fas fa-cogs"></i> Fatores Explicativos</h3>
+                    <ul>
+                        <li>Recursos naturais disponíveis</li>
+                        <li>Políticas históricas de investimento</li>
+                        <li>Custos relativos de implantação</li>
+                        <li>Demanda energética e estágio de desenvolvimento</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tópico 2: Urbanização e Processos Urbanos -->
+        <div class="topic">
+            <h2><i class="fas fa-city"></i> Urbanização e Processos Urbanos</h2>
+            <div class="topic-content">
+                <div class="subtopic">
+                    <h3><i class="fas fa-house-damage"></i> Favelização e Exclusão</h3>
+                    <p><strong>"Manguetown" (Chico Science):</strong> crítica à segregação socioespacial em áreas degradadas (manguezais).</p>
+                    <div class="note">
+                        <p>Não se refere apenas a descarte de lixo, mas à exclusão da população pobre.</p>
+                    </div>
+                </div>
+                
+                <div class="subtopic">
+                    <h3><i class="fas fa-sitemap"></i> Hierarquia Urbana</h3>
+                    <ul>
+                        <li><strong>Metrópole/Região Metropolitana:</strong> integração funcional e econômica entre municípios.</li>
+                        <li><strong>Megalópolis:</strong> conurbação de duas ou mais metrópoles (ex.: eixo Rio-São Paulo em formação).</li>
+                    </ul>
+                </div>
+                
+                <div class="subtopic">
+                    <h3><i class="fas fa-building"></i> Gentrificação</h3>
+                    <p><strong>Revitalização + elitização → substituição da população original.</strong></p>
+                    <div class="highlight">
+                        <p>Palavra-chave: <strong>"revitalização seguida de elitização"</strong></p>
+                    </div>
+                </div>
+                
+                <div class="subtopic">
+                    <h3><i class="fas fa-layer-group"></i> Outros Processos Urbanos</h3>
+                    <ul>
+                        <li><strong>Verticalização:</strong> crescimento em altura</li>
+                        <li><strong>Conurbação:</strong> fusão física de cidades</li>
+                        <li><strong>Metropolização:</strong> formação de metrópole com centralização de funções</li>
+                    </ul>
+                    <p>Podem ocorrer simultaneamente.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tópico 3: Desigualdade Social e Regional -->
+        <div class="topic">
+            <h2><i class="fas fa-chart-line"></i> Desigualdade Social e Regional</h2>
+            <div class="topic-content">
+                <div class="subtopic">
+                    <h3><i class="fas fa-money-bill-wave"></i> Crescimento Econômico × Desigualdade</h3>
+                    <ul>
+                        <li><strong>"Milagre econômico" (1970):</strong> crescimento não reduziu desigualdade</li>
+                        <li>Alta concentração de renda: 1% mais rico detém fatia desproporcional</li>
+                        <li>Fenômeno estrutural: requer políticas ativas de redistribuição</li>
+                    </ul>
+                </div>
+                
+                <div class="subtopic">
+                    <h3><i class="fas fa-map-marked-alt"></i> Dinamismo Regional (PNDR)</h3>
+                    <ul>
+                        <li><strong>Anos 1990:</strong> fronteira agrícola tecnificada (Cerrado) com alto PIB per capita</li>
+                        <li>Ex.: Oeste da Bahia, Mato Grosso</li>
+                        <li><strong>Sudeste industrializado:</strong> estagnação relativa</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tópico 4: Setores Econômicos e Atividades -->
+        <div class="topic">
+            <h2><i class="fas fa-industry"></i> Setores Econômicos e Atividades</h2>
+            <div class="topic-content">
+                <div class="subtopic">
+                    <h3><i class="fas fa-seedling"></i> Classificação Prática</h3>
+                    <ul>
+                        <li><strong>Primário:</strong> tira da natureza (agropecuária, extrativismo)</li>
+                        <li><strong>Secundário:</strong> transforma (indústria)</li>
+                        <li><strong>Terciário:</strong> serviços (comércio, transporte, educação)</li>
+                    </ul>
+                </div>
+                
+                <div class="subtopic">
+                    <h3><i class="fas fa-project-diagram"></i> Exemplo: Cadeia da Soja</h3>
+                    <ol>
+                        <li><strong>Primário:</strong> produção de soja</li>
+                        <li><strong>Secundário:</strong> indústria alimentícia (transforma soja em óleo, farelo)</li>
+                        <li><strong>Terciário:</strong> comércio e transporte dos produtos</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tópico 5: Agricultura e Expansão Agrária -->
+        <div class="topic">
+            <h2><i class="fas fa-tractor"></i> Agricultura e Expansão Agrária</h2>
+            <div class="topic-content">
+                <div class="subtopic">
+                    <h3><i class="fas fa-seedling"></i> Soja</h3>
+                    <div class="comparison">
+                        <div class="comparison-item">
+                            <h4>Brasil</h4>
+                            <p><strong>Maior produtor mundial</strong></p>
+                            <p>Principal estado: <strong>Mato Grosso</strong></p>
+                        </div>
+                        <div class="comparison-item">
+                            <h4>EUA</h4>
+                            <p><strong>Segundo maior produtor mundial</strong></p>
+                            <p>Principal estado: <strong>Illinois</strong> (Corn Belt)</p>
+                        </div>
+                    </div>
+                    <div class="highlight">
+                        <p>Macete: <strong>"B-M-E-I"</strong> (Brasil Maior, EUA Segundo)</p>
+                    </div>
+                </div>
+                
+                <div class="subtopic">
+                    <h3><i class="fas fa-expand-arrows-alt"></i> Expansão (pós-1980)</h3>
+                    <ul>
+                        <li>Direcionada para a <strong>borda sul/leste da Amazônia (Cerrado)</strong></li>
+                        <li>Estados: MT, PA, TO ("fronteira agrícola")</li>
+                        <li>Ocupa pastagens degradadas e empurra pecuária para norte</li>
+                    </ul>
+                </div>
+                
+                <div class="subtopic">
+                    <h3><i class="fas fa-leaf"></i> Revolução Verde</h3>
+                    <p>Modernização agrícola (a partir dos anos 1950):</p>
+                    <ul>
+                        <li>Sementes geneticamente modificadas</li>
+                        <li>Maquinários, defensivos agrícolas, fertilizantes</li>
+                        <li>Aumento da produtividade</li>
+                    </ul>
+                    <div class="warning">
+                        <p><strong>Impactos:</strong> degradação ambiental, exclusão de pequenos produtores, concentração fundiária.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tópico 6: Formação Territorial e Políticas Regionais -->
+        <div class="topic">
+            <h2><i class="fas fa-map"></i> Formação Territorial e Políticas Regionais</h2>
+            <div class="topic-content">
+                <div class="subtopic">
+                    <h3><i class="fas fa-road"></i> Além São Francisco (BA)</h3>
+                    <p>Processo marcado por diferentes etapas e modais:</p>
+                    <ol>
+                        <li>Século XIX: navegação</li>
+                        <li>Final do XIX: ferrovia</li>
+                        <li>Século XX: aeroporto, geração de energia, projetos de irrigação</li>
+                    </ol>
+                </div>
+                
+                <div class="subtopic">
+                    <h3><i class="fas fa-flag"></i> Políticas Regionais</h3>
+                    <ul>
+                        <li><strong>PNDR:</strong> reduzir desigualdades, explorar potenciais endógenos</li>
+                        <li>Ex.: Polos de fruticultura irrigada no Nordeste (anos 1990)</li>
+                    </ul>
+                </div>
+                
+                <div class="subtopic">
+                    <h3><i class="fas fa-tree"></i> Ocupação da Amazônia (século XX)</h3>
+                    <ul>
+                        <li>Polos de Desenvolvimento (regime militar)</li>
+                        <li>Integração nacional: estradas, incentivos fiscais</li>
+                        <li>Foco em recursos naturais e expansão agrícola</li>
+                    </ul>
+                    <div class="warning">
+                        <p><strong>Consequências:</strong> desmatamento, conflitos fundiários, impactos socioambientais.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tópico 7: Redes de Transporte e Logística -->
+        <div class="topic">
+            <h2><i class="fas fa-shipping-fast"></i> Redes de Transporte e Logística</h2>
+            <div class="topic-content">
+                <div class="subtopic">
+                    <h3><i class="fas fa-plane"></i> Transporte Aéreo</h3>
+                    <ul>
+                        <li><strong>Alta conectividade:</strong> maioria dos aeroportos interligada</li>
+                        <li><strong>Forte polarização:</strong> grande volume de voos concentrado em São Paulo</li>
+                        <li><strong>Acessibilidade desigual:</strong> voos para cidades menores são mais caros e demorados</li>
+                    </ul>
+                </div>
+                
+                <div class="subtopic">
+                    <h3><i class="fas fa-ship"></i> Navegação Interior</h3>
+                    <ul>
+                        <li><strong>Carga predominante:</strong> granéis sólidos (grãos, minérios)</li>
+                        <li><strong>Hidrovias principais:</strong> Madeira, Solimões, Paraná</li>
+                        <li>Custo reduzido comparado a rodovias e ferrovias</li>
+                        <li>Potencial subutilizado</li>
+                    </ul>
+                </div>
+                
+                <div class="subtopic">
+                    <h3><i class="fas fa-anchor"></i> Portos</h3>
+                    <p><strong>Tendência:</strong> regionalização das atividades retroportuárias</p>
+                    <ul>
+                        <li>Portos secos e zonas logísticas nas hinterlândias</li>
+                        <li>Flexibilidade operacional, redução de custos</li>
+                        <li>Integração a cadeias globais</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tópico 8: Tecnologia e Infraestrutura Digital -->
+        <div class="topic">
+            <h2><i class="fas fa-satellite"></i> Tecnologia e Infraestrutura Digital</h2>
+            <div class="topic-content">
+                <div class="subtopic">
+                    <h3><i class="fas fa-wifi"></i> Acesso à Internet</h3>
+                    <ul>
+                        <li><strong>Fibra ótica:</strong> concentrada em áreas urbanas</li>
+                        <li><strong>Satélite:</strong> alternativa em áreas rurais e isoladas (especialmente região Norte)</li>
+                        <li><strong>Rádio e telefonia fixa:</strong> limitações geográficas</li>
+                    </ul>
+                    <div class="note">
+                        <p>A desigualdade digital reflete disparidades regionais.</p>
+                    </div>
+                </div>
+                
+                <div class="subtopic">
+                    <h3><i class="fas fa-network-wired"></i> Rede Urbana e Tecnologia</h3>
+                    <ul>
+                        <li>Conexões não hierarquizadas (fluxos baseados em especialização produtiva)</li>
+                        <li>Hierarquia clássica persiste em bens e serviços centrais</li>
+                        <li>Redes urbanas complexas e diferenciadas</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tópico 9: Planejamento Territorial (IBGE) -->
+        <div class="topic">
+            <h2><i class="fas fa-chart-bar"></i> Planejamento Territorial (IBGE)</h2>
+            <div class="topic-content">
+                <div class="subtopic">
+                    <h3><i class="fas fa-users"></i> Estudos de Arranjos Populacionais</h3>
+                    <ul>
+                        <li>Identificam conurbação, morfologia urbana, hierarquia de cidades</li>
+                        <li>Base para políticas de transporte, saneamento, habitação</li>
+                        <li>Transcendem limites municipais</li>
+                    </ul>
+                </div>
+                
+                <div class="subtopic">
+                    <h3><i class="fas fa-border-all"></i> Classificação e Delimitação</h3>
+                    <p>Essencial para desenvolvimento regional integrado</p>
+                    <div class="highlight">
+                        <p>Permite reconhecer as verdadeiras áreas urbanas que vão além dos limites municipais.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tópico 10: Geopolítica e Relações Internacionais -->
+        <div class="topic">
+            <h2><i class="fas fa-handshake"></i> Geopolítica e Relações Internacionais</h2>
+            <div class="topic-content">
+                <div class="subtopic">
+                    <h3><i class="fas fa-flag-usa"></i> China no Século XXI</h3>
+                    <ul>
+                        <li><strong>Maior parceiro comercial do Brasil</strong></li>
+                        <li>Fluxo: commodities brasileiras (soja, minério) × produtos manufaturados chineses</li>
+                        <li>Central na geopolítica econômica brasileira</li>
+                        <li>Define grande parte da balança comercial</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tópico 11: Macetes e Dicas de Estudo -->
+        <div class="topic">
+            <h2><i class="fas fa-lightbulb"></i> Macetes e Dicas de Estudo</h2>
+            <div class="topic-content">
+                <div class="subtopic">
+                    <h3><i class="fas fa-bolt"></i> Matriz Energética</h3>
+                    <div class="highlight">
+                        <p><strong>"Água e Planta vs. Petróleo e Carvão"</strong></p>
+                    </div>
+                </div>
+                
+                <div class="subtopic">
+                    <h3><i class="fas fa-building"></i> Gentrificação</h3>
+                    <div class="highlight">
+                        <p><strong>"revitalização + elitização"</strong></p>
+                    </div>
+                </div>
+                
+                <div class="subtopic">
+                    <h3><i class="fas fa-industry"></i> Setores Econômicos</h3>
+                    <div class="highlight">
+                        <p><strong>Primário (tira), Secundário (transforma), Terciário (serve)</strong></p>
+                    </div>
+                </div>
+                
+                <div class="subtopic">
+                    <h3><i class="fas fa-seedling"></i> Soja</h3>
+                    <div class="highlight">
+                        <p><strong>Sigla "B-M-E-I" (Brasil Maior, EUA Segundo)</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tópico 12: Alternativas Erradas Comuns -->
+        <div class="topic">
+            <h2><i class="fas fa-times-circle"></i> Alternativas Erradas Comuns</h2>
+            <div class="topic-content">
+                <div class="subtopic">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Correções Importantes</h3>
+                    <ul>
+                        <li><strong>Matriz energética brasileira ≠ pouca renovável</strong> (na verdade, é uma das mais renováveis do mundo)</li>
+                        <li><strong>"Manguetown" ≠ apenas descarte de lixo</strong> (é crítica à exclusão socioespacial)</li>
+                        <li><strong>"Milagre econômico" ≠ estagnação/hiperinflação</strong> (foi período de crescimento acelerado)</li>
+                        <li><strong>Região Metropolitana ≠ megalópolis</strong> (megalópolis conecta metrópoles)</li>
+                        <li><strong>Pecuária e extrativismo mineral = ambos primário</strong> (secundário é transformação)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p><i class="fas fa-book"></i> Mapa Mental de Geografia - Organização do Espaço Brasileiro</p>
+        <p>Baseado no caderno de erros do IBGE - Conteúdo completo para revisão</p>
+    </div>
+</body>
+</html>

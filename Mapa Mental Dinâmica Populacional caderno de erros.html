@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Mental - Dinâmica Populacional</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f9ff;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a237e, #3949ab);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .map-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .mind-map-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+            border-left: 6px solid;
+        }
+        
+        .mind-map-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .section-icon {
+            font-size: 1.8rem;
+            margin-right: 15px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            color: white;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .topic {
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 3px solid;
+            margin-left: 10px;
+        }
+        
+        .topic-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+        
+        .topic-content {
+            padding-left: 15px;
+            color: #555;
+        }
+        
+        .topic-list {
+            list-style-type: none;
+            padding-left: 15px;
+        }
+        
+        .topic-list li {
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .topic-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: inherit;
+            font-size: 1.2rem;
+        }
+        
+        .key-point {
+            background-color: #f0f7ff;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border-left: 4px solid;
+        }
+        
+        .note {
+            background-color: #fff8e1;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-style: italic;
+            font-size: 0.95rem;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            background-color: #e8eaf6;
+            border-radius: 10px;
+            color: #555;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .map-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌍 Mapa Mental: Dinâmica Populacional</h1>
+        <p class="subtitle">Geografia - Conteúdo completo e organizado para estudo</p>
+    </div>
+    
+    <div class="map-container">
+        <!-- Seção 1: Análise Demográfica e Gráficos -->
+        <div class="mind-map-section" style="border-left-color: #1a237e;">
+            <div class="section-header">
+                <div class="section-icon" style="background-color: #1a237e;">📊</div>
+                <h2 class="section-title">Análise Demográfica e Gráficos</h2>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Interpretação de Gráficos Populacionais</div>
+                <div class="topic-content">
+                    <ul class="topic-list">
+                        <li>Diferenciar crescimento absoluto vs. densidade demográfica</li>
+                        <li>Analisar tendências de longo prazo (décadas)</li>
+                        <li>Considerar múltiplos fatores interligados</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Pirâmides Etárias</div>
+                <div class="topic-content">
+                    <ul class="topic-list">
+                        <li>Forma revela estágio de desenvolvimento</li>
+                        <li>Base larga = alta natalidade, população jovem</li>
+                        <li>Topo alargado = população envelhecida</li>
+                        <li>Base e topo similares = transição concluída</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="key-point" style="border-left-color: #1a237e;">
+                <strong>Primeira pergunta ao ver gráfico:</strong> "Isso mostra números absolutos ou densidade (hab/km²)?"
+            </div>
+        </div>
+        
+        <!-- Seção 2: Transição Demográfica -->
+        <div class="mind-map-section" style="border-left-color: #d32f2f;">
+            <div class="section-header">
+                <div class="section-icon" style="background-color: #d32f2f;">🔄</div>
+                <h2 class="section-title">Transição Demográfica</h2>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Conceito</div>
+                <div class="topic-content">
+                    Mudança de altas para baixas taxas de natalidade/mortalidade
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Fases</div>
+                <div class="topic-content">
+                    <ul class="topic-list">
+                        <li>Altas ambas (crescimento lento, população jovem)</li>
+                        <li>Queda mortalidade (explosão populacional)</li>
+                        <li>Queda natalidade (desaceleração, população adulta)</li>
+                        <li>Baixas ambas (estagnação/envelhecimento)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Brasil: Transição "acentuada e rápida"</div>
+                <div class="topic-content">
+                    <ul class="topic-list">
+                        <li>Queda drástica da fecundidade</li>
+                        <li>Aumento da expectativa de vida</li>
+                        <li>Envelhecimento populacional acelerado</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="note">
+                <strong>Macete:</strong> "Morte Cai, Nascimento Atrasado, População Envelhece"
+            </div>
+        </div>
+        
+        <!-- Seção 3: Indicadores Demográficos -->
+        <div class="mind-map-section" style="border-left-color: #388e3c;">
+            <div class="section-header">
+                <div class="section-icon" style="background-color: #388e3c;">📏</div>
+                <h2 class="section-title">Indicadores Demográficos</h2>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Densidade Demográfica</div>
+                <div class="topic-content">hab/km² (distribuição espacial)</div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Crescimento Vegetativo</div>
+                <div class="topic-content">nascimentos - mortes</div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Taxa de Fecundidade</div>
+                <div class="topic-content">filhos por mulher</div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Taxa de Urbanização</div>
+                <div class="topic-content">% em áreas urbanas</div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Expectativa de Vida</div>
+                <div class="topic-content">anos médios de vida</div>
+            </div>
+            
+            <div class="key-point" style="border-left-color: #388e3c;">
+                <strong>Diferenciar na prova:</strong> Se menciona área territorial → Densidade Demográfica. Se menciona nascimentos/mortes → Crescimento Vegetativo.
+            </div>
+        </div>
+        
+        <!-- Seção 4: Migrações e Mobilidade Espacial -->
+        <div class="mind-map-section" style="border-left-color: #f57c00;">
+            <div class="section-header">
+                <div class="section-icon" style="background-color: #f57c00;">🚶</div>
+                <h2 class="section-title">Migrações e Mobilidade Espacial</h2>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Tipos de Migração</div>
+                <div class="topic-content">
+                    <ul class="topic-list">
+                        <li><strong>Êxodo Rural:</strong> campo → cidade, permanente</li>
+                        <li><strong>Migração Pendular:</strong> deslocamentos regulares diários</li>
+                        <li><strong>Transumância:</strong> sazonal com rebanhos</li>
+                        <li><strong>Migração de Retorno:</strong> volta à origem</li>
+                        <li><strong>Refúgio:</strong> forçada por perseguição/conflito</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Classificação de Migrantes</div>
+                <div class="topic-content">
+                    Analisar: motivação, temporalidade, legalidade, trajetória
+                </div>
+            </div>
+            
+            <div class="key-point" style="border-left-color: #f57c00;">
+                <strong>Solicitante de refúgio:</strong> busca documentos, integração, emprego. Diferenciar de turista, peregrino, imigrante econômico.
+            </div>
+        </div>
+        
+        <!-- Seção 5: Geografia Urbana e Regional -->
+        <div class="mind-map-section" style="border-left-color: #7b1fa2;">
+            <div class="section-header">
+                <div class="section-icon" style="background-color: #7b1fa2;">🏙️</div>
+                <h2 class="section-title">Geografia Urbana e Regional</h2>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Brasília: cidade planejada</div>
+                <div class="topic-content">
+                    <ul class="topic-list">
+                        <li>Projetada por Lúcio Costa e Oscar Niemeyer</li>
+                        <li>Impactos: demográfico (candangos), econômico, ambiental</li>
+                        <li>Crescimento desordenado nas periferias/satélites</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Distribuição Populacional Brasil</div>
+                <div class="topic-content">
+                    <ul class="topic-list">
+                        <li><strong>Mais populoso:</strong> São Paulo (concentração Sudeste)</li>
+                        <li><strong>Menos populoso:</strong> Roraima (baixa densidade Norte)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="note">
+                <strong>Memorização:</strong> RR (Roraima) = "Raríssimo" (menor população)
+            </div>
+        </div>
+        
+        <!-- Seção 6: Dinâmica Populacional Mundial -->
+        <div class="mind-map-section" style="border-left-color: #00796b;">
+            <div class="section-header">
+                <div class="section-icon" style="background-color: #00796b;">🌎</div>
+                <h2 class="section-title">Dinâmica Populacional Mundial</h2>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Padrões Globais</div>
+                <div class="topic-content">
+                    <ul class="topic-list">
+                        <li><strong>Países em desenvolvimento:</strong> alta fecundidade, população jovem</li>
+                        <li><strong>Países desenvolvidos:</strong> baixa fecundidade, população idosa</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">África Subsaariana</div>
+                <div class="topic-content">
+                    Exemplo atual de crescimento rápido, base jovem da pirâmide
+                </div>
+            </div>
+        </div>
+        
+        <!-- Seção 7: Fatores que Influenciam a População -->
+        <div class="mind-map-section" style="border-left-color: #5d4037;">
+            <div class="section-header">
+                <div class="section-icon" style="background-color: #5d4037;">⚙️</div>
+                <h2 class="section-title">Fatores que Influenciam a População</h2>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Três Dimensões</div>
+                <div class="topic-content">
+                    <ul class="topic-list">
+                        <li><strong>Dinâmica Natural:</strong> natalidade, mortalidade, fecundidade</li>
+                        <li><strong>Migratória:</strong> imigração/emigração</li>
+                        <li><strong>Contextual:</strong> políticas públicas, economia, urbanização</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Envelhecimento Populacional</div>
+                <div class="topic-content">
+                    <ul class="topic-list">
+                        <li><strong>Causas:</strong> queda fecundidade, aumento expectativa de vida</li>
+                        <li><strong>Consequências:</strong> pressão previdência/saúde, mudanças mercado</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Seção 8: Macetes para Provas -->
+        <div class="mind-map-section" style="border-left-color: #e64a19;">
+            <div class="section-header">
+                <div class="section-icon" style="background-color: #e64a19;">📝</div>
+                <h2 class="section-title">Macetes para Provas</h2>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Transição Demográfica</div>
+                <div class="topic-content">"Morte Cai, Nascimento Atrasado, População Envelhece"</div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Tipos de Migração</div>
+                <div class="topic-content">
+                    <ul class="topic-list">
+                        <li>Mudança de endereço? → Êxodo Rural</li>
+                        <li>Vaivém diário? → Migração Pendular</li>
+                        <li>Com rebanhos? → Transumância</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Pirâmide Etária</div>
+                <div class="topic-content">Primeira pergunta: "A base (jovens) é mais larga ou mais estreita que o topo (idosos)?"</div>
+            </div>
+        </div>
+        
+        <!-- Seção 9: Análise de Dados e Generalizações -->
+        <div class="mind-map-section" style="border-left-color: #0288d1;">
+            <div class="section-header">
+                <div class="section-icon" style="background-color: #0288d1;">🔍</div>
+                <h2 class="section-title">Análise de Dados e Generalizações</h2>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Interpretação de Tabelas/Gráficos</div>
+                <div class="topic-content">
+                    Comparar faixas etárias extremas (0-14 vs. 65+). Menos jovens + mais idosos = envelhecimento populacional
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Grandes Obras/Infraestrutura</div>
+                <div class="topic-content">
+                    Analisar impactos: demográfico, econômico, ambiental, político
+                </div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Modelo de Transição</div>
+                <div class="topic-content">
+                    Aplicável a qualquer país identificando fase pelas taxas de natalidade/mortalidade
+                </div>
+            </div>
+        </div>
+        
+        <!-- Seção 10: Casos Específicos Brasileiros -->
+        <div class="mind-map-section" style="border-left-color: #c2185b;">
+            <div class="section-header">
+                <div class="section-icon" style="background-color: #c2185b;">🇧🇷</div>
+                <h2 class="section-title">Casos Específicos Brasileiros</h2>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Migração Japonesa (1908)</div>
+                <div class="topic-content">Política emigratória do Japão para lavouras de café no Brasil</div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Migração Venezuelana</div>
+                <div class="topic-content">Crise econômico-política, migração Sul-Sul</div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Tocantins (1991-2022)</div>
+                <div class="topic-content">Aumento idade mediana (envelhecimento populacional)</div>
+            </div>
+            
+            <div class="topic">
+                <div class="topic-title">Cuidado com Idosos</div>
+                <div class="topic-content">Responsabilidade compartilhada (família + Estado)</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p><strong>Dica Final:</strong> Sempre relacione os conceitos demográficos com as unidades de medida ou contextos apresentados nos enunciados.</p>
+        <p>Cruzar informações de motivação, temporalidade e padrão espacial é crucial para classificar corretamente fenômenos migratórios.</p>
+        <p style="margin-top: 10px;">Mapa Mental baseado no conteúdo completo de Dinâmica Populacional - Geografia</p>
+    </div>
+</body>
+</html>

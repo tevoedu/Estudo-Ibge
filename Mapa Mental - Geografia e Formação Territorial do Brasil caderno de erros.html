@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Mental - Geografia e Formação Territorial do Brasil</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(90deg, #2c3e50, #4a6491);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .mind-map {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .node {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 5px solid;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .node:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .node-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .node-icon {
+            font-size: 1.8rem;
+            margin-right: 15px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: white;
+        }
+        
+        .node-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        
+        .node-content {
+            flex-grow: 1;
+        }
+        
+        .concept-list, .treaty-list, .region-list {
+            list-style-type: none;
+        }
+        
+        .concept-list li, .treaty-list li, .region-list li {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .concept-list li:before, .treaty-list li:before, .region-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #3498db;
+            font-size: 1.5rem;
+        }
+        
+        .concept-name {
+            font-weight: 700;
+            color: #2c3e50;
+            display: block;
+        }
+        
+        .concept-desc {
+            color: #555;
+            font-size: 0.95rem;
+        }
+        
+        .highlight {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .highlight-title {
+            font-weight: 700;
+            color: #c0392b;
+            margin-bottom: 8px;
+        }
+        
+        .treaty-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .treaty-table th, .treaty-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .treaty-table th {
+            background-color: #f2f2f2;
+            font-weight: 700;
+        }
+        
+        .treaty-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .principle {
+            background-color: #e8f4fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-style: italic;
+            border-left: 4px solid #3498db;
+        }
+        
+        .migration-box {
+            display: flex;
+            margin-top: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .repulsion, .attraction {
+            flex: 1;
+            padding: 15px;
+        }
+        
+        .repulsion {
+            border-right: 1px solid #ddd;
+            background-color: #ffeaea;
+        }
+        
+        .attraction {
+            background-color: #eaffea;
+        }
+        
+        .repulsion h4, .attraction h4 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            border-top: 1px solid #ddd;
+        }
+        
+        .color-1 { border-left-color: #3498db; }
+        .color-1 .node-icon { background-color: #3498db; }
+        
+        .color-2 { border-left-color: #2ecc71; }
+        .color-2 .node-icon { background-color: #2ecc71; }
+        
+        .color-3 { border-left-color: #e74c3c; }
+        .color-3 .node-icon { background-color: #e74c3c; }
+        
+        .color-4 { border-left-color: #f39c12; }
+        .color-4 .node-icon { background-color: #f39c12; }
+        
+        .color-5 { border-left-color: #9b59b6; }
+        .color-5 .node-icon { background-color: #9b59b6; }
+        
+        .color-6 { border-left-color: #1abc9c; }
+        .color-6 .node-icon { background-color: #1abc9c; }
+        
+        .color-7 { border-left-color: #d35400; }
+        .color-7 .node-icon { background-color: #d35400; }
+        
+        .color-8 { border-left-color: #34495e; }
+        .color-8 .node-icon { background-color: #34495e; }
+        
+        @media (max-width: 768px) {
+            .mind-map {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .node {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-map-marked-alt"></i> Mapa Mental - Geografia</h1>
+            <p class="subtitle">Conceitos Fundamentais e Formação Territorial do Brasil</p>
+        </header>
+        
+        <div class="mind-map">
+            <!-- CONCEITOS FUNDAMENTAIS -->
+            <div class="node color-1">
+                <div class="node-header">
+                    <div class="node-icon">
+                        <i class="fas fa-globe-americas"></i>
+                    </div>
+                    <h2 class="node-title">Conceitos Fundamentais</h2>
+                </div>
+                <div class="node-content">
+                    <ul class="concept-list">
+                        <li>
+                            <span class="concept-name">Território</span>
+                            <span class="concept-desc">Espaço apropriado, controlado e dotado de significado por um grupo social. Relações de poder, cultura e afetividade.</span>
+                        </li>
+                        <li>
+                            <span class="concept-name">Lugar</span>
+                            <span class="concept-desc">Espaço vivido, com significado afetivo, cultural e histórico. Escala do cotidiano, identidade e memória.</span>
+                        </li>
+                        <li>
+                            <span class="concept-name">Região</span>
+                            <span class="concept-desc">Área com características homogêneas (naturais, econômicas, culturais). Diferencia-se das áreas vizinhas.</span>
+                        </li>
+                        <li>
+                            <span class="concept-name">Territorialidade</span>
+                            <span class="concept-desc">Processo social de controle, apropriação e significação de um espaço. Envolve poder, identidade e cultura.</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="highlight">
+                        <div class="highlight-title">Como diferenciar:</div>
+                        <p><strong>Região</strong> = homogeneidade | <strong>Território</strong> = poder + síntese | <strong>Lugar</strong> = afeto + vivência</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FORMAÇÃO TERRITORIAL -->
+            <div class="node color-2">
+                <div class="node-header">
+                    <div class="node-icon">
+                        <i class="fas fa-landmark"></i>
+                    </div>
+                    <h2 class="node-title">Formação Territorial</h2>
+                </div>
+                <div class="node-content">
+                    <p><strong>Característica geral:</strong> Processo desigual, descontínuo e predatório. Ocupação litorânea concentrada, interior ocupado tardiamente.</p>
+                    
+                    <div class="principle">
+                        <strong>Princípio norteador:</strong> "Ocupação prática precedeu a formalização jurídica"
+                    </div>
+                    
+                    <h4>Agentes internos importantes:</h4>
+                    <ul class="concept-list">
+                        <li><strong>Bandeirantes:</strong> exploração e captura de indígenas</li>
+                        <li><strong>Tropeiros:</strong> transporte e comércio de gado</li>
+                        <li><strong>Missionários:</strong> catequese e ocupação</li>
+                        <li><strong>Sertanistas:</strong> exploração de recursos</li>
+                    </ul>
+                    
+                    <h4>Papel das atividades econômicas:</h4>
+                    <p>Pecuária, extrativismo, mineração e agricultura definiram rotas, fixação populacional e expansão territorial.</p>
+                </div>
+            </div>
+            
+            <!-- TRATADOS DE LIMITES -->
+            <div class="node color-3">
+                <div class="node-header">
+                    <div class="node-icon">
+                        <i class="fas fa-file-signature"></i>
+                    </div>
+                    <h2 class="node-title">Tratados de Limites</h2>
+                </div>
+                <div class="node-content">
+                    <table class="treaty-table">
+                        <thead>
+                            <tr>
+                                <th>Tratado</th>
+                                <th>Ano</th>
+                                <th>Princípio</th>
+                                <th>Consequência</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Tordesilhas</strong></td>
+                                <td>1494</td>
+                                <td>Meridiano (370 léguas)</td>
+                                <td>Rapidamente desrespeitado</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Utrecht</strong></td>
+                                <td>1713</td>
+                                <td>Definição fronteiras norte</td>
+                                <td>Amapá reconhecido como português</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Madri</strong></td>
+                                <td>1750</td>
+                                <td><strong>Uti possidetis</strong></td>
+                                <td>Reconheceu ocupação além de Tordesilhas</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Santo Ildefonso</strong></td>
+                                <td>1777</td>
+                                <td>Ajustes pontuais</td>
+                                <td>Portugal perdeu Colônia do Sacramento</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Petrópolis</strong></td>
+                                <td>1903</td>
+                                <td>Compensação financeira</td>
+                                <td>Incorporação do Acre ao Brasil</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="highlight" style="margin-top: 15px;">
+                        <div class="highlight-title">Ao estudar tratados:</div>
+                        <p>1. Contexto geopolítico (guerra/disputa)<br>
+                        2. Princípio aplicado (meridiano vs. ocupação efetiva)</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- REGIONALIZAÇÃO -->
+            <div class="node color-4">
+                <div class="node-header">
+                    <div class="node-icon">
+                        <i class="fas fa-map"></i>
+                    </div>
+                    <h2 class="node-title">Regionalização do Brasil</h2>
+                </div>
+                <div class="node-content">
+                    <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px;">
+                        <div style="flex: 1; min-width: 150px;">
+                            <h4>IBGE (5 regiões)</h4>
+                            <p><strong>Critério:</strong> Político-administrativo</p>
+                            <p>Cada estado pertence a apenas uma região</p>
+                            <ul class="region-list">
+                                <li>Norte</li>
+                                <li>Nordeste</li>
+                                <li>Centro-Oeste</li>
+                                <li>Sudeste</li>
+                                <li>Sul</li>
+                            </ul>
+                        </div>
+                        
+                        <div style="flex: 1; min-width: 150px;">
+                            <h4>Geiger (3 complexos)</h4>
+                            <p><strong>Critério:</strong> Geoeconômico</p>
+                            <p>Um estado pode pertencer a mais de uma região</p>
+                            <ul class="region-list">
+                                <li>Amazônia</li>
+                                <li>Nordeste</li>
+                                <li>Centro-Sul</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="highlight">
+                        <div class="highlight-title">Estados "duais" (Geiger):</div>
+                        <p>Maranhão, Tocantins, Piauí, Bahia, Minas Gerais, Mato Grosso</p>
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <p><strong>Pergunta-chave para análise:</strong> "Qual foi o critério utilizado para esta divisão?"</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PROCESSOS SOCIOECONÔMICOS -->
+            <div class="node color-5">
+                <div class="node-header">
+                    <div class="node-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h2 class="node-title">Processos Socioeconômicos</h2>
+                </div>
+                <div class="node-content">
+                    <h4>Ciclo do Café (século XIX):</h4>
+                    <ul class="concept-list">
+                        <li>Ocupação do Sudeste e Sul</li>
+                        <li>Ferrovias, imigração, urbanização</li>
+                        <li>Formação do eixo econômico nacional</li>
+                    </ul>
+                    
+                    <h4>Modernização Agrícola (século XX):</h4>
+                    <ul class="concept-list">
+                        <li>Mecanização e concentração fundiária</li>
+                        <li>Êxodo rural → urbanização acelerada</li>
+                    </ul>
+                    
+                    <h4>Company Towns:</h4>
+                    <p>Cidades controladas por uma empresa (ex: Fordlândia/AM, vilas de mineração)</p>
+                    
+                    <div class="highlight">
+                        <div class="highlight-title">Ciclo econômico molda território por:</div>
+                        <p>1. Áreas de ocupação<br>
+                        2. Redes de transporte<br>
+                        3. Fluxos populacionais<br>
+                        4. Hierarquia urbana</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- GEOGRAFIA FÍSICA -->
+            <div class="node color-6">
+                <div class="node-header">
+                    <div class="node-icon">
+                        <i class="fas fa-mountain"></i>
+                    </div>
+                    <h2 class="node-title">Geografia Física & Recursos</h2>
+                </div>
+                <div class="node-content">
+                    <h4>Escudos Cristalinos:</h4>
+                    <ul class="concept-list">
+                        <li>Formações antigas (Pré-Cambriano)</li>
+                        <li>Ocupam 36% do território brasileiro</li>
+                        <li>Riqueza mineral: ferro (Carajás, Quadrilátero Ferrífero), ouro, manganês</li>
+                    </ul>
+                    
+                    <div class="highlight">
+                        <div class="highlight-title">Migrações Internas:</div>
+                        <div class="migration-box">
+                            <div class="repulsion">
+                                <h4>Fatores de Repulsão (origem):</h4>
+                                <ul class="concept-list">
+                                    <li>Falta de oportunidades</li>
+                                    <li>Conflitos</li>
+                                    <li>Desastres naturais</li>
+                                </ul>
+                            </div>
+                            <div class="attraction">
+                                <h4>Fatores de Atração (destino):</h4>
+                                <ul class="concept-list">
+                                    <li>Oferta de emprego</li>
+                                    <li>Políticas de desenvolvimento</li>
+                                    <li>Melhor qualidade de vida</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- INDICADORES SOCIAIS -->
+            <div class="node color-7">
+                <div class="node-header">
+                    <div class="node-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h2 class="node-title">Indicadores Sociais</h2>
+                </div>
+                <div class="node-content">
+                    <h4>IDHM (Índice de Desenvolvimento Humano Municipal):</h4>
+                    <ul class="concept-list">
+                        <li><strong>Componentes:</strong> Longevidade, Educação, Renda</li>
+                        <li>Melhoria entre 2000-2010 devido a avanços sociais amplos</li>
+                        <li>Não foi resultado exclusivo do PIB ou pleno emprego</li>
+                    </ul>
+                    
+                    <div class="principle">
+                        <strong>Mecanismo fundamental da urbanização:</strong> Êxodo rural induzido por mudanças na estrutura produtiva do campo.
+                    </div>
+                    
+                    <h4>Criação de novos municípios/estados:</h4>
+                    <p>Relacionada à dinamização e crescimento econômico regional (expansão de fronteiras agrícolas, mineração, crescimento populacional).</p>
+                </div>
+            </div>
+            
+            <!-- RESUMO FINAL -->
+            <div class="node color-8">
+                <div class="node-header">
+                    <div class="node-icon">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <h2 class="node-title">Resumo Final</h2>
+                </div>
+                <div class="node-content">
+                    <h4>Palavras-chave:</h4>
+                    <ul class="concept-list">
+                        <li><strong>Território:</strong> poder, apropriação, identidade</li>
+                        <li><strong>Lugar:</strong> afeto, memória, cotidiano</li>
+                        <li><strong>Região:</strong> homogeneidade, análise</li>
+                        <li><strong>Territorialidade:</strong> processo, controle, significado</li>
+                        <li><strong>Uti possidetis:</strong> quem ocupa, possui</li>
+                        <li><strong>Êxodo rural → urbanização</strong></li>
+                    </ul>
+                    
+                    <div class="highlight">
+                        <div class="highlight-title">Princípios Gerais:</div>
+                        <p>• Ocupação prática > formalização jurídica<br>
+                        • Tratados: contexto + princípio<br>
+                        • Regionalização: identificar o critério<br>
+                        • Migrações: repulsão + atração</p>
+                    </div>
+                    
+                    <div style="margin-top: 15px; text-align: center; font-style: italic; color: #7f8c8d;">
+                        <p>Use para revisões, sínteses e conexões entre os temas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Mapa Mental de Geografia - Conceitos e Formação Territorial do Brasil</p>
+            <p>Baseado no conteúdo do caderno de erros do IBGE</p>
+        </footer>
+    </div>
+</body>
+</html>

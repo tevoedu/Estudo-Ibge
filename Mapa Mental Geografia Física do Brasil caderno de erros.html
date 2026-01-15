@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Mental - Geografia Física do Brasil</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .mindmap {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .category {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 5px solid #2a5298;
+        }
+        
+        .category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .category-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eaeaea;
+        }
+        
+        .category-icon {
+            width: 50px;
+            height: 50px;
+            background: #2a5298;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .category-title {
+            font-size: 1.5rem;
+            color: #1e3c72;
+            font-weight: 700;
+        }
+        
+        .subcategory {
+            margin-bottom: 25px;
+        }
+        
+        .subcategory-title {
+            font-size: 1.2rem;
+            color: #2a5298;
+            margin-bottom: 10px;
+            padding-left: 10px;
+            border-left: 4px solid #4CAF50;
+            font-weight: 600;
+        }
+        
+        .topic {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #FF9800;
+        }
+        
+        .topic-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .topic-title i {
+            margin-right: 8px;
+            color: #FF9800;
+        }
+        
+        .topic-content {
+            color: #555;
+            font-size: 0.95rem;
+        }
+        
+        .highlight {
+            background: #e8f4fd;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .highlight-title {
+            font-weight: 600;
+            color: #2196F3;
+            margin-bottom: 5px;
+        }
+        
+        .macete {
+            background: #f0f9eb;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .macete-title {
+            font-weight: 600;
+            color: #4CAF50;
+            margin-bottom: 5px;
+        }
+        
+        .connection-line {
+            height: 2px;
+            background: linear-gradient(90deg, #2a5298, transparent);
+            margin: 20px 0;
+        }
+        
+        .color-code {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .color-item {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #ddd;
+        }
+        
+        @media (max-width: 768px) {
+            .mindmap {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .category {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-brain"></i> Mapa Mental: Geografia Física do Brasil</h1>
+            <p class="subtitle">Conteúdo completo baseado no caderno de erros do IBGE</p>
+        </header>
+        
+        <div class="color-code">
+            <div class="color-item">
+                <div class="color-box" style="background-color: #2a5298;"></div>
+                <span>Categoria Principal</span>
+            </div>
+            <div class="color-item">
+                <div class="color-box" style="background-color: #4CAF50;"></div>
+                <span>Subcategoria</span>
+            </div>
+            <div class="color-item">
+                <div class="color-box" style="background-color: #FF9800;"></div>
+                <span>Tópico Específico</span>
+            </div>
+            <div class="color-item">
+                <div class="color-box" style="background-color: #2196F3;"></div>
+                <span>Destaque/Explicação</span>
+            </div>
+            <div class="color-item">
+                <div class="color-box" style="background-color: #4CAF50;"></div>
+                <span>Macete/Mnemônico</span>
+            </div>
+        </div>
+        
+        <div class="mindmap">
+            <!-- CATEGORIA 1 -->
+            <div class="category">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h2 class="category-title">Instrumentos de Medição</h2>
+                </div>
+                
+                <div class="subcategory">
+                    <h3 class="subcategory-title">Hidrológicos</h3>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-water"></i> Molinete Hidrométrico</div>
+                        <div class="topic-content">Mede VELOCIDADE da água. NÃO mede cota/altura.</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-ruler-vertical"></i> Régua Linimétrica/Linígrafo</div>
+                        <div class="topic-content">Mede ALTURA/COTA da água do rio.</div>
+                    </div>
+                </div>
+                
+                <div class="subcategory">
+                    <h3 class="subcategory-title">Climáticos</h3>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-thermometer-half"></i> Geotermômetro</div>
+                        <div class="topic-content">Mede temperatura do SOLO em diferentes profundidades.</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-thermometer-full"></i> Termopar</div>
+                        <div class="topic-content">Sensor de temperatura geral (não específico para solo).</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-tint"></i> Pluviômetro</div>
+                        <div class="topic-content">Mede volume de CHUVA.</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-wind"></i> Barômetro</div>
+                        <div class="topic-content">Mede PRESSÃO ATMOSFÉRICA.</div>
+                    </div>
+                </div>
+                
+                <div class="macete">
+                    <div class="macete-title">Macete de Memorização</div>
+                    <div class="topic-content">"Régua no Rio, Pluviômetro para Chuva, Termômetro no Ar, Geotermômetro no Chão, Higrômetro para Umidade"</div>
+                </div>
+            </div>
+            
+            <!-- CATEGORIA 2 -->
+            <div class="category">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-tree"></i>
+                    </div>
+                    <h2 class="category-title">Biomas Brasileiros</h2>
+                </div>
+                
+                <div class="subcategory">
+                    <h3 class="subcategory-title">Principais Biomas</h3>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-seedling"></i> Cerrado</div>
+                        <div class="topic-content">Savana brasileira (ex: Tocantins, Centro-Oeste). NÃO é Pampa.</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-mountain"></i> Pampa</div>
+                        <div class="topic-content">Campos temperados (extremo sul - RS).</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-forest"></i> Amazônia</div>
+                        <div class="topic-content">Floresta Ombrófila ("que ama chuva").</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-cactus"></i> Caatinga</div>
+                        <div class="topic-content">Savana Estépica (semiárido nordestino).</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-water"></i> Pantanal</div>
+                        <div class="topic-content">Planície alagável. NÃO é savana.</div>
+                    </div>
+                </div>
+                
+                <div class="subcategory">
+                    <h3 class="subcategory-title">Regiões de Transição</h3>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-map-marked-alt"></i> Maranhão</div>
+                        <div class="topic-content">Cerrado (64%), Amazônia (35%), Caatinga (1%).</div>
+                    </div>
+                </div>
+                
+                <div class="macete">
+                    <div class="macete-title">Macete de Identificação</div>
+                    <div class="topic-content">"Savana brasileira = Cerrado"; "Floresta úmida = Amazônia/Mata Atlântica"</div>
+                </div>
+            </div>
+            
+            <!-- CATEGORIA 3 -->
+            <div class="category">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-cloud-sun"></i>
+                    </div>
+                    <h2 class="category-title">Clima e Fatores Climáticos</h2>
+                </div>
+                
+                <div class="subcategory">
+                    <h3 class="subcategory-title">Fatores (ex: Centro-Oeste)</h3>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-globe-americas"></i> Continentalidade</div>
+                        <div class="topic-content">Maior amplitude térmica (dias quentes, noites frias).</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-wind"></i> Massas de Ar</div>
+                        <div class="topic-content">
+                            • mEc (Equatorial Continental): Calor e chuva no verão<br>
+                            • mPa (Polar Atlântica): Friagem no inverno<br>
+                            • mTa (Tropical Atlântica): Umidade
+                        </div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-sun"></i> Latitude Tropical</div>
+                        <div class="topic-content">Predomínio de temperaturas elevadas.</div>
+                    </div>
+                    
+                    <div class="highlight">
+                        <div class="highlight-title">IMPORTANTE</div>
+                        <div class="topic-content">Mato Grosso NÃO é extratropical - está na ZONA TROPICAL.</div>
+                    </div>
+                </div>
+                
+                <div class="subcategory">
+                    <h3 class="subcategory-title">Fenômenos Climáticos</h3>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-snowflake"></i> Friagem</div>
+                        <div class="topic-content">Invasão de massa polar (mPa) na Amazônia. NÃO é inversão térmica.</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-temperature-high"></i> Inversão Térmica</div>
+                        <div class="topic-content">Fenômeno local (ar quente aprisiona frio). Comum em cidades poluídas.</div>
+                    </div>
+                </div>
+                
+                <div class="subcategory">
+                    <h3 class="subcategory-title">Tipos de Nevoeiro</h3>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-cloud"></i> Radiação</div>
+                        <div class="topic-content">Noite, céu claro, solo frio (terra firme).</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-wind"></i> Advecção</div>
+                        <div class="topic-content">Ar quente/úmido sobre superfície fria (mar/terra).</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CATEGORIA 4 -->
+            <div class="category">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h2 class="category-title">Geografia Humana e História</h2>
+                </div>
+                
+                <div class="subcategory">
+                    <h3 class="subcategory-title">Ciclos Econômicos da Amazônia</h3>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-history"></i> 1. Drogas do Sertão (séc. XVII-XVIII)</div>
+                        <div class="topic-content">Especiarias (cacau, cravo).</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-industry"></i> 2. Ciclo da Borracha (fim XIX - início XX)</div>
+                        <div class="topic-content">Látex, urbanização (Belém, Manaus).</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-road"></i> 3. Expansão Capitalista (1960s em diante)</div>
+                        <div class="topic-content">Rodovias, agropecuária, mineração (Carajás).</div>
+                    </div>
+                    
+                    <div class="highlight">
+                        <div class="highlight-title">Sistema de Aviamento</div>
+                        <div class="topic-content">Crédito informal durante o ciclo da borracha.</div>
+                    </div>
+                </div>
+                
+                <div class="subcategory">
+                    <h3 class="subcategory-title">Terminologia</h3>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-ship"></i> Regatão</div>
+                        <div class="topic-content">Comerciante fluvial amazônico (NÃO "regateiro").</div>
+                    </div>
+                </div>
+                
+                <div class="subcategory">
+                    <h3 class="subcategory-title">Crescimento Urbano - Manaus</h3>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-city"></i> Zona Franca de Manaus</div>
+                        <div class="topic-content">Principal fator de atração populacional.</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-ship"></i> Transporte Principal</div>
+                        <div class="topic-content">HIDROVIÁRIO (não rodoviário).</div>
+                    </div>
+                </div>
+                
+                <div class="macete">
+                    <div class="macete-title">Macete Cronológico</div>
+                    <div class="topic-content">"Drogas do Sertão (XVII-XVIII) → Borracha (XIX-XX) → Expansão Capitalista (XX)"</div>
+                </div>
+            </div>
+            
+            <!-- CATEGORIA 5 -->
+            <div class="category">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-tractor"></i>
+                    </div>
+                    <h2 class="category-title">Agricultura e Uso do Solo</h2>
+                </div>
+                
+                <div class="subcategory">
+                    <h3 class="subcategory-title">Tipos de Agricultura</h3>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-home"></i> Agricultura Familiar</div>
+                        <div class="topic-content">Maior contingente no NORDESTE (não no Centro-Oeste).</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-industry"></i> Agricultura Empresarial</div>
+                        <div class="topic-content">Centro-Oeste (soja, gado).</div>
+                    </div>
+                </div>
+                
+                <div class="macete">
+                    <div class="macete-title">Macete de Memorização</div>
+                    <div class="topic-content">"Nordeste = Pequena Propriedade + Muita Gente"</div>
+                </div>
+            </div>
+            
+            <!-- CATEGORIA 6 -->
+            <div class="category">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <h2 class="category-title">Recursos Hídricos</h2>
+                </div>
+                
+                <div class="subcategory">
+                    <h3 class="subcategory-title">Uso Global da Água</h3>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-seedling"></i> Agricultura</div>
+                        <div class="topic-content">~70% (Maior consumidor).</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-industry"></i> Indústria</div>
+                        <div class="topic-content">~20%.</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-home"></i> Uso Doméstico</div>
+                        <div class="topic-content">~10%.</div>
+                    </div>
+                </div>
+                
+                <div class="macete">
+                    <div class="macete-title">Macete Lógico</div>
+                    <div class="topic-content">"Comida precisa de água → Agricultura consome mais"</div>
+                </div>
+            </div>
+            
+            <!-- CATEGORIA 7 -->
+            <div class="category">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-tree"></i>
+                    </div>
+                    <h2 class="category-title">Vegetação da Amazônia</h2>
+                </div>
+                
+                <div class="subcategory">
+                    <h3 class="subcategory-title">Formações Florestais</h3>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-mountain"></i> Terra Firme</div>
+                        <div class="topic-content">NUNCA alaga. Alta biodiversidade.</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-water"></i> Várzea</div>
+                        <div class="topic-content">Alagamento SAZONAL. Solo fértil.</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-swimming-pool"></i> Igapó</div>
+                        <div class="topic-content">Alagamento PERMANENTE. Solo pobre, menor diversidade.</div>
+                    </div>
+                </div>
+                
+                <div class="macete">
+                    <div class="macete-title">Macete de Diferenciação</div>
+                    <div class="topic-content">"Igapó = PERMANENTE; Várzea = SAZONAL; Terra Firme = NUNCA"</div>
+                </div>
+            </div>
+            
+            <!-- CATEGORIA 8 -->
+            <div class="category">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-wind"></i>
+                    </div>
+                    <h2 class="category-title">Circulação Atmosférica e Marítima</h2>
+                </div>
+                
+                <div class="subcategory">
+                    <h3 class="subcategory-title">Correntes Marítimas</h3>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-thermometer-three-quarters"></i> Corrente Quente na Costa</div>
+                        <div class="topic-content">Ar instável → CHUVA.</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-thermometer-quarter"></i> Corrente Fria na Costa</div>
+                        <div class="topic-content">Ar estável → SECA (ex: desertos no litoral oeste).</div>
+                    </div>
+                </div>
+                
+                <div class="subcategory">
+                    <h3 class="subcategory-title">Ventos</h3>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-wind"></i> Ventos Alísios</div>
+                        <div class="topic-content">Atuam em baixas latitudes. NÃO são principal causa do padrão leste-oeste de chuvas.</div>
+                    </div>
+                </div>
+                
+                <div class="macete">
+                    <div class="macete-title">Regra Prática</div>
+                    <div class="topic-content">"Corrente Quente = Chuva; Corrente Fria = Seca"</div>
+                </div>
+            </div>
+            
+            <!-- CATEGORIA 9 -->
+            <div class="category">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-smog"></i>
+                    </div>
+                    <h2 class="category-title">Poluição e Impactos Ambientais</h2>
+                </div>
+                
+                <div class="subcategory">
+                    <h3 class="subcategory-title">Poluição em Manaus</h3>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-car"></i> Principal Causa</div>
+                        <div class="topic-content">Transporte RODOVIÁRIO (queima de combustíveis fósseis).</div>
+                    </div>
+                </div>
+                
+                <div class="subcategory">
+                    <h3 class="subcategory-title">Energia Elétrica</h3>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-bolt"></i> Consumo vs Geração</div>
+                        <div class="topic-content">Consumo NÃO polui diretamente. Poluição vem da GERAÇÃO (se termoelétrica).</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-fire"></i> Termoelétricas</div>
+                        <div class="topic-content">A gás poluem MENOS que as a diesel.</div>
+                    </div>
+                </div>
+                
+                <div class="macete">
+                    <div class="macete-title">Macete de Análise</div>
+                    <div class="topic-content">"Energia elétrica consumida não polui. A poluição está na geração."</div>
+                </div>
+            </div>
+            
+            <!-- CATEGORIA 10 -->
+            <div class="category">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h2 class="category-title">Macetes e Generalizações</h2>
+                </div>
+                
+                <div class="subcategory">
+                    <h3 class="subcategory-title">Abordagem para Questões</h3>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-clipboard-check"></i> Monitoramento Ambiental</div>
+                        <div class="topic-content">Identifique a variável: cota → régua; chuva → pluviômetro; etc.</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-tree"></i> Identificação de Biomas</div>
+                        <div class="topic-content">Associe características + localização.</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-cloud-sun"></i> Análise Climática</div>
+                        <div class="topic-content">Verifique: massas de ar, continentalidade, latitude, correntes marítimas.</div>
+                    </div>
+                </div>
+                
+                <div class="subcategory">
+                    <h3 class="subcategory-title">Massas de Ar no Centro-Oeste</h3>
+                    <div class="topic">
+                        <div class="topic-title"><i class="fas fa-snowflake"></i> Frio no Inverno</div>
+                        <div class="topic-content">Massa Polar Atlântica (mPa).</div>
+                    </div>
+                </div>
+                
+                <div class="highlight">
+                    <div class="highlight-title">Estratégia Geral</div>
+                    <div class="topic-content">Sempre relacione o nome técnico/regional com características e localização no mapa brasileiro.</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="connection-line"></div>
+        
+        <footer>
+            <p>Mapa Mental de Geografia Física do Brasil | Baseado no caderno de erros do IBGE</p>
+            <p>Organizado por categorias para estudo sistemático | Conteúdo completo e didático</p>
+        </footer>
+    </div>
+</body>
+</html>

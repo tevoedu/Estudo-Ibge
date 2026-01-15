@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Mental - Segurança da Informação</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f9ff;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 25px;
+            background: linear-gradient(135deg, #1a2980, #26d0ce);
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            max-width: 900px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 6px solid;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-title i {
+            font-size: 1.8rem;
+        }
+        
+        .subsection {
+            margin-bottom: 20px;
+            background-color: #f8faff;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        
+        .subsection-title {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        ul {
+            list-style-type: none;
+            padding-left: 10px;
+        }
+        
+        ul li {
+            margin-bottom: 8px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        ul li:before {
+            content: "•";
+            color: #3498db;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        .sub-item {
+            margin-left: 20px;
+            font-size: 0.95rem;
+            color: #555;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 8px;
+            margin-bottom: 5px;
+        }
+        
+        .principle-box {
+            background-color: #e8f4fc;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .principle-title {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .color-1 { border-color: #1a2980; color: #1a2980; }
+        .color-2 { border-color: #26d0ce; color: #26d0ce; }
+        .color-3 { border-color: #8e44ad; color: #8e44ad; }
+        .color-4 { border-color: #e74c3c; color: #e74c3c; }
+        .color-5 { border-color: #f39c12; color: #f39c12; }
+        .color-6 { border-color: #2ecc71; color: #2ecc71; }
+        .color-7 { border-color: #9b59b6; color: #9b59b6; }
+        .color-8 { border-color: #1abc9c; color: #1abc9c; }
+        .color-9 { border-color: #d35400; color: #d35400; }
+        .color-10 { border-color: #34495e; color: #34495e; }
+        
+        .bg-color-1 { background-color: #eef2ff; }
+        .bg-color-2 { background-color: #e0f7fa; }
+        .bg-color-3 { background-color: #f3e5f5; }
+        .bg-color-4 { background-color: #ffebee; }
+        .bg-color-5 { background-color: #fff3e0; }
+        .bg-color-6 { background-color: #e8f5e9; }
+        .bg-color-7 { background-color: #f3e5f5; }
+        .bg-color-8 { background-color: #e0f2f1; }
+        .bg-color-9 { background-color: #fbe9e7; }
+        .bg-color-10 { background-color: #eceff1; }
+        
+        .badge-1 { background-color: #1a2980; color: white; }
+        .badge-2 { background-color: #26d0ce; color: white; }
+        .badge-3 { background-color: #8e44ad; color: white; }
+        .badge-4 { background-color: #e74c3c; color: white; }
+        .badge-5 { background-color: #f39c12; color: white; }
+        .badge-6 { background-color: #2ecc71; color: white; }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            border-top: 1px solid #ddd;
+        }
+        
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background-color: #3498db;
+            width: 100%;
+            top: 50%;
+            left: 100%;
+            z-index: -1;
+        }
+        
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><i class="fas fa-brain"></i> MAPA MENTAL COMPLETO</h1>
+        <h2>Segurança da Informação e Legislação Brasileira</h2>
+        <p>Organização visual de todos os conceitos, legislações, ameaças, defesas e boas práticas em segurança da informação</p>
+    </div>
+    
+    <div class="container">
+        <!-- SEÇÃO 1: LEGISLAÇÃO BRASILEIRA -->
+        <div class="section bg-color-1">
+            <div class="section-title color-1">
+                <i class="fas fa-gavel"></i> 1. LEGISLAÇÃO BRASILEIRA
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-1">
+                    <i class="fas fa-shield-alt"></i> LGPD (Lei 13.709/2018)
+                </div>
+                <ul>
+                    <li><strong>Objetivo:</strong> Proteger dados pessoais, garantir privacidade e intimidade</li>
+                    <li><strong>Requisitos:</strong> Consentimento explícito, livre e informado</li>
+                    <li><strong>Princípios:</strong>
+                        <div class="sub-item">• Finalidade específica e legítima</div>
+                        <div class="sub-item">• Adequação e necessidade</div>
+                        <div class="sub-item">• Livre acesso e transparência</div>
+                        <div class="sub-item">• Qualidade dos dados</div>
+                        <div class="sub-item">• Responsabilização e prestação de contas</div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-1">
+                    <i class="fas fa-globe-americas"></i> Marco Civil da Internet
+                </div>
+                <ul>
+                    <li><strong>Constituição da Internet brasileira</strong></li>
+                    <li><strong>Princípios:</strong>
+                        <div class="sub-item">• Neutralidade da rede</div>
+                        <div class="sub-item">• Proteção à privacidade digital</div>
+                        <div class="sub-item">• Responsabilidade dos provedores</div>
+                        <div class="sub-item">• Liberdade de expressão</div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-1">
+                    <i class="fas fa-user-shield"></i> Lei Carolina Dieckmann
+                </div>
+                <ul>
+                    <li><strong>Crimes tipificados:</strong></li>
+                    <div class="sub-item">• Invasão de dispositivo informático</div>
+                    <div class="sub-item">• Obtenção/adulteração/destruição de dados</div>
+                    <div class="sub-item">• Interrupção ou perturbação de serviço</div>
+                    <div class="sub-item">• Falsificação de documentos eletrônicos</div>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- SEÇÃO 2: FUNDAMENTOS DA SEGURANÇA -->
+        <div class="section bg-color-2">
+            <div class="section-title color-2">
+                <i class="fas fa-lock"></i> 2. FUNDAMENTOS DA SEGURANÇA
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-2">
+                    <i class="fas fa-triangle"></i> Tríade CID
+                </div>
+                <div class="principle-box">
+                    <div class="principle-title">
+                        <i class="fas fa-user-secret"></i> Confidencialidade
+                    </div>
+                    <p>Acesso às informações apenas por pessoas ou sistemas autorizados</p>
+                </div>
+                
+                <div class="principle-box">
+                    <div class="principle-title">
+                        <i class="fas fa-check-circle"></i> Integridade
+                    </div>
+                    <p>Garantia de que os dados sejam precisos, completos e não alterados indevidamente</p>
+                </div>
+                
+                <div class="principle-box">
+                    <div class="principle-title">
+                        <i class="fas fa-plug"></i> Disponibilidade
+                    </div>
+                    <p>Acesso à informação e aos sistemas sempre que necessário por usuários autorizados</p>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-2">
+                    <i class="fas fa-cubes"></i> Acrônimo DICA
+                </div>
+                <ul>
+                    <li><strong>D</strong>isponibilidade</li>
+                    <li><strong>I</strong>ntegridade</li>
+                    <li><strong>C</strong>onfidencialidade</li>
+                    <li><strong>A</strong>utenticidade</li>
+                </ul>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-2">
+                    <i class="fas fa-star"></i> Outros Princípios
+                </div>
+                <ul>
+                    <li><strong>Autenticidade:</strong> Garantia de origem genuína</li>
+                    <li><strong>Não Repúdio:</strong> Prova irrefutável de autoria</li>
+                    <li><strong>Confiabilidade:</strong> Sistema cumpre propósito continuamente</li>
+                    <li><strong>Primariedade (LAI):</strong> Dados coletados na fonte primária</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- SEÇÃO 3: FATOR HUMANO -->
+        <div class="section bg-color-3">
+            <div class="section-title color-3">
+                <i class="fas fa-users"></i> 3. FATOR HUMANO
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-3">
+                    <i class="fas fa-balance-scale"></i> Dualidade Humana
+                </div>
+                <ul>
+                    <li><strong>Elo mais fraco:</strong>
+                        <div class="sub-item">• Negligência (senhas anotadas)</div>
+                        <div class="sub-item">• Engenharia social (phishing)</div>
+                        <div class="sub-item">• Vazamentos intencionais (insiders)</div>
+                        <div class="sub-item">• Erros não intencionais</div>
+                    </li>
+                    <li><strong>Linha de defesa:</strong>
+                        <div class="sub-item">• Comportamento ético</div>
+                        <div class="sub-item">• Cumprimento de políticas</div>
+                        <div class="sub-item">• Consciência situacional</div>
+                        <div class="sub-item">• Denúncia proativa</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- SEÇÃO 4: CONTROLE DE ACESSO -->
+        <div class="section bg-color-4">
+            <div class="section-title color-4">
+                <i class="fas fa-key"></i> 4. CONTROLE DE ACESSO
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-4">
+                    <i class="fas fa-sign-in-alt"></i> Processo de Controle
+                </div>
+                <ul>
+                    <li><strong>1. Identificação:</strong> Declarar identidade (username, e-mail, CPF)</li>
+                    <li><strong>2. Autenticação:</strong> Verificar identidade (senha, biometria, token)</li>
+                    <li><strong>3. Autorização:</strong> Definir permissões (o que pode fazer)</li>
+                </ul>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-4">
+                    <i class="fas fa-user-lock"></i> MFA (Autenticação Multifator)
+                </div>
+                <ul>
+                    <li><strong>3 Fatores:</strong></li>
+                    <div class="sub-item">• Algo que você SABE (senha)</div>
+                    <div class="sub-item">• Algo que você TEM (token, smartphone)</div>
+                    <div class="sub-item">• Algo que você É (biometria)</div>
+                    <div class="sub-item">• Algo que você FAZ (biometria comportamental)</div>
+                </ul>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-4">
+                    <i class="fas fa-mobile-alt"></i> Métodos OTP
+                </div>
+                <ul>
+                    <li>SMS</li>
+                    <li>E-mail</li>
+                    <li>Aplicativos autenticadores</li>
+                    <li>Tokens físicos</li>
+                    <li>Chamada telefônica</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- SEÇÃO 5: AMEAÇAS E ATAQUES -->
+        <div class="section bg-color-5">
+            <div class="section-title color-5">
+                <i class="fas fa-bug"></i> 5. AMEAÇAS E ATAQUES
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-5">
+                    <i class="fas fa-fish"></i> Engenharia Social
+                </div>
+                <ul>
+                    <li><span class="badge badge-4">Phishing</span> E-mails falsos</li>
+                    <li><span class="badge badge-4">Pharming</span> Redirecionamento DNS</li>
+                    <li><span class="badge badge-4">Smishing</span> Phishing por SMS</li>
+                    <li><span class="badge badge-4">Robotexts</span> SMS fraudulentos automáticos</li>
+                    <li><span class="badge badge-4">Malvertising</span> Anúncios maliciosos</li>
+                </ul>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-5">
+                    <i class="fas fa-code"></i> Ataques Técnicos
+                </div>
+                <ul>
+                    <li><span class="badge badge-5">SQL Injection</span> Injeção de código SQL</li>
+                    <li><span class="badge badge-5">DDoS</span> Sobrecarga de serviços</li>
+                    <li><span class="badge badge-5">Força Bruta</span> Teste sistemático de senhas</li>
+                    <li><span class="badge badge-5">Session Hijacking</span> Roubo de token de sessão</li>
+                    <li><span class="badge badge-5">Spoofing</span> Falsificação de identidade</li>
+                </ul>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-5">
+                    <i class="fas fa-exclamation-triangle"></i> Vulnerabilidades
+                </div>
+                <ul>
+                    <li>Software desatualizado</li>
+                    <li>Senhas fracas/padrão</li>
+                    <li>Falhas de programação (SQLi, XSS)</li>
+                    <li>Configurações inseguras</li>
+                    <li>Falta de criptografia</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- SEÇÃO 6: MALWARE -->
+        <div class="section bg-color-6">
+            <div class="section-title color-6">
+                <i class="fas fa-virus"></i> 6. MALWARE
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-6">
+                    <i class="fas fa-biohazard"></i> Vírus
+                </div>
+                <ul>
+                    <li><strong>Boot:</strong> Infecta setor de inicialização</li>
+                    <li><strong>Macro:</strong> Em documentos com macros</li>
+                    <li><strong>Stealth:</strong> Evita detecção</li>
+                    <li><strong>Polimórfico:</strong> Muta código</li>
+                    <li><strong>Bomba Relógio:</strong> Ativa por condição/tempo</li>
+                </ul>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-6">
+                    <i class="fas fa-spider"></i> Outros Tipos
+                </div>
+                <ul>
+                    <li><span class="badge badge-6">Cavalo de Troia</span> Disfarçado de software legítimo</li>
+                    <li><span class="badge badge-6">RAT</span> Controle remoto total</li>
+                    <li><span class="badge badge-6">Worm</span> Autopropagável</li>
+                    <li><span class="badge badge-6">Ransomware</span> Criptografa e exige resgate</li>
+                    <li><span class="badge badge-6">Spyware</span> Coleta informações</li>
+                    <li><span class="badge badge-6">Botnet</span> Rede de bots para ataques</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- SEÇÃO 7: MECANISMOS DE DEFESA -->
+        <div class="section bg-color-7">
+            <div class="section-title color-7">
+                <i class="fas fa-shield-virus"></i> 7. DEFESAS
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-7">
+                    <i class="fas fa-search"></i> Antivírus/Antimalware
+                </div>
+                <ul>
+                    <li><strong>Componentes:</strong> Mecanismo de varredura + definições</li>
+                    <li><strong>Ações:</strong> Quarentena, exclusão, desinfecção</li>
+                    <li><strong>Pago vs Gratuito:</strong> Atualizações, suporte, funcionalidades</li>
+                </ul>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-7">
+                    <i class="fas fa-fire"></i> Firewall
+                </div>
+                <ul>
+                    <li><strong>Função:</strong> Controlar tráfego de rede (entrada/saída)</li>
+                    <li><strong>Limitação:</strong> Não protege contra todo malware</li>
+                </ul>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-7">
+                    <i class="fas fa-eye"></i> IDS vs IPS
+                </div>
+                <ul>
+                    <li><strong>IDS:</strong> Detecta e alerta (passivo) - NIDS/HIDS</li>
+                    <li><strong>IPS:</strong> Detecta e bloqueia (preventivo)</li>
+                </ul>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-7">
+                    <i class="fab fa-windows"></i> Windows Security
+                </div>
+                <ul>
+                    <li>Microsoft Defender (antivírus)</li>
+                    <li>Firewall do Windows</li>
+                    <li>Windows Update (patches)</li>
+                    <li>BitLocker (criptografia)</li>
+                    <li>SmartScreen (anti-phishing)</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- SEÇÃO 8: CRIPTOGRAFIA -->
+        <div class="section bg-color-8">
+            <div class="section-title color-8">
+                <i class="fas fa-lock"></i> 8. CRIPTOGRAFIA
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-8">
+                    <i class="fas fa-exchange-alt"></i> Simétrica vs Assimétrica
+                </div>
+                <div class="principle-box">
+                    <div class="principle-title">
+                        <i class="fas fa-key"></i> Simétrica
+                    </div>
+                    <p><strong>Uma chave secreta compartilhada</strong></p>
+                    <div class="sub-item">• Exemplos: AES, DES, Blowfish</div>
+                    <div class="sub-item">• Vantagem: Rápida</div>
+                    <div class="sub-item">• Desvantagem: Distribuição da chave</div>
+                </div>
+                
+                <div class="principle-box">
+                    <div class="principle-title">
+                        <i class="fas fa-keyboard"></i> Assimétrica
+                    </div>
+                    <p><strong>Par de chaves (pública/privada)</strong></p>
+                    <div class="sub-item">• Exemplos: RSA, ECC</div>
+                    <div class="sub-item">• Aplicações: SSL/TLS, assinaturas digitais</div>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-8">
+                    <i class="fas fa-certificate"></i> Certificação Digital
+                </div>
+                <ul>
+                    <li><strong>Autoridade Certificadora (AC):</strong> Emite e assina certificados</li>
+                    <li><strong>Cadeia de confiança:</strong> AC Raiz → AC Intermediária → Usuário</li>
+                </ul>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-8">
+                    <i class="fas fa-signature"></i> Assinatura Digital
+                </div>
+                <ul>
+                    <li><strong>Criação:</strong> Hash do documento + criptografia com chave privada</li>
+                    <li><strong>Verificação:</strong> Descriptografia com chave pública + comparação de hash</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- SEÇÃO 9: GESTÃO E BOAS PRÁTICAS -->
+        <div class="section bg-color-9">
+            <div class="section-title color-9">
+                <i class="fas fa-tasks"></i> 9. GESTÃO E BOAS PRÁTICAS
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-9">
+                    <i class="fas fa-save"></i> Backup e Recuperação
+                </div>
+                <div class="principle-box">
+                    <div class="principle-title">
+                        <i class="fas fa-history"></i> RPO (Recovery Point Objective)
+                    </div>
+                    <p>Mede "QUANTO" dado pode ser perdido</p>
+                </div>
+                
+                <div class="principle-box">
+                    <div class="principle-title">
+                        <i class="fas fa-clock"></i> RTO (Recovery Time Objective)
+                    </div>
+                    <p>Mede "QUANTO TEMPO" leva para recuperar</p>
+                </div>
+                
+                <ul>
+                    <li><strong>Teste de restauração:</strong> Crítico para validação</li>
+                    <li><strong>Deduplicação:</strong> Elimina dados redundantes</li>
+                </ul>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-9">
+                    <i class="fas fa-hard-hat"></i> Hardening
+                </div>
+                <ul>
+                    <li><strong>Definição:</strong> Fortificação de sistemas</li>
+                    <li><strong>Ações:</strong> Remover serviços desnecessários, aplicar patches, ajustar configurações</li>
+                    <li><strong>Exemplo:</strong> Hardening de USB (desabilitar AutoRun)</li>
+                </ul>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-9">
+                    <i class="fas fa-project-diagram"></i> Continuidade de Negócios
+                </div>
+                <ul>
+                    <li><strong>BCM:</strong> Gestão holística da continuidade</li>
+                    <li><strong>BCP:</strong> Plano de continuidade de negócios</li>
+                    <li><strong>DRP:</strong> Plano de recuperação de desastres</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- SEÇÃO 10: RELACIONAMENTOS E SINERGIAS -->
+        <div class="section bg-color-10">
+            <div class="section-title color-10">
+                <i class="fas fa-link"></i> 10. RELACIONAMENTOS E SINERGIAS
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-10">
+                    <i class="fas fa-sitemap"></i> Interconexões
+                </div>
+                <ul>
+                    <li><strong>Marco Civil</strong> → Estabelece direitos fundamentais</li>
+                    <li><strong>LGPD</strong> → Detalha proteção de dados</li>
+                    <li><strong>Lei Carolina Dieckmann</strong> → Pune violações criminosas</li>
+                    <li><strong>ISO 27002</strong> → Fornece diretrizes de implementação</li>
+                </ul>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title color-10">
+                    <i class="fas fa-layer-group"></i> Estratégias Integradas
+                </div>
+                <ul>
+                    <li><strong>Hardening + Monitoramento</strong> → Defesa em profundidade</li>
+                    <li><strong>Criptografia + Controle de acesso</strong> → Proteção em camadas</li>
+                    <li><strong>Backup + Continuidade</strong> → Resiliência organizacional</li>
+                </ul>
+            </div>
+            
+            <div class="principle-box">
+                <div class="principle-title">
+                    <i class="fas fa-bullseye"></i> Princípio Central
+                </div>
+                <p>Segurança da Informação é um processo contínuo e em camadas, envolvendo pessoas, processos e tecnologia, sempre alinhado à legislação vigente e às melhores práticas do setor.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p><i class="fas fa-map"></i> Mapa Mental Completo de Segurança da Informação</p>
+        <p>Baseado no conteúdo fornecido: Legislação, Fundamentos, Ameaças, Defesas, Criptografia e Boas Práticas</p>
+        <p><i class="fas fa-info-circle"></i> Todo o conteúdo está organizado visualmente para estudo e referência</p>
+    </div>
+</body>
+</html>
