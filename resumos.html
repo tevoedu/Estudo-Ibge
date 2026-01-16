@@ -28,6 +28,7 @@
             --cartography-color: #3b82f6;
             --brazil-color: #84cc16;
             --errors-color: #ec4899;
+            --simulado1-color: #9d4edd;
             --radius-lg: 24px;
             --radius-md: 16px;
             --radius-sm: 12px;
@@ -86,6 +87,13 @@
             backdrop-filter: blur(20px);
             border: 1px solid var(--border);
             box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .viewer-open .header {
+            opacity: 0.3;
+            transform: scale(0.98);
+            pointer-events: none;
         }
 
         .logo-container {
@@ -181,6 +189,13 @@
             grid-template-columns: 300px 1fr;
             gap: 30px;
             margin-bottom: 60px;
+            transition: var(--transition);
+        }
+
+        .viewer-open .main-layout {
+            opacity: 0.3;
+            transform: scale(0.98);
+            pointer-events: none;
         }
 
         /* Sidebar */
@@ -455,21 +470,19 @@
             border: 1px solid var(--border);
         }
 
-        /* Viewer modal */
+        /* Viewer modal - CORREÇÕES APLICADAS */
         .viewer-modal {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: rgba(0, 0, 0, 0.95);
             display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 40px;
-            backdrop-filter: blur(10px);
-            animation: fadeIn 0.3s ease-out;
+            z-index: 2000;
+            opacity: 0;
+            animation: fadeIn 0.3s ease-out forwards;
+            overflow: hidden;
         }
 
         @keyframes fadeIn {
@@ -479,22 +492,19 @@
 
         .viewer-container {
             background-color: var(--bg-primary);
-            border-radius: var(--radius-lg);
             width: 100%;
-            max-width: 1500px;
-            height: 90vh;
+            height: 100%;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-            border: 1px solid var(--border);
             animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
         @keyframes slideUp {
             from {
                 opacity: 0;
-                transform: translateY(50px);
+                transform: translateY(20px);
             }
             to {
                 opacity: 1;
@@ -503,18 +513,26 @@
         }
 
         .viewer-header {
-            padding: 25px 30px;
-            border-bottom: 1px solid var(--border);
+            padding: 20px 30px;
+            background-color: rgba(10, 10, 10, 0.95);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+            flex-shrink: 0;
         }
 
         .viewer-title {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: var(--text-primary);
+            max-width: 70%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .viewer-controls {
@@ -523,36 +541,65 @@
         }
 
         .viewer-btn {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border-radius: var(--radius-md);
-            border: none;
-            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            background-color: rgba(26, 26, 26, 0.8);
             color: var(--text-primary);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: var(--transition);
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
         .viewer-btn:hover {
             background-color: var(--accent-primary);
             color: white;
             transform: translateY(-2px);
+            border-color: var(--accent-primary);
         }
 
         .viewer-content {
             flex: 1;
             position: relative;
             background-color: var(--bg-primary);
+            overflow: hidden;
+            min-height: 0;
         }
 
         .viewer-iframe {
             width: 100%;
             height: 100%;
             border: none;
+            display: block;
+        }
+
+        /* Modo Foco/Leitura */
+        .viewer-modal.focus-mode .viewer-header {
+            opacity: 0;
+            transform: translateY(-100%);
+            transition: var(--transition);
+        }
+
+        .viewer-modal.focus-mode .viewer-header:hover {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Tela Cheia */
+        .viewer-modal:fullscreen .viewer-container {
+            background-color: #000;
+        }
+
+        .viewer-modal:fullscreen .viewer-header {
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .viewer-modal:fullscreen .viewer-btn {
+            background-color: rgba(0, 0, 0, 0.7);
         }
 
         /* Footer */
@@ -566,6 +613,13 @@
             background-color: rgba(20, 20, 20, 0.8);
             border-radius: var(--radius-lg);
             backdrop-filter: blur(20px);
+            transition: var(--transition);
+        }
+
+        .viewer-open .footer {
+            opacity: 0.3;
+            transform: scale(0.98);
+            pointer-events: none;
         }
 
         .footer p {
@@ -674,11 +728,25 @@
             }
             
             .viewer-modal {
-                padding: 20px;
+                padding: 0;
             }
             
             .content, .header {
                 padding: 25px;
+            }
+            
+            .viewer-header {
+                padding: 15px 20px;
+            }
+            
+            .viewer-title {
+                font-size: 1rem;
+                max-width: 60%;
+            }
+            
+            .viewer-btn {
+                width: 40px;
+                height: 40px;
             }
         }
 
@@ -698,6 +766,19 @@
             
             .file-icon {
                 align-self: flex-start;
+            }
+            
+            .viewer-header {
+                padding: 12px 15px;
+            }
+            
+            .viewer-controls {
+                gap: 8px;
+            }
+            
+            .viewer-btn {
+                width: 36px;
+                height: 36px;
             }
         }
     </style>
@@ -768,6 +849,10 @@
                             <i class="fas fa-exclamation-circle filter-icon"></i>
                             <span>Caderno de Erros</span>
                         </div>
+                        <div class="filter-option" data-filter="simulado1">
+                            <i class="fas fa-clipboard-list filter-icon"></i>
+                            <span>Conteúdo que caiu no Simulado 1</span>
+                        </div>
                     </div>
                 </div>
                 
@@ -775,7 +860,7 @@
                     <div class="stats-title">Estatísticas</div>
                     <div class="stats-grid">
                         <div class="stat-item">
-                            <span class="stat-value">13</span>
+                            <span class="stat-value">17</span>
                             <span class="stat-label">Arquivos</span>
                         </div>
                         <div class="stat-item">
@@ -783,7 +868,7 @@
                             <span class="stat-label">Categorias</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-value">332</span>
+                            <span class="stat-value">336</span>
                             <span class="stat-label">KB Total</span>
                         </div>
                         <div class="stat-item">
@@ -835,6 +920,9 @@
             <div class="viewer-header">
                 <div class="viewer-title" id="viewer-title"></div>
                 <div class="viewer-controls">
+                    <button class="viewer-btn" id="focus-btn" title="Modo Foco">
+                        <i class="fas fa-eye"></i>
+                    </button>
                     <button class="viewer-btn" id="fullscreen-btn" title="Tela cheia">
                         <i class="fas fa-expand"></i>
                     </button>
@@ -853,7 +941,7 @@
     </div>
 
     <script>
-        // Files data - TODOS OS 13 ARQUIVOS
+        // Files data - TODOS OS 17 ARQUIVOS (13 antigos + 4 novos)
         const files = [
             {
                 title: "Mapa Mental - Geografia e Formação Territorial do Brasil (Caderno de Erros)",
@@ -976,10 +1064,47 @@
                 icon: "fas fa-exclamation-triangle",
                 color: "#ec4899",
                 isErrorNotebook: true
+            },
+            // NOVOS ARQUIVOS DO SIMULADO 1
+            {
+                title: "Conteúdo que caiu no Simulado 1 - Ética",
+                file: "simulado 01 etica.html",
+                date: "17/01/2026 10:00",
+                size: "1 KB",
+                category: "simulado1",
+                icon: "fas fa-clipboard-list",
+                color: "#9d4edd"
+            },
+            {
+                title: "Conteúdo que caiu no Simulado 1 - Geografia",
+                file: "simulado 01 geografia.html",
+                date: "17/01/2026 10:00",
+                size: "1 KB",
+                category: "simulado1",
+                icon: "fas fa-clipboard-list",
+                color: "#9d4edd"
+            },
+            {
+                title: "Conteúdo que caiu no Simulado 1 - Português",
+                file: "simulado 01 portugues.html",
+                date: "17/01/2026 10:00",
+                size: "1 KB",
+                category: "simulado1",
+                icon: "fas fa-clipboard-list",
+                color: "#9d4edd"
+            },
+            {
+                title: "Conteúdo que caiu no Simulado 1 - RLM e Matemática",
+                file: "simulado 01 rlm e mat.html",
+                date: "17/01/2026 10:00",
+                size: "1 KB",
+                category: "simulado1",
+                icon: "fas fa-clipboard-list",
+                color: "#9d4edd"
             }
         ];
 
-        // Category data - ATUALIZADO COM NOVAS CATEGORIAS
+        // Category data - ATUALIZADO COM NOVA CATEGORIA
         const categories = {
             "all": { name: "Todos os Mapas", color: "#7c3aed" },
             "etica": { name: "Código de Ética", color: "#7c3aed" },
@@ -989,7 +1114,8 @@
             "brasil": { name: "Geografia do Brasil", color: "#84cc16" },
             "cartografia": { name: "Cartografia", color: "#3b82f6" },
             "seguranca": { name: "Segurança", color: "#8b5cf6" },
-            "erros": { name: "Caderno de Erros", color: "#ec4899" }
+            "erros": { name: "Caderno de Erros", color: "#ec4899" },
+            "simulado1": { name: "Conteúdo que caiu no Simulado 1", color: "#9d4edd" }
         };
 
         // DOM Elements
@@ -1004,10 +1130,13 @@
         const closeBtn = document.getElementById('close-btn');
         const refreshBtn = document.getElementById('refresh-btn');
         const fullscreenBtn = document.getElementById('fullscreen-btn');
+        const focusBtn = document.getElementById('focus-btn');
+        const appContainer = document.querySelector('.app');
 
         // Current state
         let currentFilter = 'all';
         let currentSearch = '';
+        let isFocusMode = false;
 
         // Initialize
         function init() {
@@ -1186,6 +1315,19 @@
                 }
             });
             
+            focusBtn.addEventListener('click', function() {
+                isFocusMode = !isFocusMode;
+                if (isFocusMode) {
+                    viewerModal.classList.add('focus-mode');
+                    this.innerHTML = '<i class="fas fa-eye-slash"></i>';
+                    this.title = 'Sair do Modo Foco';
+                } else {
+                    viewerModal.classList.remove('focus-mode');
+                    this.innerHTML = '<i class="fas fa-eye"></i>';
+                    this.title = 'Modo Foco';
+                }
+            });
+            
             fullscreenBtn.addEventListener('click', function() {
                 if (!document.fullscreenElement) {
                     viewerModal.requestFullscreen().catch(err => {
@@ -1206,7 +1348,27 @@
             // Close viewer with Escape key
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
-                    closeViewer();
+                    if (isFocusMode) {
+                        isFocusMode = false;
+                        viewerModal.classList.remove('focus-mode');
+                        focusBtn.innerHTML = '<i class="fas fa-eye"></i>';
+                        focusBtn.title = 'Modo Foco';
+                    } else if (viewerModal.style.display === 'flex') {
+                        closeViewer();
+                    }
+                }
+            });
+            
+            // Fullscreen change event
+            document.addEventListener('fullscreenchange', function() {
+                if (!document.fullscreenElement) {
+                    // Exited fullscreen
+                    fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
+                    fullscreenBtn.title = 'Tela cheia';
+                } else {
+                    // Entered fullscreen
+                    fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
+                    fullscreenBtn.title = 'Sair da tela cheia';
                 }
             });
         }
@@ -1220,6 +1382,19 @@
             viewerIframe.src = file.file;
             viewerModal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
+            appContainer.classList.add('viewer-open');
+            
+            // Reset focus mode
+            isFocusMode = false;
+            viewerModal.classList.remove('focus-mode');
+            focusBtn.innerHTML = '<i class="fas fa-eye"></i>';
+            focusBtn.title = 'Modo Foco';
+            
+            // Ensure iframe fills the container
+            setTimeout(() => {
+                viewerIframe.style.width = '100%';
+                viewerIframe.style.height = '100%';
+            }, 10);
         }
 
         // Close viewer
@@ -1227,11 +1402,18 @@
             viewerModal.style.display = 'none';
             viewerIframe.src = '';
             document.body.style.overflow = 'auto';
+            appContainer.classList.remove('viewer-open');
             
             // Exit fullscreen if active
             if (document.fullscreenElement) {
                 document.exitFullscreen();
             }
+            
+            // Reset focus mode
+            isFocusMode = false;
+            viewerModal.classList.remove('focus-mode');
+            focusBtn.innerHTML = '<i class="fas fa-eye"></i>';
+            focusBtn.title = 'Modo Foco';
         }
 
         // Initialize app
