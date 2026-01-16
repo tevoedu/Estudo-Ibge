@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Mental Visual - Geografia do Brasil</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #1a237e;
+            --color-secondary: #283593;
+            --color-tertiary: #303f9f;
+            --color-accent: #3949ab;
+            --color-light: #5c6bc0;
+            --color-highlight: #7986cb;
+            --color-bg: #f8f9fa;
+            --color-card: #ffffff;
+            --color-text: #2c3e50;
+            --color-text-light: #546e7a;
+            --shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 15px 35px rgba(0, 0, 0, 0.15);
+            --radius: 12px;
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            color: var(--color-text);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            background-attachment: fixed;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        .main-header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            color: white;
+            overflow: hidden;
+        }
+        
+        .main-header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23000000' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.2;
+        }
+        
+        .main-header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .main-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .icon-header {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.9);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Grid Layout */
+        .mind-map-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(650px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        @media (max-width: 1400px) {
+            .mind-map-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Mind Map Cards */
+        .mind-map-card {
+            background-color: var(--color-card);
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border-left: 8px solid;
+            height: 100%;
+        }
+        
+        .mind-map-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .mind-map-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--card-color), transparent);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+        }
+        
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--card-color), var(--card-color-light));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            color: white;
+            font-size: 1.8rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-title {
+            font-size: 1.8rem;
+            color: var(--card-color);
+            font-weight: 700;
+        }
+        
+        .card-number {
+            display: inline-block;
+            background-color: var(--card-color);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 36px;
+            margin-right: 15px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        /* Topic Styling */
+        .topic-container {
+            margin-bottom: 25px;
+        }
+        
+        .topic-title {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--card-color);
+            padding-left: 15px;
+            border-left: 4px solid var(--card-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .topic-title i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .subtopic {
+            margin-bottom: 20px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .subtopic::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 12px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--card-color-light);
+        }
+        
+        .subtopic-title {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: var(--color-text);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .subtopic-title i {
+            color: var(--card-color);
+            margin-right: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .content-list {
+            list-style-type: none;
+            padding-left: 5px;
+        }
+        
+        .content-list li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+            color: var(--color-text-light);
+        }
+        
+        .content-list li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--card-color);
+            font-weight: bold;
+        }
+        
+        /* Special Boxes */
+        .highlight-box {
+            background: linear-gradient(to right, rgba(var(--card-rgb), 0.08), rgba(var(--card-rgb), 0.03));
+            border-radius: 8px;
+            padding: 18px;
+            margin: 20px 0;
+            border-left: 5px solid var(--card-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .highlight-box::before {
+            content: "★";
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+            color: rgba(var(--card-rgb), 0.1);
+        }
+        
+        .highlight-title {
+            font-weight: 700;
+            color: var(--card-color);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .highlight-title i {
+            margin-right: 8px;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .comparison-table th {
+            background-color: var(--card-color);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background-color: rgba(var(--card-rgb), 0.03);
+        }
+        
+        .comparison-table tr:hover {
+            background-color: rgba(var(--card-rgb), 0.07);
+        }
+        
+        /* Color Definitions for Cards */
+        .card-1 {
+            --card-color: #1a237e;
+            --card-color-light: #3949ab;
+            --card-rgb: 26, 35, 126;
+        }
+        
+        .card-2 {
+            --card-color: #0d47a1;
+            --card-color-light: #1565c0;
+            --card-rgb: 13, 71, 161;
+        }
+        
+        .card-3 {
+            --card-color: #00695c;
+            --card-color-light: #00897b;
+            --card-rgb: 0, 105, 92;
+        }
+        
+        .card-4 {
+            --card-color: #2e7d32;
+            --card-color-light: #43a047;
+            --card-rgb: 46, 125, 50;
+        }
+        
+        .card-5 {
+            --card-color: #ff8f00;
+            --card-color-light: #ffa000;
+            --card-rgb: 255, 143, 0;
+        }
+        
+        .card-6 {
+            --card-color: #d84315;
+            --card-color-light: #e64a19;
+            --card-rgb: 216, 67, 21;
+        }
+        
+        .card-7 {
+            --card-color: #6a1b9a;
+            --card-color-light: #8e24aa;
+            --card-rgb: 106, 27, 154;
+        }
+        
+        .card-8 {
+            --card-color: #37474f;
+            --card-color-light: #546e7a;
+            --card-rgb: 55, 71, 79;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 40px;
+            color: var(--color-text-light);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: var(--radius);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .footer p {
+            margin-bottom: 10px;
+        }
+        
+        .footer-icons {
+            margin-top: 15px;
+        }
+        
+        .footer-icons i {
+            font-size: 1.2rem;
+            margin: 0 10px;
+            color: var(--color-primary);
+            opacity: 0.7;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-header h1 {
+                font-size: 2rem;
+            }
+            
+            .main-header p {
+                font-size: 1rem;
+            }
+            
+            .mind-map-card {
+                padding: 20px;
+            }
+            
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .card-icon {
+                margin-bottom: 15px;
+            }
+            
+            .mind-map-grid {
+                gap: 20px;
+            }
+        }
+        
+        /* Connections visualization */
+        .connections {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .connection-line {
+            position: absolute;
+            background: linear-gradient(to right, var(--color-primary), var(--color-accent));
+            height: 2px;
+            transform-origin: left center;
+            opacity: 0.1;
+        }
+    </style>
+</head>
+<body>
+    <div class="connections" id="connections"></div>
+    
+    <div class="container">
+        <header class="main-header">
+            <div class="icon-header">
+                <i class="fas fa-globe-americas"></i>
+            </div>
+            <h1>Mapa Mental Visual - Geografia do Brasil</h1>
+            <p>Conteúdo completo das questões 42-55 • Organizado em mapa mental interconectado</p>
+        </header>
+        
+        <div class="mind-map-grid">
+            <!-- Card 1: Cartografia -->
+            <div class="mind-map-card card-1">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-map"></i>
+                    </div>
+                    <div>
+                        <div class="card-number">1</div>
+                        <h2 class="card-title">CARTOGRAFIA FUNDAMENTAL</h2>
+                    </div>
+                </div>
+                
+                <div class="topic-container">
+                    <h3 class="topic-title"><i class="fas fa-ruler-combined"></i> Sistema de Coordenadas</h3>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-arrow-up"></i> LATITUDE</h4>
+                        <ul class="content-list">
+                            <li>Distância angular em relação ao Equador</li>
+                            <li>Variação: 0° a 90° Norte ou Sul</li>
+                            <li>Linha de referência: Linha do Equador (0°)</li>
+                            <li>Função: definir posição norte-sul</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-arrow-right"></i> LONGITUDE</h4>
+                        <ul class="content-list">
+                            <li>Distância angular em relação ao Meridiano de Greenwich</li>
+                            <li>Variação: 0° a 180° Leste ou Oeste</li>
+                            <li>Linha de referência: Meridiano de Greenwich (0°)</li>
+                            <li>Função: definir posição leste-oeste</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="highlight-box">
+                        <div class="highlight-title"><i class="fas fa-lightbulb"></i> Macete de Memorização</div>
+                        <p><strong>Latitude → Largura</strong> (norte-sul, 0-90°) | <strong>Longitude → Comprimento</strong> (leste-oeste, 0-180°)</p>
+                    </div>
+                </div>
+                
+                <div class="topic-container">
+                    <h3 class="topic-title"><i class="fas fa-compass"></i> Instrumentos de Orientação</h3>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-map-pin"></i> BÚSSOLA</h4>
+                        <ul class="content-list">
+                            <li>Agulha magnetizada alinha-se com campo magnético</li>
+                            <li>Aponta para Polo Norte Magnético</li>
+                            <li>Correção: Declinação Magnética</li>
+                            <li>Imprecisa perto dos polos</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-satellite"></i> GPS</h4>
+                        <ul class="content-list">
+                            <li>Funcionamento: trilateração por sinais de satélites</li>
+                            <li>Mínimo 3 satélites para posição (latitude, longitude)</li>
+                            <li>Mínimo 4 satélites para posição + altitude</li>
+                            <li>Vantagem: não depende do magnetismo terrestre</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card 2: Biomas -->
+            <div class="mind-map-card card-2">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-tree"></i>
+                    </div>
+                    <div>
+                        <div class="card-number">2</div>
+                        <h2 class="card-title">BIOMAS BRASILEIROS</h2>
+                    </div>
+                </div>
+                
+                <div class="topic-container">
+                    <h3 class="topic-title"><i class="fas fa-leaf"></i> Características dos Biomas</h3>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-rainbow"></i> AMAZÔNIA</h4>
+                        <ul class="content-list">
+                            <li>Maior bioma brasileiro e maior floresta equatorial</li>
+                            <li>Maior biodiversidade planetária</li>
+                            <li>Clima equatorial úmido</li>
+                            <li>Ameaças: desmatamento, garimpo</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-mountain"></i> CERRADO</h4>
+                        <ul class="content-list">
+                            <li>Savana brasileira (segundo maior bioma)</li>
+                            <li>Solos ácidos e profundos (latossolos)</li>
+                            <li>Biodiversidade: savana mais biodiversa do mundo</li>
+                            <li>Hotspot de biodiversidade</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-seedling"></i> CAATINGA</h4>
+                        <ul class="content-list">
+                            <li>Único bioma exclusivamente brasileiro</li>
+                            <li>Região semiárida do Nordeste</li>
+                            <li>Vegetação xerófila (adaptada à seca)</li>
+                            <li>Nome tupi: "mata branca"</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="highlight-box">
+                        <div class="highlight-title"><i class="fas fa-brain"></i> Macetes de Memorização</div>
+                        <p><strong>Caatinga</strong>: "C" de Casa (exclusivamente brasileiro) | <strong>Pantanal</strong>: "P" de Planície | <strong>Amazônia</strong>: "A" de Amaior</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card 3: Relevo -->
+            <div class="mind-map-card card-3">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-mountain"></i>
+                    </div>
+                    <div>
+                        <div class="card-number">3</div>
+                        <h2 class="card-title">RELEVO BRASILEIRO</h2>
+                    </div>
+                </div>
+                
+                <div class="topic-container">
+                    <h3 class="topic-title"><i class="fas fa-layer-group"></i> Formas de Relevo</h3>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-chevron-up"></i> PLANALTOS</h4>
+                        <ul class="content-list">
+                            <li>Formas elevadas com superfícies planas</li>
+                            <li>Delimitados por escarpas</li>
+                            <li>Formação: predominantemente erosiva</li>
+                            <li>Base geológica: estruturas antigas</li>
+                            <li>Dominam a paisagem brasileira</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-chevron-down"></i> PLANÍCIES</h4>
+                        <ul class="content-list">
+                            <li>Baixas altitudes</li>
+                            <li>Formação: sedimentação recente</li>
+                            <li>Localização principal: litoral e grandes bacias</li>
+                            <li>Processo: acumulação de sedimentos</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-angle-double-down"></i> DEPRESSÕES</h4>
+                        <ul class="content-list">
+                            <li>Áreas rebaixadas em relação ao entorno</li>
+                            <li>Formas de transição entre planaltos e planícies</li>
+                            <li>Formação: erosão</li>
+                            <li>Não possuem altitude fixa</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-container">
+                    <h3 class="topic-title"><i class="fas fa-globe-americas"></i> Características do Relevo</h3>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-history"></i> GEOLOGIA</h4>
+                        <ul class="content-list">
+                            <li>Território antigo e estável (escudo cratônico)</li>
+                            <li>Centro da Placa Sul-Americana</li>
+                            <li>Baixa atividade sísmica e vulcânica</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-wind"></i> PROCESSOS DOMINANTES</h4>
+                        <ul class="content-list">
+                            <li>Erosão (agentes externos: chuva, vento, rios)</li>
+                            <li>Não há dobramentos modernos</li>
+                            <li>Formas resultantes de milhões de anos de erosão</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card 4: Climatologia -->
+            <div class="mind-map-card card-4">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-cloud-sun"></i>
+                    </div>
+                    <div>
+                        <div class="card-number">4</div>
+                        <h2 class="card-title">CLIMATOLOGIA BRASILEIRA</h2>
+                    </div>
+                </div>
+                
+                <div class="topic-container">
+                    <h3 class="topic-title"><i class="fas fa-wind"></i> Massas de Ar</h3>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-thermometer-full"></i> CLASSIFICAÇÃO</h4>
+                        <ul class="content-list">
+                            <li><strong>mEc</strong> - Equatorial Continental: Quente e úmida (Amazônia)</li>
+                            <li><strong>mEa</strong> - Equatorial Atlântica: Quente e úmida (litoral norte)</li>
+                            <li><strong>mTc</strong> - Tropical Continental: Quente e SECA (Chaco)</li>
+                            <li><strong>mTa</strong> - Tropical Atlântica: Quente e úmida (litoral brasileiro)</li>
+                            <li><strong>mPa</strong> - Polar Atlântica: Fria e úmida (sul do Atlântico)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-container">
+                    <h3 class="topic-title"><i class="fas fa-snowflake"></i> Dinâmica de Inverno</h3>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-temperature-low"></i> MASSA POLAR ATLÂNTICA (mPa)</h4>
+                        <ul class="content-list">
+                            <li>Principal atuante no inverno austral</li>
+                            <li>Avanço pelo continente: corredor da bacia do Paraná-Paraguai</li>
+                            <li>Efeitos: frentes frias, chuvas frontais, friagem na Amazônia</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="highlight-box">
+                        <div class="highlight-title"><i class="fas fa-bolt"></i> Macetes</div>
+                        <p><strong>mPa</strong>: "P" de Penetra (no inverno) | <strong>ZCAS</strong>: sistema-chave do verão</p>
+                    </div>
+                </div>
+                
+                <div class="topic-container">
+                    <h3 class="topic-title"><i class="fas fa-sun"></i> Dinâmica de Verão</h3>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-cloud-rain"></i> ZONA DE CONVERGÊNCIA DO ATLÂNTICO SUL (ZCAS)</h4>
+                        <ul class="content-list">
+                            <li>Principal sistema do verão</li>
+                            <li>Corredor de nebulosidade contínua</li>
+                            <li>Transporta umidade da Amazônia para Centro-Oeste, Sudeste e parte da Amazônia</li>
+                            <li>Causa: chuvas intensas e persistentes</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card 5: Hidrografia -->
+            <div class="mind-map-card card-5">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-water"></i>
+                    </div>
+                    <div>
+                        <div class="card-number">5</div>
+                        <h2 class="card-title">HIDROGRAFIA BRASILEIRA</h2>
+                    </div>
+                </div>
+                
+                <div class="topic-container">
+                    <h3 class="topic-title"><i class="fas fa-river"></i> Características Gerais</h3>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-tint"></i> REGIME FLUVIAL</h4>
+                        <ul class="content-list">
+                            <li>Predominante: PLUVIAL (dependente das chuvas)</li>
+                            <li>Sazonalidade: cheias no verão, vazantes no inverno</li>
+                            <li class="warning">NÃO existe regime nival ou glacial no Brasil</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-directions"></i> DRENAGEM</h4>
+                        <ul class="content-list">
+                            <li>Predominantemente EXORREICA (rios deságuam no mar)</li>
+                            <li>Endorreica (rios que deságuam em lagos interiores) é rara</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-container">
+                    <h3 class="topic-title"><i class="fas fa-bolt"></i> Potencial Hidroelétrico</h3>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-charging-station"></i> FATORES FAVORÁVEIS</h4>
+                        <ul class="content-list">
+                            <li>Grandes bacias hidrográficas</li>
+                            <li>Alta pluviosidade (água em abundância)</li>
+                            <li>Predominância de planaltos no relevo (desníveis)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-map-marked-alt"></i> DISTRIBUIÇÃO DO POTENCIAL</h4>
+                        <ul class="content-list">
+                            <li><strong>Bacia do Paraná:</strong> maior potencial explorado (relevo de planalto + proximidade dos centros)</li>
+                            <li><strong>Bacia Amazônica:</strong> maior vazão, mas menor aproveitamento (planície + desafios ambientais)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="highlight-box">
+                        <div class="highlight-title"><i class="fas fa-exclamation-triangle"></i> Erro Conceitual Crítico</div>
+                        <p>Rio São Francisco NÃO tem regime nival (só pluvial). No Brasil, só existe regime pluvial.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card 6: Agricultura -->
+            <div class="mind-map-card card-6">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-tractor"></i>
+                    </div>
+                    <div>
+                        <div class="card-number">6</div>
+                        <h2 class="card-title">AGRICULTURA BRASILEIRA</h2>
+                    </div>
+                </div>
+                
+                <div class="topic-container">
+                    <h3 class="topic-title"><i class="fas fa-home"></i> Agricultura Familiar</h3>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-seedling"></i> CARACTERÍSTICAS</h4>
+                        <ul class="content-list">
+                            <li>Propriedades trabalhadas pela família</li>
+                            <li>Principal produtor de alimentos básicos</li>
+                            <li>Foco: mercado interno</li>
+                            <li>Sistema: policultura (vários produtos)</li>
+                            <li>Tamanho: pequenas e médias propriedades</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-exclamation-circle"></i> DESAFIOS</h4>
+                        <ul class="content-list">
+                            <li>Acesso limitado a crédito</li>
+                            <li>Falta de assistência técnica</li>
+                            <li>Dificuldade de acesso a tecnologia</li>
+                            <li>Infraestrutura precária</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-container">
+                    <h3 class="topic-title"><i class="fas fa-industry"></i> Agronegócio</h3>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-globe"></i> CARACTERÍSTICAS</h4>
+                        <ul class="content-list">
+                            <li>Foco: exportação de commodities</li>
+                            <li>Produtos: soja, milho, carne, café, algodão</li>
+                            <li>Sistema: monocultura</li>
+                            <li>Tamanho: grandes propriedades (latifúndios)</li>
+                            <li>Uso intensivo de capital e tecnologia</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-container">
+                    <h3 class="topic-title"><i class="fas fa-balance-scale"></i> Comparação Direta</h3>
+                    
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>CARACTERÍSTICA</th>
+                                <th>AGRICULTURA FAMILIAR</th>
+                                <th>AGRONEGÓCIO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Objetivo</strong></td>
+                                <td>Mercado interno</td>
+                                <td>Exportação</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Produtos</strong></td>
+                                <td>Alimentos básicos</td>
+                                <td>Commodities</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sistema</strong></td>
+                                <td>Policultura</td>
+                                <td>Monocultura</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Propriedade</strong></td>
+                                <td>Pequena/Média</td>
+                                <td>Grande (latifúndio)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="highlight-box">
+                        <div class="highlight-title"><i class="fas fa-brain"></i> Macete de Memorização</div>
+                        <p><strong>Agricultura Familiar:</strong> Mercado Interno, Alimentos, Policultura, Pequena Propriedade<br>
+                        <strong>Agronegócio:</strong> Exportação, Commodities, Monocultura, Latifúndio</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card 7: Demografia -->
+            <div class="mind-map-card card-7">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div>
+                        <div class="card-number">7</div>
+                        <h2 class="card-title">DEMOGRAFIA BRASILEIRA</h2>
+                    </div>
+                </div>
+                
+                <div class="topic-container">
+                    <h3 class="topic-title"><i class="fas fa-chart-line"></i> Transição Demográfica</h3>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-exchange-alt"></i> DEFINIÇÃO</h4>
+                        <ul class="content-list">
+                            <li>Passagem de altas para baixas taxas de natalidade e mortalidade</li>
+                            <li>Brasil: completou a transição</li>
+                            <li>Fase atual: baixa natalidade + baixa mortalidade</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-container">
+                    <h3 class="topic-title"><i class="fas fa-user-clock"></i> Envelhecimento Populacional</h3>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-baby"></i> CAUSAS</h4>
+                        <ul class="content-list">
+                            <li>Queda da Taxa de Fecundidade Total (TFT abaixo de 2,1)</li>
+                            <li>Aumento da Expectativa de Vida</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-exclamation-triangle"></i> CONSEQUÊNCIAS</h4>
+                        <ul class="content-list">
+                            <li>Pressão sobre sistema de saúde pública</li>
+                            <li>Pressão sobre sistema previdenciário</li>
+                            <li>Mais beneficiários (aposentados) em relação a contribuintes</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-container">
+                    <h3 class="topic-title"><i class="fas fa-gift"></i> Bônus Demográfico</h3>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-window-restore"></i> DEFINIÇÃO</h4>
+                        <ul class="content-list">
+                            <li>Período temporário com proporção favorável</li>
+                            <li>População em idade ativa (15-64 anos) maior que dependentes</li>
+                            <li>Janela de oportunidade econômica</li>
+                            <li>NÃO é período em que idosos são mais numerosos que jovens</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card 8: Síntese -->
+            <div class="mind-map-card card-8">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div>
+                        <div class="card-number">8</div>
+                        <h2 class="card-title">SÍNTESE E ESTRATÉGIAS</h2>
+                    </div>
+                </div>
+                
+                <div class="topic-container">
+                    <h3 class="topic-title"><i class="fas fa-search"></i> Padrões de Questões</h3>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-times-circle"></i> IDENTIFICAÇÃO DE ERROS</h4>
+                        <ul class="content-list">
+                            <li>Afirmações absolutas e generalizantes</li>
+                            <li>Confusão entre conceitos similares</li>
+                            <li>Inversão de relações causais</li>
+                            <li>Ignorância de exceções importantes</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-bug"></i> PADRÕES COMUNS DE ERRO</h4>
+                        <ul class="content-list">
+                            <li>Confundir latitude com longitude</li>
+                            <li>Atribuir características de um bioma a outro</li>
+                            <li>Inverter relações espaciais ou temporais</li>
+                            <li>Aplicar conceitos de outras regiões ao Brasil</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-container">
+                    <h3 class="topic-title"><i class="fas fa-tasks"></i> Estratégias de Revisão</h3>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-book-open"></i> POR TEMA</h4>
+                        <ul class="content-list">
+                            <li>Estudar conceitos fundamentais primeiro</li>
+                            <li>Memorizar características únicas de cada elemento</li>
+                            <li>Aprender os erros mais comuns</li>
+                            <li>Praticar com questões que explorem confusões</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="subtopic">
+                        <h4 class="subtopic-title"><i class="fas fa-check-circle"></i> CHECKLIST PARA ANÁLISE</h4>
+                        <ul class="content-list">
+                            <li>Conceito está correto?</li>
+                            <li>Unidades de medida estão corretas?</li>
+                            <li>Variações numéricas estão dentro dos limites?</li>
+                            <li>Relações causais estão na direção certa?</li>
+                            <li>Não há generalizações indevidas?</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="highlight-box">
+                        <div class="highlight-title"><i class="fas fa-graduation-cap"></i> Dica Final</div>
+                        <p>Revise sempre os <strong>macetes de memorização</strong> e os <strong>erros conceituais críticos</strong> de cada tema para maximizar seu desempenho nas questões!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="footer">
+            <p><strong>Mapa Mental Visual - Geografia do Brasil</strong></p>
+            <p>Conteúdo completo das questões 42-55 • Organizado para estudo eficiente</p>
+            <div class="footer-icons">
+                <i class="fas fa-map-marked-alt"></i>
+                <i class="fas fa-globe-americas"></i>
+                <i class="fas fa-book"></i>
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        // Adiciona um efeito sutil de conexões visuais entre os cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.mind-map-card');
+            const connectionsContainer = document.getElementById('connections');
+            
+            // Cria linhas de conexão visuais entre os cards
+            for (let i = 0; i < cards.length - 1; i++) {
+                const line = document.createElement('div');
+                line.className = 'connection-line';
+                
+                // Posiciona aleatoriamente as linhas no fundo
+                const top = Math.random() * 80 + 10;
+                const left = Math.random() * 80 + 10;
+                const width = Math.random() * 20 + 5;
+                const rotation = Math.random() * 180;
+                
+                line.style.top = `${top}%`;
+                line.style.left = `${left}%`;
+                line.style.width = `${width}%`;
+                line.style.transform = `rotate(${rotation}deg)`;
+                
+                connectionsContainer.appendChild(line);
+            }
+            
+            // Adiciona efeito de realce ao passar o mouse sobre os títulos
+            const topicTitles = document.querySelectorAll('.topic-title');
+            topicTitles.forEach(title => {
+                title.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateX(5px)';
+                    this.style.transition = 'transform 0.2s ease';
+                });
+                
+                title.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateX(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

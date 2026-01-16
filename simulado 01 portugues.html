@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Mental - Língua Portuguesa</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .mind-map-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .mind-map-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+            border-top: 5px solid;
+        }
+        
+        .mind-map-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            font-size: 1.3rem;
+        }
+        
+        .node {
+            margin-bottom: 15px;
+        }
+        
+        .node-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.1rem;
+        }
+        
+        .node-content {
+            margin-left: 25px;
+            padding-left: 15px;
+            border-left: 2px dashed #ccc;
+        }
+        
+        .node-item {
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .node-item:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: inherit;
+            font-size: 1.2rem;
+        }
+        
+        .color-1 { border-color: #3498db; }
+        .color-1 .section-title { border-color: #3498db; color: #2980b9; }
+        .color-1 .node-title { color: #2980b9; }
+        
+        .color-2 { border-color: #2ecc71; }
+        .color-2 .section-title { border-color: #2ecc71; color: #27ae60; }
+        .color-2 .node-title { color: #27ae60; }
+        
+        .color-3 { border-color: #e74c3c; }
+        .color-3 .section-title { border-color: #e74c3c; color: #c0392b; }
+        .color-3 .node-title { color: #c0392b; }
+        
+        .color-4 { border-color: #f39c12; }
+        .color-4 .section-title { border-color: #f39c12; color: #d68910; }
+        .color-4 .node-title { color: #d68910; }
+        
+        .color-5 { border-color: #9b59b6; }
+        .color-5 .section-title { border-color: #9b59b6; color: #8e44ad; }
+        .color-5 .node-title { color: #8e44ad; }
+        
+        .color-6 { border-color: #1abc9c; }
+        .color-6 .section-title { border-color: #1abc9c; color: #16a085; }
+        .color-6 .node-title { color: #16a085; }
+        
+        .color-7 { border-color: #34495e; }
+        .color-7 .section-title { border-color: #34495e; color: #2c3e50; }
+        .color-7 .node-title { color: #2c3e50; }
+        
+        .color-8 { border-color: #e67e22; }
+        .color-8 .section-title { border-color: #e67e22; color: #d35400; }
+        .color-8 .node-title { color: #d35400; }
+        
+        .color-9 { border-color: #7f8c8d; }
+        .color-9 .section-title { border-color: #7f8c8d; color: #2c3e50; }
+        .color-9 .node-title { color: #2c3e50; }
+        
+        .example-box {
+            background-color: #f8f9fa;
+            border-left: 3px solid #3498db;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 0.95rem;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .mind-map-container {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-brain"></i> Mapa Mental - Língua Portuguesa</h1>
+        <p class="subtitle">Conteúdo cobrado em concursos e vestibulares</p>
+    </header>
+    
+    <div class="mind-map-container">
+        <!-- Interpretação de Texto -->
+        <section class="mind-map-section color-1">
+            <h2 class="section-title"><i class="fas fa-book-reader"></i> Interpretação de Texto</h2>
+            
+            <div class="node">
+                <div class="node-title"><i class="fas fa-bullseye"></i> Finalidade Principal</div>
+                <div class="node-content">
+                    <div class="node-item">Identificar o verbo de ação central do texto.</div>
+                    <div class="node-item">Reconhecer o objetivo comunicativo e o benefício direto apresentado.</div>
+                    <div class="node-item">Eliminar alternativas que extrapolem ou acrescentem informações não presentes no texto.</div>
+                </div>
+            </div>
+            
+            <div class="node">
+                <div class="node-title"><i class="fas fa-align-left"></i> Tipologia Textual</div>
+                <div class="node-content">
+                    <div class="node-item"><strong>Informativo / Expositivo:</strong> apresenta dados, fatos ou explicações de forma objetiva.</div>
+                    <div class="node-item"><strong>Diferenciar de:</strong></div>
+                    <div class="node-content">
+                        <div class="node-item">Narrativo (relato de fatos com enredo).</div>
+                        <div class="node-item">Descritivo (caracterização).</div>
+                        <div class="node-item">Injuntivo (ordem, instrução).</div>
+                        <div class="node-item">Argumentativo (defesa de ponto de vista).</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Acentuação Gráfica -->
+        <section class="mind-map-section color-2">
+            <h2 class="section-title"><i class="fas fa-accent-grave"></i> Acentuação Gráfica</h2>
+            
+            <div class="node">
+                <div class="node-title"><i class="fas fa-volume-up"></i> Classificação por Sílaba Tônica</div>
+                <div class="node-content">
+                    <div class="node-item"><strong>Oxítona:</strong> última sílaba (ex: café, chapéu).</div>
+                    <div class="node-item"><strong>Paroxítona:</strong> penúltima sílaba (ex: mesa, útil).</div>
+                    <div class="node-item"><strong>Proparoxítona:</strong> antepenúltima sílaba (ex: médico, lâmpada).</div>
+                </div>
+            </div>
+            
+            <div class="node">
+                <div class="node-title"><i class="fas fa-ruler"></i> Regras Específicas</div>
+                <div class="node-content">
+                    <div class="node-item"><strong>Proparoxítonas:</strong> todas são acentuadas.</div>
+                    <div class="node-item"><strong>Oxítonas:</strong> acentuam-se as terminadas em a(s), e(s), o(s), em(ens).</div>
+                    <div class="node-item"><strong>Paroxítonas:</strong> acentuam-se as que NÃO terminam em a(s), e(s), o(s), em(ens).</div>
+                    <div class="node-item"><strong>Hiatos:</strong> acentuam-se 'i' e 'u' tônicos sozinhos na sílaba ou seguidos de 's', desde que não venham após ditongo.</div>
+                </div>
+            </div>
+            
+            <div class="node">
+                <div class="node-title"><i class="fas fa-exchange-alt"></i> Acento Diferencial</div>
+                <div class="node-content">
+                    <div class="node-item">Usado para distinguir palavras de mesma grafia e pronúncia semelhantes.</div>
+                    <div class="example-box">
+                        <strong>Exemplo:</strong> "têm" (3ª pessoa do plural) x "tem" (singular)
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Morfologia -->
+        <section class="mind-map-section color-3">
+            <h2 class="section-title"><i class="fas fa-shapes"></i> Morfologia</h2>
+            
+            <div class="node">
+                <div class="node-title"><i class="fas fa-cubes"></i> Classes Gramaticais</div>
+                <div class="node-content">
+                    <div class="node-item"><strong>"Bastante":</strong></div>
+                    <div class="node-content">
+                        <div class="node-item"><strong>Advérbio:</strong> invariável (ex: bastante cansado).</div>
+                        <div class="node-item"><strong>Pronome indefinido:</strong> variável (ex: bastantes problemas).</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="node">
+                <div class="node-title"><i class="fas fa-adjust"></i> Adjetivos</div>
+                <div class="node-content">
+                    <div class="node-item"><strong>Qualificativo:</strong></div>
+                    <div class="node-content">
+                        <div class="node-item">Expressa qualidade subjetiva.</div>
+                        <div class="node-item">Admite grau (comparativo e superlativo).</div>
+                    </div>
+                    <div class="node-item"><strong>De Relação:</strong></div>
+                    <div class="node-content">
+                        <div class="node-item">Indica origem, matéria ou especialidade.</div>
+                        <div class="node-item">Não admite grau.</div>
+                        <div class="node-item">Valor objetivo.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Sintaxe -->
+        <section class="mind-map-section color-4">
+            <h2 class="section-title"><i class="fas fa-sitemap"></i> Sintaxe</h2>
+            
+            <div class="node">
+                <div class="node-title"><i class="fas fa-code-branch"></i> Orações Subordinadas</div>
+                <div class="node-content">
+                    <div class="node-item"><strong>Adjetivas:</strong> exercem função de adjunto adnominal.</div>
+                    <div class="node-content">
+                        <div class="node-item"><strong>Restritiva:</strong> essencial ao sentido, sem vírgulas.</div>
+                        <div class="node-item"><strong>Explicativa:</strong> acessória, com vírgulas.</div>
+                    </div>
+                    <div class="node-item"><strong>Adverbiais:</strong> exprimem circunstância (tempo, causa, condição, concessão etc.).</div>
+                    <div class="node-item">Quando antepostas à oração principal, devem ser separadas por vírgula.</div>
+                </div>
+            </div>
+            
+            <div class="node">
+                <div class="node-title"><i class="fas fa-functions"></i> Funções Sintáticas</div>
+                <div class="node-content">
+                    <div class="node-item"><strong>Aposto Explicativo:</strong> termo acessório que explica ou especifica um substantivo. Isolado por vírgulas.</div>
+                    <div class="node-item"><strong>Diferença para Adjunto Adnominal:</strong> termo essencial. Não é isolado por vírgulas.</div>
+                </div>
+            </div>
+            
+            <div class="node">
+                <div class="node-title"><i class="fas fa-verb"></i> Verbo "Haver"</div>
+                <div class="node-content">
+                    <div class="node-item">Impessoal quando indica:</div>
+                    <div class="node-content">
+                        <div class="node-item">Existência.</div>
+                        <div class="node-item">Tempo decorrido.</div>
+                        <div class="node-item">Fenômeno.</div>
+                    </div>
+                    <div class="node-item">Permanece invariável na 3ª pessoa do singular.</div>
+                </div>
+            </div>
+            
+            <div class="node">
+                <div class="node-title"><i class="fas fa-recycle"></i> Pronome "Se"</div>
+                <div class="node-content">
+                    <div class="node-item"><strong>Funções:</strong></div>
+                    <div class="node-content">
+                        <div class="node-item">Reflexivo.</div>
+                        <div class="node-item">Recíproco.</div>
+                        <div class="node-item">Apassivador.</div>
+                        <div class="node-item">Índice de indeterminação do sujeito.</div>
+                        <div class="node-item">Parte integrante do verbo.</div>
+                    </div>
+                    <div class="node-item"><strong>Reflexivo Recíproco:</strong> indica ação mútua entre dois ou mais agentes.</div>
+                </div>
+            </div>
+            
+            <div class="node">
+                <div class="node-title"><i class="fas fa-handshake"></i> Concordância Verbal</div>
+                <div class="node-content">
+                    <div class="node-item">Verbos impessoais (haver, fazer indicando tempo): permanecem no singular.</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Semântica -->
+        <section class="mind-map-section color-5">
+            <h2 class="section-title"><i class="fas fa-language"></i> Semântica</h2>
+            
+            <div class="node">
+                <div class="node-title"><i class="fas fa-sync-alt"></i> Sinônimos e Antônimos</div>
+                <div class="node-content">
+                    <div class="node-item">Sinônimos devem manter equivalência de sentido no contexto.</div>
+                    <div class="node-item">Desconfiar de alternativas que apresentem relação de oposição.</div>
+                </div>
+            </div>
+            
+            <div class="node">
+                <div class="node-title"><i class="fas fa-project-diagram"></i> Relações Semânticas da Preposição "Por"</div>
+                <div class="node-content">
+                    <div class="node-item">Pode indicar:</div>
+                    <div class="node-content">
+                        <div class="node-item">Causa.</div>
+                        <div class="node-item">Meio.</div>
+                        <div class="node-item">Lugar.</div>
+                        <div class="node-item">Tempo.</div>
+                        <div class="node-item">Agente da passiva.</div>
+                        <div class="node-item">Substituição.</div>
+                    </div>
+                    <div class="node-item">"Por" + infinitivo geralmente indica causa.</div>
+                </div>
+            </div>
+            
+            <div class="node">
+                <div class="node-title"><i class="fas fa-quote-right"></i> Locuções e Expressões</div>
+                <div class="node-content">
+                    <div class="node-item"><strong>"Graças a":</strong> usada para resultados positivos ou desejáveis.</div>
+                    <div class="node-item"><strong>"Cerca de":</strong> indica aproximação numérica. Não deve ser usada com números exatos.</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Pontuação -->
+        <section class="mind-map-section color-6">
+            <h2 class="section-title"><i class="fas fa-comma"></i> Pontuação</h2>
+            
+            <div class="node">
+                <div class="node-title"><i class="fas fa-pause-circle"></i> Vírgula com Orações Subordinadas Adverbiais</div>
+                <div class="node-content">
+                    <div class="node-item">Obrigatória quando a oração adverbial estiver anteposta à principal.</div>
+                </div>
+            </div>
+            
+            <div class="node">
+                <div class="node-title"><i class="fas fa-exclamation-triangle"></i> Evitar Ambiguidade</div>
+                <div class="node-content">
+                    <div class="node-item">Posicionar o termo modificador próximo ao elemento que ele modifica.</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Crase -->
+        <section class="mind-map-section color-7">
+            <h2 class="section-title"><i class="fas fa-merge"></i> Crase</h2>
+            
+            <div class="node">
+                <div class="node-title"><i class="fas fa-info-circle"></i> Conceito</div>
+                <div class="node-content">
+                    <div class="node-item">Fusão da preposição "a" com o artigo definido feminino "a(s)".</div>
+                </div>
+            </div>
+            
+            <div class="node">
+                <div class="node-title"><i class="fas fa-ban"></i> Casos em que NÃO ocorre</div>
+                <div class="node-content">
+                    <div class="node-item">Antes de palavra masculina.</div>
+                    <div class="node-item">Antes de verbo.</div>
+                    <div class="node-item">Antes de pronome pessoal.</div>
+                    <div class="node-item">Antes de pronome indefinido (em geral no plural).</div>
+                    <div class="node-item">Antes de pronomes demonstrativos "este", "essa", "isso".</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Conjugação Verbal -->
+        <section class="mind-map-section color-8">
+            <h2 class="section-title"><i class="fas fa-clock"></i> Conjugação Verbal</h2>
+            
+            <div class="node">
+                <div class="node-title"><i class="fas fa-hourglass-half"></i> Pretérito Perfeito Composto do Indicativo</div>
+                <div class="node-content">
+                    <div class="node-item"><strong>Forma:</strong> verbo "ter" no presente + particípio.</div>
+                    <div class="node-item">Indica ação iniciada no passado que se prolonga ou se repete até o presente.</div>
+                </div>
+            </div>
+            
+            <div class="node">
+                <div class="node-title"><i class="fas fa-hourglass-start"></i> Futuro do Pretérito do Indicativo</div>
+                <div class="node-content">
+                    <div class="node-item">Expressa hipótese, condição ou possibilidade.</div>
+                    <div class="node-item">Frequentemente associado a estruturas com "se" + imperfeito do subjuntivo.</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Figuras de Linguagem e Coesão -->
+        <section class="mind-map-section color-9">
+            <h2 class="section-title"><i class="fas fa-theater-masks"></i> Figuras de Linguagem & Coesão</h2>
+            
+            <div class="node">
+                <div class="node-title"><i class="fas fa-user-friends"></i> Personificação (Prosopopeia)</div>
+                <div class="node-content">
+                    <div class="node-item">Atribuição de características humanas a seres inanimados ou abstratos.</div>
+                </div>
+            </div>
+            
+            <div class="node">
+                <div class="node-title"><i class="fas fa-link"></i> Coesão Textual</div>
+                <div class="node-content">
+                    <div class="node-item"><strong>Conectivos:</strong></div>
+                    <div class="node-content">
+                        <div class="node-item"><strong>"No entanto":</strong> conectivo adversativo. Indica oposição ou contraste.</div>
+                    </div>
+                    <div class="node-item"><strong>Ambiguidade Estrutural:</strong> ocorre quando a construção sintática permite mais de uma interpretação.</div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <p>Mapa Mental de Língua Portuguesa - Conteúdo para concursos e vestibulares</p>
+        <p>Organizado por tópicos principais e subtópicos</p>
+    </footer>
+</body>
+</html>
