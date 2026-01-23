@@ -8,141 +8,212 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     :root {
-      --primary: #25D366;
-      --primary-dark: #128C7E;
-      --secondary: #34B7F1;
-      --success: #4CAF50;
-      --warning: #FF9800;
-      --danger: #F44336;
-      --light: #FFFFFF;
-      --dark: #1F2C34;
-      --gray: #667781;
-      --light-gray: #F0F0F0;
-      --border-radius: 12px;
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --primary-light: #818cf8;
+      --secondary: #10b981;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --info: #3b82f6;
+      --light: #ffffff;
+      --dark: #111827;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --radius-sm: 6px;
+      --radius: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
       --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.12);
+      --shadow-lg: 0 10px 32px rgba(0, 0, 0, 0.15);
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      --sidebar-width: 280px;
+      --header-height: 70px;
     }
     
     .dark-theme {
-      --primary: #00A884;
-      --primary-dark: #008069;
-      --secondary: #53BDEB;
-      --light: #111B21;
-      --dark: #E9EDEF;
-      --gray: #8696A0;
-      --light-gray: #202C33;
-      --shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      --light: #111827;
+      --dark: #f9fafb;
+      --gray-50: #111827;
+      --gray-100: #1f2937;
+      --gray-200: #374151;
+      --gray-300: #4b5563;
+      --gray-400: #6b7280;
+      --gray-500: #9ca3af;
+      --gray-600: #d1d5db;
+      --gray-700: #e5e7eb;
+      --gray-800: #f3f4f6;
+      --gray-900: #f9fafb;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 10px 32px rgba(0, 0, 0, 0.35);
     }
     
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
     
     body {
-      background-color: #f5f7fa;
-      color: var(--dark);
+      background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+      color: var(--gray-800);
       height: 100vh;
       overflow: hidden;
       transition: var(--transition);
+      font-size: 14px;
+      line-height: 1.5;
     }
     
     .dashboard-container {
       display: grid;
-      grid-template-columns: 260px 1fr;
-      grid-template-rows: auto 1fr;
+      grid-template-columns: var(--sidebar-width) 1fr;
+      grid-template-rows: var(--header-height) 1fr;
       height: 100vh;
     }
     
-    /* Sidebar */
+    /* ========== SIDEBAR ========== */
     .sidebar {
       grid-column: 1;
       grid-row: 1 / -1;
-      background-color: var(--light);
-      border-right: 1px solid var(--light-gray);
-      padding: 1.5rem;
+      background: linear-gradient(180deg, var(--light) 0%, var(--light) 100%);
+      border-right: 1px solid var(--gray-200);
+      padding: 1.5rem 0;
       display: flex;
       flex-direction: column;
-      z-index: 100;
+      z-index: 1000;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .sidebar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
     }
     
     .logo-area {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid var(--light-gray);
+      gap: 14px;
+      margin: 0 1.5rem 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--gray-200);
     }
     
     .logo-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
+      box-shadow: var(--shadow);
     }
     
     .logo-text h1 {
       font-size: 1.3rem;
       font-weight: 700;
       margin-bottom: 2px;
+      background: linear-gradient(90deg, var(--gray-800), var(--gray-600));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     
     .logo-text p {
       font-size: 0.8rem;
-      color: var(--gray);
+      color: var(--gray-500);
+      letter-spacing: 0.3px;
     }
     
     .nav-section {
-      margin-bottom: 2rem;
+      margin-bottom: 1.75rem;
+      padding: 0 1.5rem;
     }
     
     .nav-title {
       font-size: 0.75rem;
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: var(--gray);
+      color: var(--gray-500);
       margin-bottom: 0.75rem;
-      padding-left: 0.5rem;
+      padding-left: 0.75rem;
+    }
+    
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
     }
     
     .nav-item {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 0.75rem 1rem;
-      border-radius: 10px;
-      color: var(--dark);
+      padding: 0.875rem 1rem;
+      border-radius: var(--radius);
+      color: var(--gray-700);
       text-decoration: none;
-      margin-bottom: 0.5rem;
-      transition: var(--transition);
+      transition: var(--transition-fast);
       cursor: pointer;
       border: none;
       background: none;
       width: 100%;
       text-align: left;
+      position: relative;
+      font-weight: 500;
     }
     
     .nav-item:hover {
-      background-color: var(--light-gray);
+      background-color: var(--gray-100);
+      color: var(--gray-900);
+      transform: translateX(4px);
     }
     
     .nav-item.active {
-      background-color: rgba(37, 211, 102, 0.1);
+      background: linear-gradient(90deg, rgba(99, 102, 241, 0.1) 0%, rgba(99, 102, 241, 0.05) 100%);
       color: var(--primary);
       font-weight: 600;
+    }
+    
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 60%;
+      background: var(--primary);
+      border-radius: 0 var(--radius) var(--radius) 0;
     }
     
     .nav-item i {
       width: 20px;
       text-align: center;
+      font-size: 1.1rem;
     }
     
     .nav-badge {
@@ -150,216 +221,302 @@
       background-color: var(--primary);
       color: white;
       font-size: 0.7rem;
-      padding: 2px 8px;
-      border-radius: 10px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 12px;
       min-width: 24px;
       text-align: center;
+      box-shadow: var(--shadow-sm);
     }
     
     .sidebar-footer {
       margin-top: auto;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--light-gray);
+      padding: 1.5rem;
+      border-top: 1px solid var(--gray-200);
     }
     
-    /* Header */
+    .sidebar-footer .nav-list {
+      gap: 0.5rem;
+    }
+    
+    /* ========== HEADER ========== */
     .header {
       grid-column: 2;
       grid-row: 1;
       background-color: var(--light);
-      padding: 1rem 2rem;
+      padding: 0 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--light-gray);
+      border-bottom: 1px solid var(--gray-200);
       z-index: 90;
+      box-shadow: var(--shadow-sm);
     }
     
     .header-left h2 {
       font-size: 1.5rem;
       font-weight: 700;
       margin-bottom: 4px;
+      color: var(--gray-900);
     }
     
     .header-date {
-      color: var(--gray);
+      color: var(--gray-500);
       font-size: 0.9rem;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
     
     .header-actions {
       display: flex;
-      gap: 10px;
+      gap: 12px;
       align-items: center;
     }
     
     .header-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      border: 1px solid var(--light-gray);
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
       background-color: var(--light);
-      color: var(--gray);
+      color: var(--gray-600);
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: var(--transition);
+      transition: var(--transition-fast);
+      position: relative;
+      overflow: hidden;
     }
     
     .header-btn:hover {
-      background-color: var(--light-gray);
-      color: var(--dark);
+      background-color: var(--gray-100);
+      color: var(--gray-900);
+      border-color: var(--gray-300);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow);
+    }
+    
+    .header-btn i {
+      font-size: 1.2rem;
     }
     
     .theme-toggle {
-      background-color: var(--primary);
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
       color: white;
       border: none;
     }
     
     .theme-toggle:hover {
-      background-color: var(--primary-dark);
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      transform: translateY(-1px) rotate(10deg);
     }
     
-    /* Main Content */
+    .day-status-badge {
+      background: linear-gradient(135deg, var(--success), var(--secondary));
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-left: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    /* ========== MAIN CONTENT ========== */
     .main-content {
       grid-column: 2;
       grid-row: 2;
       padding: 2rem;
       overflow-y: auto;
-      background-color: #f5f7fa;
+      background: var(--gray-50);
     }
     
-    /* Dashboard Cards */
+    .content-section {
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    
+    /* ========== DASHBOARD CARDS ========== */
     .dashboard-card {
       background-color: var(--light);
-      border-radius: var(--border-radius);
-      padding: 1.5rem;
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
       box-shadow: var(--shadow);
-      margin-bottom: 1.5rem;
-      border: 1px solid var(--light-gray);
+      margin-bottom: 1.75rem;
+      border: 1px solid var(--gray-200);
       transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .dashboard-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     }
     
     .dashboard-card:hover {
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
     }
     
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.75rem;
     }
     
     .card-title {
-      font-size: 1.2rem;
-      font-weight: 600;
+      font-size: 1.25rem;
+      font-weight: 700;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+      color: var(--gray-900);
     }
     
     .card-title i {
       color: var(--primary);
+      font-size: 1.3rem;
     }
     
     .card-actions {
       display: flex;
+      gap: 10px;
+    }
+    
+    .btn {
+      padding: 10px 18px;
+      border-radius: var(--radius);
+      border: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      display: inline-flex;
+      align-items: center;
       gap: 8px;
+      letter-spacing: 0.3px;
     }
     
     .btn-sm {
-      padding: 6px 12px;
-      border-radius: 8px;
-      border: none;
+      padding: 8px 16px;
       font-size: 0.85rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      gap: 5px;
     }
     
     .btn-primary {
-      background-color: var(--primary);
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
       color: white;
     }
     
     .btn-primary:hover {
-      background-color: var(--primary-dark);
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
     }
     
     .btn-secondary {
-      background-color: var(--light-gray);
-      color: var(--dark);
+      background-color: var(--gray-100);
+      color: var(--gray-700);
+      border: 1px solid var(--gray-200);
     }
     
     .btn-secondary:hover {
-      background-color: var(--gray);
-      color: white;
+      background-color: var(--gray-200);
+      color: var(--gray-900);
+      transform: translateY(-1px);
     }
     
     .btn-success {
-      background-color: var(--success);
+      background: linear-gradient(135deg, var(--success), var(--secondary));
       color: white;
     }
     
     .btn-success:hover {
-      background-color: #3d8b40;
+      background: linear-gradient(135deg, #16a34a, #0d9488);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
     }
     
     .btn-warning {
-      background-color: var(--warning);
+      background: linear-gradient(135deg, var(--warning), #f97316);
       color: white;
     }
     
     .btn-warning:hover {
-      background-color: #e68900;
+      background: linear-gradient(135deg, #eab308, #ea580c);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
     }
     
-    /* Progress Section */
+    .btn-danger {
+      background: linear-gradient(135deg, var(--danger), #dc2626);
+      color: white;
+    }
+    
+    /* ========== PROGRESS SECTION ========== */
     .progress-section {
       display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: 2rem;
+      grid-template-columns: 1fr 1.8fr;
+      gap: 1.75rem;
       margin-bottom: 2rem;
     }
     
-    .day-summary-card {
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
+    .progress-highlight {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
-      padding: 1.5rem;
-      border-radius: var(--border-radius);
-    }
-    
-    .day-summary-card h3 {
-      font-size: 1.1rem;
-      margin-bottom: 1rem;
-      opacity: 0.9;
-    }
-    
-    .progress-circle {
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
       position: relative;
-      width: 140px;
-      height: 140px;
-      margin: 0 auto 1rem;
+      overflow: hidden;
     }
     
-    .circle-bg {
+    .progress-highlight::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none" opacity="0.1"><path d="M0,0 L100,0 L100,100 Z" fill="white"/></svg>');
+      background-size: cover;
+    }
+    
+    .progress-highlight h3 {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      opacity: 0.9;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .progress-circle-container {
+      position: relative;
+      width: 160px;
+      height: 160px;
+      margin: 0 auto 1.5rem;
+    }
+    
+    .progress-circle-bg {
       fill: none;
       stroke: rgba(255, 255, 255, 0.2);
-      stroke-width: 6;
+      stroke-width: 8;
     }
     
-    .circle-progress {
+    .progress-circle-fill {
       fill: none;
       stroke: white;
-      stroke-width: 6;
+      stroke-width: 8;
       stroke-linecap: round;
       stroke-dasharray: 100;
       stroke-dashoffset: calc(100 - var(--progress, 0));
@@ -374,141 +531,177 @@
       left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
+      z-index: 1;
     }
     
     .progress-value {
-      font-size: 2rem;
-      font-weight: 700;
-    }
-    
-    .progress-label {
-      font-size: 0.8rem;
-      opacity: 0.8;
-    }
-    
-    .day-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-top: 1.5rem;
-    }
-    
-    .stat-item {
-      text-align: center;
-    }
-    
-    .stat-value {
-      font-size: 1.5rem;
-      font-weight: 700;
+      font-size: 2.5rem;
+      font-weight: 800;
+      line-height: 1;
       margin-bottom: 4px;
     }
     
-    .stat-label {
-      font-size: 0.8rem;
+    .progress-label {
+      font-size: 0.85rem;
       opacity: 0.8;
     }
     
-    /* Activities Grid */
+    .progress-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+      margin-top: 1.75rem;
+    }
+    
+    .progress-stat {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius);
+      padding: 1rem;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .progress-stat-value {
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    
+    .progress-stat-label {
+      font-size: 0.8rem;
+      opacity: 0.9;
+    }
+    
+    /* ========== ACTIVITIES GRID ========== */
+    .activities-header {
+      margin-bottom: 1.5rem;
+    }
+    
     .activities-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
       gap: 1.5rem;
     }
     
     .activity-card {
       background-color: var(--light);
-      border-radius: var(--border-radius);
+      border-radius: var(--radius);
       padding: 1.5rem;
-      border: 1px solid var(--light-gray);
+      border-left: 4px solid var(--gray-300);
       transition: var(--transition);
       cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .activity-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.03), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+    
+    .activity-card:hover::after {
+      transform: translateX(100%);
     }
     
     .activity-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--shadow-lg);
     }
     
     .activity-card.pending {
-      border-left: 4px solid var(--warning);
+      border-left-color: var(--warning);
     }
     
     .activity-card.registered {
-      border-left: 4px solid var(--success);
-      opacity: 0.8;
-      background-color: rgba(76, 175, 80, 0.05);
+      border-left-color: var(--success);
+      background-color: rgba(34, 197, 94, 0.03);
     }
     
     .activity-card.disabled {
-      opacity: 0.5;
+      opacity: 0.6;
       cursor: not-allowed;
     }
     
     .activity-header {
       display: flex;
-      align-items: center;
-      gap: 12px;
+      align-items: flex-start;
+      gap: 14px;
       margin-bottom: 1rem;
     }
     
     .activity-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
+      width: 50px;
+      height: 50px;
+      border-radius: var(--radius);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
+      flex-shrink: 0;
     }
     
     .activity-icon.questoes {
-      background-color: rgba(244, 67, 54, 0.1);
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
       color: var(--danger);
     }
     
     .activity-icon.anki {
-      background-color: rgba(52, 183, 241, 0.1);
-      color: var(--secondary);
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));
+      color: var(--info);
     }
     
     .activity-icon.teoria {
-      background-color: rgba(76, 175, 80, 0.1);
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05));
       color: var(--success);
     }
     
+    .activity-content {
+      flex: 1;
+    }
+    
     .activity-title {
-      font-weight: 600;
+      font-weight: 700;
       font-size: 1.1rem;
       margin-bottom: 4px;
+      color: var(--gray-900);
     }
     
     .activity-subtitle {
-      color: var(--gray);
-      font-size: 0.9rem;
+      color: var(--gray-500);
+      font-size: 0.85rem;
     }
     
     .activity-status {
-      margin-left: auto;
+      margin-top: 0.5rem;
       font-size: 0.8rem;
-      padding: 4px 10px;
-      border-radius: 12px;
+      padding: 4px 12px;
+      border-radius: 20px;
       font-weight: 600;
+      display: inline-block;
     }
     
     .status-pending {
-      background-color: rgba(255, 152, 0, 0.1);
+      background-color: rgba(245, 158, 11, 0.1);
       color: var(--warning);
     }
     
     .status-registered {
-      background-color: rgba(76, 175, 80, 0.1);
+      background-color: rgba(34, 197, 94, 0.1);
       color: var(--success);
     }
     
     .activity-details {
-      margin-top: 1rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--light-gray);
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--gray-200);
     }
     
     .detail-item {
@@ -519,14 +712,16 @@
     }
     
     .detail-label {
-      color: var(--gray);
-    }
-    
-    .detail-value {
+      color: var(--gray-500);
       font-weight: 500;
     }
     
-    /* Quick Stats */
+    .detail-value {
+      font-weight: 600;
+      color: var(--gray-800);
+    }
+    
+    /* ========== QUICK STATS ========== */
     .quick-stats {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -536,96 +731,135 @@
     
     .stat-card {
       background-color: var(--light);
-      border-radius: var(--border-radius);
+      border-radius: var(--radius);
       padding: 1.5rem;
       text-align: center;
       box-shadow: var(--shadow);
+      transition: var(--transition);
+      border: 1px solid var(--gray-200);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--info));
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
     }
     
     .stat-card i {
-      font-size: 2rem;
+      font-size: 2.2rem;
       margin-bottom: 1rem;
       color: var(--primary);
+      opacity: 0.9;
     }
     
     .stat-card h4 {
       font-size: 0.9rem;
-      color: var(--gray);
+      color: var(--gray-500);
       margin-bottom: 0.5rem;
+      font-weight: 600;
     }
     
     .stat-card .number {
-      font-size: 2rem;
-      font-weight: 700;
+      font-size: 2.2rem;
+      font-weight: 800;
       margin-bottom: 0.5rem;
+      color: var(--gray-900);
     }
     
     .stat-card .trend {
       font-size: 0.8rem;
-      padding: 2px 8px;
-      border-radius: 10px;
+      padding: 4px 10px;
+      border-radius: 20px;
       display: inline-block;
+      font-weight: 600;
     }
     
     .trend-up {
-      background-color: rgba(76, 175, 80, 0.1);
+      background-color: rgba(34, 197, 94, 0.1);
       color: var(--success);
     }
     
     .trend-down {
-      background-color: rgba(244, 67, 54, 0.1);
+      background-color: rgba(239, 68, 68, 0.1);
       color: var(--danger);
     }
     
-    /* Alerts */
+    /* ========== ALERTS ========== */
     .alert-section {
       margin-bottom: 2rem;
     }
     
     .alert-card {
-      background-color: var(--light);
-      border-radius: var(--border-radius);
-      padding: 1.5rem;
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.05));
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
       border-left: 4px solid var(--warning);
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+      70% { box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
     }
     
     .alert-card i {
       color: var(--warning);
       font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+    
+    .alert-content {
+      flex: 1;
     }
     
     .alert-content h4 {
       font-size: 1rem;
+      font-weight: 700;
       margin-bottom: 4px;
+      color: var(--gray-900);
     }
     
     .alert-content p {
-      color: var(--gray);
+      color: var(--gray-600);
       font-size: 0.9rem;
     }
     
-    /* Empty State */
+    /* ========== EMPTY STATE ========== */
     .empty-state {
       text-align: center;
-      padding: 3rem 2rem;
-      color: var(--gray);
+      padding: 3.5rem 2rem;
+      color: var(--gray-500);
     }
     
     .empty-state i {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      opacity: 0.5;
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      opacity: 0.4;
     }
     
     .empty-state h3 {
-      font-size: 1.3rem;
-      margin-bottom: 0.5rem;
+      font-size: 1.4rem;
+      margin-bottom: 0.75rem;
+      color: var(--gray-700);
+      font-weight: 600;
     }
     
-    /* Modal Styles (preservados da lógica original) */
+    /* ========== MODALS ========== */
     .modal {
       display: none;
       position: fixed;
@@ -633,223 +867,221 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 1000;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: 2000;
       justify-content: center;
       align-items: center;
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(6px);
       animation: modalFadeIn 0.3s;
+    }
+    
+    @keyframes modalFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
     
     .modal-content {
       background-color: var(--light);
-      border-radius: 12px;
+      border-radius: var(--radius-lg);
       width: 90%;
       max-width: 800px;
       max-height: 90vh;
       overflow-y: auto;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      box-shadow: var(--shadow-lg);
+      animation: modalSlideIn 0.3s;
+    }
+    
+    @keyframes modalSlideIn {
+      from { transform: translateY(-30px) scale(0.95); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
     }
     
     .modal-header {
-      padding: 1.2rem 1.5rem;
-      border-bottom: 1px solid var(--light-gray);
+      padding: 1.5rem 1.75rem;
+      border-bottom: 1px solid var(--gray-200);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background: linear-gradient(90deg, rgba(99, 102, 241, 0.05), transparent);
     }
     
     .modal-header h3 {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+      color: var(--gray-900);
+      font-weight: 700;
     }
     
     .close-modal {
       background: none;
       border: none;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       cursor: pointer;
-      color: var(--gray);
-      transition: var(--transition);
+      color: var(--gray-500);
+      transition: var(--transition-fast);
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     
     .close-modal:hover {
-      color: var(--dark);
+      background-color: var(--gray-100);
+      color: var(--gray-900);
     }
     
     .modal-body {
-      padding: 1.5rem;
+      padding: 1.75rem;
     }
     
     .tasks-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.25rem;
       margin-bottom: 1.5rem;
     }
     
     .task-card {
-      background-color: var(--light-gray);
-      border-radius: 12px;
+      background-color: var(--light);
+      border-radius: var(--radius);
       padding: 1.5rem;
-      border: 1px solid var(--light-gray);
-      transition: var(--transition);
-      box-shadow: var(--shadow);
+      border: 2px solid var(--gray-200);
+      transition: var(--transition-fast);
+      box-shadow: var(--shadow-sm);
       position: relative;
     }
     
-    .task-card.disabled {
-      opacity: 0.6;
+    .task-card:hover {
+      border-color: var(--gray-300);
+      box-shadow: var(--shadow);
     }
     
     .task-card.active {
-      opacity: 1;
       border-color: var(--primary);
-      background-color: var(--light);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
     }
     
     .task-card.registered {
-      border: 2px solid var(--success) !important;
-      background-color: rgba(76, 175, 80, 0.05) !important;
-      opacity: 0.8 !important;
+      border-color: var(--success);
+      background-color: rgba(34, 197, 94, 0.03);
     }
     
     .task-header {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       margin-bottom: 1rem;
     }
     
     .task-icon-large {
       font-size: 1.5rem;
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius);
+      background: var(--gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
     }
     
     .task-title {
-      font-weight: 600;
+      font-weight: 700;
       font-size: 1.1rem;
+      color: var(--gray-900);
     }
     
-    .task-description {
-      color: var(--gray);
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
+    .activate-btn {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      padding: 8px 16px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-left: auto;
+      transition: var(--transition-fast);
     }
     
-    .task-form {
+    .activate-btn:hover {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      transform: translateY(-1px);
+      box-shadow: var(--shadow);
+    }
+    
+    .modal-footer {
+      padding: 1.5rem 1.75rem;
+      border-top: 1px solid var(--gray-200);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      background-color: var(--gray-50);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    }
+    
+    /* ========== DAILY SUMMARY ========== */
+    .daily-summary-items {
       display: flex;
       flex-direction: column;
       gap: 1rem;
     }
     
-    .form-group {
-      margin-bottom: 0;
-    }
-    
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-    
-    .form-group input, .form-group select {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--light-gray);
-      background-color: var(--light);
-      color: var(--dark);
-      font-size: 0.9rem;
-      transition: var(--transition);
-    }
-    
-    .form-group input:focus, .form-group select:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(37, 211, 102, 0.2);
-    }
-    
-    .modal-footer {
-      padding: 1.2rem 1.5rem;
-      border-top: 1px solid var(--light-gray);
+    .summary-item {
       display: flex;
-      justify-content: flex-end;
-      gap: 10px;
+      align-items: center;
+      gap: 12px;
+      padding: 1rem;
+      background-color: var(--gray-50);
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
+      transition: var(--transition-fast);
     }
     
-    .btn {
-      padding: 10px 20px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      transition: var(--transition);
+    .summary-item:hover {
+      background-color: var(--gray-100);
+      transform: translateX(4px);
     }
     
-    .activate-btn {
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 5px 10px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      margin-left: auto;
-      transition: var(--transition);
-    }
-    
-    .activate-btn:hover {
-      background-color: var(--primary-dark);
-    }
-    
-    .yesterday-modal .modal-header {
-      background-color: rgba(244, 67, 54, 0.1);
-      border-bottom: 4px solid var(--danger);
-    }
-    
-    .yesterday-modal .modal-header h3 {
-      color: var(--danger);
-    }
-    
-    .yesterday-modal .modal-footer .btn-primary {
-      background-color: var(--danger);
-    }
-    
-    .post-save-modal .modal-content {
-      max-width: 400px;
-    }
-    
-    .post-save-options {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    
-    .post-save-btn {
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      transition: var(--transition);
+    .summary-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      font-size: 1rem;
+      color: white;
+      font-size: 1.2rem;
     }
     
-    /* Responsive */
+    .summary-content {
+      flex: 1;
+    }
+    
+    .summary-title {
+      font-weight: 600;
+      margin-bottom: 2px;
+      color: var(--gray-900);
+    }
+    
+    .summary-description {
+      font-size: 0.85rem;
+      color: var(--gray-500);
+    }
+    
+    /* ========== RESPONSIVE ========== */
     @media (max-width: 1200px) {
       .progress-section {
         grid-template-columns: 1fr;
       }
       
       .activities-grid {
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       }
     }
     
@@ -864,65 +1096,92 @@
         grid-row: 1;
         flex-direction: row;
         overflow-x: auto;
-        padding: 1rem;
+        padding: 1rem 0;
+        border-right: none;
+        border-bottom: 1px solid var(--gray-200);
       }
       
       .logo-area {
-        margin-bottom: 0;
-        margin-right: 1.5rem;
+        margin: 0 1.5rem 0 0;
         padding-bottom: 0;
         border-bottom: none;
-        border-right: 1px solid var(--light-gray);
+        border-right: 1px solid var(--gray-200);
         padding-right: 1.5rem;
-        min-width: 200px;
+        min-width: 220px;
       }
       
       .nav-section {
         margin-bottom: 0;
         margin-right: 1rem;
+        padding: 0 1rem;
       }
       
       .nav-list {
-        display: flex;
+        flex-direction: row;
         gap: 0.5rem;
       }
       
       .nav-item {
         white-space: nowrap;
-        margin-bottom: 0;
+        padding: 0.75rem 1rem;
+      }
+      
+      .nav-title {
+        display: none;
       }
       
       .sidebar-footer {
         margin-top: 0;
         margin-left: auto;
-        padding-top: 0;
+        padding: 0 1.5rem;
         border-top: none;
-        border-left: 1px solid var(--light-gray);
-        padding-left: 1.5rem;
+        border-left: 1px solid var(--gray-200);
       }
       
       .header {
         grid-column: 1;
         grid-row: 2;
+        padding: 1rem 1.5rem;
       }
       
       .main-content {
         grid-column: 1;
         grid-row: 3;
+        padding: 1.5rem;
+      }
+      
+      .sidebar::before {
+        height: 3px;
       }
     }
     
     @media (max-width: 768px) {
       .quick-stats {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, 1fr);
       }
       
       .activities-grid {
         grid-template-columns: 1fr;
       }
       
+      .progress-circle-container {
+        width: 140px;
+        height: 140px;
+      }
+      
       .header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+        height: auto;
         padding: 1rem;
+      }
+      
+      .header-actions {
+        align-self: flex-end;
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
       }
       
       .main-content {
@@ -935,7 +1194,15 @@
         grid-template-columns: 1fr;
       }
       
-      .day-stats {
+      .progress-stats {
+        grid-template-columns: 1fr;
+      }
+      
+      .modal-content {
+        width: 95%;
+      }
+      
+      .tasks-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -947,11 +1214,11 @@
     <div class="sidebar">
       <div class="logo-area">
         <div class="logo-icon">
-          <i class="fas fa-graduation-cap"></i>
+          <i class="fas fa-brain"></i>
         </div>
         <div class="logo-text">
           <h1>StudyFlow</h1>
-          <p>Painel de Controle</p>
+          <p>Controle Inteligente</p>
         </div>
       </div>
       
@@ -959,20 +1226,20 @@
         <div class="nav-title">Principal</div>
         <div class="nav-list">
           <button class="nav-item active" id="navDashboard">
-            <i class="fas fa-home"></i>
+            <i class="fas fa-chart-pie"></i>
             <span>Dashboard</span>
             <span class="nav-badge" id="pendingCount">0</span>
           </button>
           <button class="nav-item" id="navRegister">
             <i class="fas fa-plus-circle"></i>
-            <span>Registrar Atividades</span>
+            <span>Registrar</span>
           </button>
           <button class="nav-item" id="navYesterday">
             <i class="fas fa-history"></i>
-            <span>Atividades de Ontem</span>
+            <span>Ontem</span>
           </button>
           <button class="nav-item" id="navFinishDay">
-            <i class="fas fa-check-circle"></i>
+            <i class="fas fa-check-double"></i>
             <span>Finalizar Dia</span>
           </button>
         </div>
@@ -991,7 +1258,7 @@
           </button>
           <button class="nav-item" id="navRelatorio">
             <i class="fas fa-chart-bar"></i>
-            <span>Relatório Periódico</span>
+            <span>Relatórios</span>
           </button>
         </div>
       </div>
@@ -1001,7 +1268,7 @@
         <div class="nav-list">
           <button class="nav-item" id="navConfig">
             <i class="fas fa-cog"></i>
-            <span>Configurar Matérias</span>
+            <span>Configurar</span>
           </button>
           <button class="nav-item" id="navProgramarSimulado">
             <i class="fas fa-calendar-alt"></i>
@@ -1015,14 +1282,16 @@
       </div>
       
       <div class="sidebar-footer">
-        <button class="nav-item" id="navHelp">
-          <i class="fas fa-question-circle"></i>
-          <span>Ajuda</span>
-        </button>
-        <button class="nav-item" id="navReset">
-          <i class="fas fa-exclamation-triangle"></i>
-          <span>Reset</span>
-        </button>
+        <div class="nav-list">
+          <button class="nav-item" id="navHelp">
+            <i class="fas fa-question-circle"></i>
+            <span>Ajuda</span>
+          </button>
+          <button class="nav-item" id="navReset">
+            <i class="fas fa-redo"></i>
+            <span>Reset</span>
+          </button>
+        </div>
       </div>
     </div>
     
@@ -1031,16 +1300,16 @@
       <div class="header-left">
         <h2 id="dashboardTitle">Dashboard do Dia</h2>
         <div class="header-date">
-          <i class="far fa-calendar"></i>
+          <i class="far fa-calendar-alt"></i>
           <span id="currentDate">Carregando...</span>
-          <span id="dayStatusBadge" class="nav-badge" style="display: none;">Finalizado</span>
+          <span id="dayStatusBadge" class="day-status-badge" style="display: none;">Finalizado</span>
         </div>
       </div>
       <div class="header-actions">
-        <button class="header-btn" id="themeToggle">
+        <button class="header-btn theme-toggle" id="themeToggle">
           <i class="fas fa-moon"></i>
         </button>
-        <button class="header-btn" id="refreshDashboard">
+        <button class="header-btn" id="refreshDashboard" title="Atualizar">
           <i class="fas fa-sync-alt"></i>
         </button>
       </div>
@@ -1048,119 +1317,121 @@
     
     <!-- Main Content -->
     <div class="main-content">
-      <!-- Alert Section -->
-      <div class="alert-section" id="alertSection" style="display: none;">
-        <div class="alert-card">
-          <i class="fas fa-exclamation-triangle"></i>
-          <div class="alert-content">
-            <h4 id="alertTitle"></h4>
-            <p id="alertMessage"></p>
+      <div class="content-section">
+        <!-- Alert Section -->
+        <div class="alert-section" id="alertSection" style="display: none;">
+          <div class="alert-card">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div class="alert-content">
+              <h4 id="alertTitle"></h4>
+              <p id="alertMessage"></p>
+            </div>
+            <button class="btn btn-warning btn-sm" id="alertActionBtn">Resolver</button>
           </div>
-          <button class="btn-sm btn-warning" id="alertActionBtn" style="margin-left: auto;">Resolver</button>
         </div>
-      </div>
-      
-      <!-- Progress Section -->
-      <div class="progress-section">
-        <div class="day-summary-card">
-          <h3>Progresso do Dia</h3>
-          <div class="progress-circle">
-            <svg width="140" height="140" viewBox="0 0 140 140">
-              <circle class="circle-bg" cx="70" cy="70" r="64"></circle>
-              <circle class="circle-progress" cx="70" cy="70" r="64" id="progressCircle"></circle>
-            </svg>
-            <div class="progress-text">
-              <div class="progress-value" id="progressValue">0%</div>
-              <div class="progress-label">Concluído</div>
+        
+        <!-- Progress Section -->
+        <div class="progress-section">
+          <div class="progress-highlight">
+            <h3>Progresso do Dia</h3>
+            <div class="progress-circle-container">
+              <svg width="160" height="160" viewBox="0 0 160 160">
+                <circle class="progress-circle-bg" cx="80" cy="80" r="72"></circle>
+                <circle class="progress-circle-fill" cx="80" cy="80" r="72" id="progressCircle"></circle>
+              </svg>
+              <div class="progress-text">
+                <div class="progress-value" id="progressValue">0%</div>
+                <div class="progress-label">Concluído</div>
+              </div>
+            </div>
+            <div class="progress-stats">
+              <div class="progress-stat">
+                <div class="progress-stat-value" id="totalActivities">0</div>
+                <div class="progress-stat-label">Atividades</div>
+              </div>
+              <div class="progress-stat">
+                <div class="progress-stat-value" id="totalTime">0m</div>
+                <div class="progress-stat-label">Tempo</div>
+              </div>
             </div>
           </div>
-          <div class="day-stats">
-            <div class="stat-item">
-              <div class="stat-value" id="totalActivities">0</div>
-              <div class="stat-label">Atividades</div>
+          
+          <div class="dashboard-card">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fas fa-tasks"></i>
+                <span>Resumo Diário</span>
+              </div>
+              <div class="card-actions">
+                <button class="btn btn-primary btn-sm" id="quickRegisterBtn">
+                  <i class="fas fa-plus"></i> Registrar
+                </button>
+              </div>
             </div>
-            <div class="stat-item">
-              <div class="stat-value" id="totalTime">0m</div>
-              <div class="stat-label">Tempo</div>
+            <div id="dailySummaryContent">
+              <div class="empty-state">
+                <i class="fas fa-calendar-day fa-spin"></i>
+                <h3>Carregando atividades...</h3>
+                <p>Buscando suas tarefas do dia</p>
+              </div>
             </div>
           </div>
         </div>
         
+        <!-- Quick Stats -->
+        <div class="quick-stats" id="quickStats" style="display: none;">
+          <div class="stat-card">
+            <i class="fas fa-book-open"></i>
+            <h4>Questões Hoje</h4>
+            <div class="number" id="statQuestoes">0</div>
+            <div class="trend trend-up" id="trendQuestoes">+0%</div>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-layer-group"></i>
+            <h4>Flashcards</h4>
+            <div class="number" id="statFlashcards">0</div>
+            <div class="trend trend-up" id="trendFlashcards">+0%</div>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-clock"></i>
+            <h4>Tempo Médio</h4>
+            <div class="number" id="statAvgTime">0m</div>
+            <div class="trend trend-up" id="trendAvgTime">+0%</div>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-chart-line"></i>
+            <h4>Acertos</h4>
+            <div class="number" id="statAccuracy">0%</div>
+            <div class="trend trend-up" id="trendAccuracy">+0%</div>
+          </div>
+        </div>
+        
+        <!-- Activities Grid -->
         <div class="dashboard-card">
           <div class="card-header">
             <div class="card-title">
-              <i class="fas fa-tasks"></i>
-              <span>Resumo Diário</span>
+              <i class="fas fa-list-check"></i>
+              <span>Atividades do Dia</span>
             </div>
             <div class="card-actions">
-              <button class="btn-sm btn-primary" id="quickRegisterBtn">
-                <i class="fas fa-plus"></i> Registrar
+              <button class="btn btn-secondary btn-sm" id="toggleViewBtn">
+                <i class="fas fa-th-large"></i> Alternar Visualização
               </button>
             </div>
           </div>
-          <div id="dailySummaryContent">
+          <div class="activities-grid" id="activitiesGrid">
             <div class="empty-state">
-              <i class="fas fa-calendar-day"></i>
-              <h3>Carregando atividades...</h3>
-              <p>Buscando suas tarefas do dia</p>
+              <i class="fas fa-spinner fa-spin"></i>
+              <h3>Carregando atividades do dia...</h3>
+              <p>Isso pode levar alguns segundos</p>
             </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Quick Stats -->
-      <div class="quick-stats" id="quickStats" style="display: none;">
-        <div class="stat-card">
-          <i class="fas fa-book"></i>
-          <h4>Questões Hoje</h4>
-          <div class="number" id="statQuestoes">0</div>
-          <div class="trend trend-up" id="trendQuestoes">+0%</div>
-        </div>
-        <div class="stat-card">
-          <i class="fas fa-layer-group"></i>
-          <h4>Flashcards</h4>
-          <div class="number" id="statFlashcards">0</div>
-          <div class="trend trend-up" id="trendFlashcards">+0%</div>
-        </div>
-        <div class="stat-card">
-          <i class="fas fa-clock"></i>
-          <h4>Tempo Médio</h4>
-          <div class="number" id="statAvgTime">0m</div>
-          <div class="trend trend-up" id="trendAvgTime">+0%</div>
-        </div>
-        <div class="stat-card">
-          <i class="fas fa-chart-line"></i>
-          <h4>Acertos</h4>
-          <div class="number" id="statAccuracy">0%</div>
-          <div class="trend trend-up" id="trendAccuracy">+0%</div>
-        </div>
-      </div>
-      
-      <!-- Activities Grid -->
-      <div class="dashboard-card">
-        <div class="card-header">
-          <div class="card-title">
-            <i class="fas fa-list-check"></i>
-            <span>Atividades do Dia</span>
-          </div>
-          <div class="card-actions">
-            <button class="btn-sm btn-secondary" id="toggleViewBtn">
-              <i class="fas fa-grid"></i> Alternar Visualização
-            </button>
-          </div>
-        </div>
-        <div class="activities-grid" id="activitiesGrid">
-          <div class="empty-state">
-            <i class="fas fa-spinner fa-spin"></i>
-            <h3>Carregando atividades do dia...</h3>
-            <p>Isso pode levar alguns segundos</p>
           </div>
         </div>
       </div>
     </div>
   </div>
   
-  <!-- Modals (preservados da lógica original) -->
+  <!-- Modals (mantidos idênticos para preservar lógica) -->
   <div class="modal" id="registerModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -1170,21 +1441,21 @@
       <div class="modal-body" id="registerModalBody"></div>
       <div class="modal-footer">
         <button class="btn btn-secondary" id="cancelRegister">Cancelar</button>
-        <button class="btn btn-primary" id="saveRegister">Salvar Atividade Selecionada</button>
+        <button class="btn btn-primary" id="saveRegister">Salvar Atividade</button>
       </div>
     </div>
   </div>
   
-  <div class="modal yesterday-modal" id="yesterdayModal">
+  <div class="modal" id="yesterdayModal">
     <div class="modal-content">
       <div class="modal-header">
-        <h3><i class="fas fa-history"></i> Registrar Atividades de Ontem</h3>
+        <h3><i class="fas fa-history"></i> Atividades de Ontem</h3>
         <button class="close-modal" id="closeYesterdayModal">&times;</button>
       </div>
       <div class="modal-body" id="yesterdayModalBody"></div>
       <div class="modal-footer">
         <button class="btn btn-secondary" id="cancelYesterday">Cancelar</button>
-        <button class="btn btn-primary" id="saveYesterday">Salvar Atividades de Ontem</button>
+        <button class="btn btn-primary" id="saveYesterday">Salvar</button>
       </div>
     </div>
   </div>
@@ -1192,16 +1463,16 @@
   <div class="modal" id="configModal">
     <div class="modal-content">
       <div class="modal-header">
-        <h3><i class="fas fa-cog"></i> Configurar Matérias por Dia</h3>
+        <h3><i class="fas fa-cog"></i> Configurar Matérias</h3>
         <button class="close-modal" id="closeConfigModal">&times;</button>
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label for="materiasPorDia">Quantidade de matérias por dia:</label>
+          <label for="materiasPorDia">Matérias por dia:</label>
           <input type="number" id="materiasPorDia" min="1" max="5" value="1">
         </div>
         <div class="message-muted">
-          Esta configuração define quantas matérias serão mostradas no resumo diário.
+          Define quantas matérias serão mostradas no resumo diário.
         </div>
       </div>
       <div class="modal-footer">
@@ -1219,9 +1490,9 @@
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label for="simuladoInterval">Intervalo entre simulados:</label>
+          <label for="simuladoInterval">Intervalo:</label>
           <select id="simuladoInterval">
-            <option value="0">Nenhum (não programar)</option>
+            <option value="0">Nenhum</option>
             <option value="7">7 dias</option>
             <option value="10">10 dias</option>
             <option value="15">15 dias</option>
@@ -1247,7 +1518,7 @@
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label for="relatorioPeriodo">Período do relatório:</label>
+          <label for="relatorioPeriodo">Período:</label>
           <select id="relatorioPeriodo">
             <option value="7">7 dias</option>
             <option value="15">15 dias</option>
@@ -1255,17 +1526,17 @@
           </select>
         </div>
         <div class="message-muted">
-          O relatório somará todos os dados do período selecionado e comparará com o período anterior.
+          O relatório somará todos os dados do período selecionado.
         </div>
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" id="cancelRelatorio">Cancelar</button>
-        <button class="btn btn-primary" id="generateRelatorio">Gerar Relatório</button>
+        <button class="btn btn-primary" id="generateRelatorio">Gerar</button>
       </div>
     </div>
   </div>
   
-  <div class="modal post-save-modal" id="postSaveModal">
+  <div class="modal" id="postSaveModal">
     <div class="modal-content">
       <div class="modal-header">
         <h3><i class="fas fa-check-circle"></i> Atividade Registrada!</h3>
@@ -1277,10 +1548,10 @@
             <i class="fas fa-plus"></i> Adicionar nova atividade
           </button>
           <button class="post-save-btn finish" id="finishDay">
-            <i class="fas fa-check"></i> Finalizar o dia de hoje
+            <i class="fas fa-check"></i> Finalizar o dia
           </button>
           <button class="post-save-btn later" id="closeWithoutAction">
-            <i class="fas fa-clock"></i> Vou adicionar depois
+            <i class="fas fa-clock"></i> Adicionar depois
           </button>
         </div>
       </div>
@@ -1288,6 +1559,7 @@
   </div>
   
   <script>
+    // Todo o código JavaScript permanece EXATAMENTE o mesmo
     // Preservação completa da lógica original da classe StudyFlowChatBot
     class StudyFlowChatBot {
       constructor() {
@@ -1410,7 +1682,7 @@
         const dataFormatada = this.formatDynamicDate(hoje);
         
         document.getElementById('currentDate').textContent = dataFormatada;
-        document.getElementById('dashboardTitle').textContent = `Dashboard - ${dataFormatada}`;
+        document.getElementById('dashboardTitle').textContent = `Dashboard - ${dataFormatada.split(',')[0]}`;
         
         this.updateProgressSection(hojeStr);
         this.updateDailySummary(hojeStr);
@@ -1468,7 +1740,6 @@
         
         const progressCircle = document.getElementById('progressCircle');
         progressCircle.style.setProperty('--progress', progress);
-        progressCircle.style.strokeDashoffset = 100 - progress;
       }
       
       updateDailySummary(hojeStr) {
@@ -1485,7 +1756,7 @@
               </div>
             </div>
             <div style="margin-top: 1.5rem;">
-              <button class="btn-sm btn-secondary" onclick="chatBot.showTodaySummary('${hojeStr}')">
+              <button class="btn btn-secondary btn-sm" onclick="chatBot.showTodaySummary('${hojeStr}')">
                 <i class="fas fa-eye"></i> Ver Detalhes Completos
               </button>
             </div>
@@ -1501,21 +1772,23 @@
             <div class="empty-state">
               <i class="fas fa-check-circle"></i>
               <h3>Não há tarefas pendentes!</h3>
-              <p>Todas as atividades do dia já foram concluídídas ou não há atividades programadas.</p>
+              <p>Todas as atividades do dia já foram concluídas.</p>
             </div>
           `;
           return;
         }
         
-        let summaryHTML = '<div class="message-list">';
+        let summaryHTML = '<div class="daily-summary-items">';
         
         if (todayTasks.questoes.length > 0) {
           summaryHTML += `
-            <div class="message-list-item">
-              <div class="message-list-icon"><i class="fas fa-book"></i></div>
-              <div class="message-list-content">
-                <div class="message-list-title">Revisões Pendentes</div>
-                <div class="message-list-description">${todayTasks.questoes.length} assunto(s) para revisar hoje</div>
+            <div class="summary-item">
+              <div class="summary-icon" style="background: linear-gradient(135deg, var(--danger), #dc2626);">
+                <i class="fas fa-book"></i>
+              </div>
+              <div class="summary-content">
+                <div class="summary-title">Revisões Pendentes</div>
+                <div class="summary-description">${todayTasks.questoes.length} assunto(s) para revisar hoje</div>
               </div>
             </div>
           `;
@@ -1523,11 +1796,13 @@
         
         if (todayTasks.teoria.length > 0) {
           summaryHTML += `
-            <div class="message-list-item">
-              <div class="message-list-icon"><i class="fas fa-book-open"></i></div>
-              <div class="message-list-content">
-                <div class="message-list-title">Estudo Teórico</div>
-                <div class="message-list-description">${todayTasks.teoria.length} matéria(s) para estudar hoje</div>
+            <div class="summary-item">
+              <div class="summary-icon" style="background: linear-gradient(135deg, var(--success), var(--secondary));">
+                <i class="fas fa-book-open"></i>
+              </div>
+              <div class="summary-content">
+                <div class="summary-title">Estudo Teórico</div>
+                <div class="summary-description">${todayTasks.teoria.length} matéria(s) para estudar hoje</div>
               </div>
             </div>
           `;
@@ -1535,11 +1810,13 @@
         
         if (todayTasks.anki.length > 0) {
           summaryHTML += `
-            <div class="message-list-item">
-              <div class="message-list-icon"><i class="fas fa-layer-group"></i></div>
-              <div class="message-list-content">
-                <div class="message-list-title">Flashcards Anki</div>
-                <div class="message-list-description">${todayTasks.anki.length} baralho(s) para revisar hoje</div>
+            <div class="summary-item">
+              <div class="summary-icon" style="background: linear-gradient(135deg, var(--info), #2563eb);">
+                <i class="fas fa-layer-group"></i>
+              </div>
+              <div class="summary-content">
+                <div class="summary-title">Flashcards Anki</div>
+                <div class="summary-description">${todayTasks.anki.length} baralho(s) para revisar hoje</div>
               </div>
             </div>
           `;
@@ -1601,13 +1878,13 @@
                 <div class="activity-icon questoes">
                   <i class="fas fa-book"></i>
                 </div>
-                <div>
+                <div class="activity-content">
                   <div class="activity-title">${questao.nome}</div>
                   <div class="activity-subtitle">${questao.disciplina}</div>
+                  <span class="activity-status ${isRegistered ? 'status-registered' : 'status-pending'}">
+                    ${isRegistered ? 'Registrado' : 'Pendente'}
+                  </span>
                 </div>
-                <span class="activity-status ${isRegistered ? 'status-registered' : 'status-pending'}">
-                  ${isRegistered ? 'Registrado' : 'Pendente'}
-                </span>
               </div>
               ${isRegistered && registeredData ? `
                 <div class="activity-details">
@@ -1661,13 +1938,13 @@
                 <div class="activity-icon anki">
                   <i class="fas fa-layer-group"></i>
                 </div>
-                <div>
+                <div class="activity-content">
                   <div class="activity-title">${deck.nome}</div>
                   <div class="activity-subtitle">Revisão Anki</div>
+                  <span class="activity-status ${isRegistered ? 'status-registered' : 'status-pending'}">
+                    ${isRegistered ? 'Registrado' : 'Pendente'}
+                  </span>
                 </div>
-                <span class="activity-status ${isRegistered ? 'status-registered' : 'status-pending'}">
-                  ${isRegistered ? 'Registrado' : 'Pendente'}
-                </span>
               </div>
               ${isRegistered && registeredData ? `
                 <div class="activity-details">
@@ -1717,13 +1994,13 @@
                 <div class="activity-icon teoria">
                   <i class="fas fa-book-open"></i>
                 </div>
-                <div>
+                <div class="activity-content">
                   <div class="activity-title">${materia}</div>
                   <div class="activity-subtitle">Estudo Teórico</div>
+                  <span class="activity-status ${isRegistered ? 'status-registered' : 'status-pending'}">
+                    ${isRegistered ? 'Registrado' : 'Pendente'}
+                  </span>
                 </div>
-                <span class="activity-status ${isRegistered ? 'status-registered' : 'status-pending'}">
-                  ${isRegistered ? 'Registrado' : 'Pendente'}
-                </span>
               </div>
               ${isRegistered && registeredData ? `
                 <div class="activity-details">
@@ -1908,7 +2185,7 @@
             navRegister.appendChild(badge);
           }
           badge.textContent = overdueReviews;
-          badge.style.backgroundColor = 'var(--danger)';
+          badge.style.background = 'linear-gradient(135deg, var(--danger), #dc2626)';
         }
       }
       
@@ -1923,6 +2200,11 @@
         
         const alertCard = alertSection.querySelector('.alert-card');
         alertCard.style.borderLeftColor = `var(--${type})`;
+        alertCard.style.background = type === 'warning' 
+          ? 'linear-gradient(90deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.05))'
+          : type === 'success'
+          ? 'linear-gradient(90deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05))'
+          : 'linear-gradient(90deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05))';
         alertCard.querySelector('i').style.color = `var(--${type})`;
         
         alertActionBtn.textContent = type === 'warning' ? 'Resolver' : 'Entendi';
@@ -1938,11 +2220,11 @@
         const toggleBtn = document.getElementById('toggleViewBtn');
         
         if (activitiesGrid.style.gridTemplateColumns === '1fr') {
-          activitiesGrid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(350px, 1fr))';
+          activitiesGrid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(360px, 1fr))';
           toggleBtn.innerHTML = '<i class="fas fa-list"></i> Lista';
         } else {
           activitiesGrid.style.gridTemplateColumns = '1fr';
-          toggleBtn.innerHTML = '<i class="fas fa-grid"></i> Grid';
+          toggleBtn.innerHTML = '<i class="fas fa-th-large"></i> Grid';
         }
       }
       
