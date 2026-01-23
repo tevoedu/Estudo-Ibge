@@ -2010,8 +2010,8 @@
         const cicloAtualizado = this.updateStudyCycle(materiaId, tempo, specificDate);
         
         if (cicloAtualizado) {
-          // Registrar sessão no módulo Home (mantendo o funcionamento atual)
-          this.registerHomeSession(`Teoria - ${materiaId}`, parseInt(tempo), specificDate);
+          // REMOVIDO: Chamada duplicada para registerHomeSession
+          // O registro no Home já é feito dentro de updateStudyCycle
           
           // CORREÇÃO: Atualizar progresso da teoria com conteúdo e página
           const teoriaProgress = this.getModuleData('teoriaProgress') || {};
@@ -2050,33 +2050,28 @@
         
         let sessions = this.getModuleData(dateKey) || [];
         
-        // CORREÇÃO: Verificar se já existe uma sessão igual para evitar duplicação
-        const sessionExists = sessions.some(session => 
+        // VERIFICAÇÃO ROBUSTA CONTRA DUPLICAÇÃO
+        // Procura por sessão existente da mesma matéria no mesmo dia
+        const existingSessionIndex = sessions.findIndex(session => 
           session.subject === subject && 
           session.date === `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`
         );
         
-        if (!sessionExists) {
+        if (existingSessionIndex === -1) {
+          // Se não existe, adiciona nova
           sessions.push({
             subject: subject,
             minutes: minutes,
             date: `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`,
             timestamp: date.toISOString()
           });
-          
-          this.setModuleData(dateKey, sessions);
         } else {
-          // Se já existe, atualizar o tempo
-          const index = sessions.findIndex(session => 
-            session.subject === subject && 
-            session.date === `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`
-          );
-          
-          if (index !== -1) {
-            sessions[index].minutes += minutes;
-            this.setModuleData(dateKey, sessions);
-          }
+          // Se já existe, ATUALIZA o tempo (não duplica)
+          sessions[existingSessionIndex].minutes = minutes;
+          sessions[existingSessionIndex].timestamp = date.toISOString();
         }
+        
+        this.setModuleData(dateKey, sessions);
       }
       
       // CORREÇÃO APLICADA: Função updateReviewModule atualizada para aceitar data específica
@@ -2211,6 +2206,7 @@
             activeCycle.studyTime[studyDate] = (activeCycle.studyTime[studyDate] || 0) + parseInt(tempo);
             
             // CORREÇÃO: Registrar sessão no módulo Home para CADA matéria
+            // APENAS AQUI deve ser chamado registerHomeSession para teoria
             this.registerHomeSession(`Teoria - ${materiaId}`, parseInt(tempo), studyDate);
             
             // CORREÇÃO: Salvar progresso da teoria para CADA matéria
