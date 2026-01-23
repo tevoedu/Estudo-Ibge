@@ -1062,6 +1062,15 @@
       background-color: #3d8b40;
     }
     
+    .post-save-btn.later {
+      background-color: var(--gray);
+      color: white;
+    }
+    
+    .post-save-btn.later:hover {
+      background-color: #5a6268;
+    }
+    
     .progress-indicator {
       display: flex;
       align-items: center;
@@ -1289,6 +1298,9 @@
           <button class="post-save-btn finish" id="finishDay">
             <i class="fas fa-check"></i> Finalizar o dia de hoje
           </button>
+          <button class="post-save-btn later" id="closeWithoutAction">
+            <i class="fas fa-clock"></i> Vou adicionar depois
+          </button>
         </div>
       </div>
     </div>
@@ -1417,6 +1429,11 @@
         document.getElementById('finishDay').addEventListener('click', () => {
           document.getElementById('postSaveModal').style.display = 'none';
           this.finalizeDay();
+        });
+        
+        // NOVO: Botão "Vou adicionar depois"
+        document.getElementById('closeWithoutAction').addEventListener('click', () => {
+          document.getElementById('postSaveModal').style.display = 'none';
         });
         
         // Fechar modal ao clicar fora
@@ -1631,7 +1648,7 @@
         modalBody.innerHTML = tasksHTML;
       }
       
-      // CORREÇÃO CRÍTICA APLICADA: Salvar atividades de ontem - AGORA REGISTRA COM A DATA CORRETA DE ONTEM
+      // CORREÇÃO APLICADA: Salvar atividades de ontem - AGORA REGISTRA COM A DATA CORRETA DE ONTEM
       saveYesterdayTasks() {
         const activeCards = document.querySelectorAll('#yesterdayModal .task-card.active');
         let hasError = false;
@@ -3020,8 +3037,9 @@
         const hojeStr = this.getDynamicDateString();
         const todayTasks = this.getTodayTasks();
         
-        // Buscar atividades já registradas (do registro parcial ou do localStorage)
+        // Buscar atividades já registradas (com prioridade para registro parcial)
         let registeredActivities = {};
+        
         if (this.hasPartialRegistration()) {
           registeredActivities = this.partialRegistration.activities;
         } else {
@@ -3029,11 +3047,28 @@
           registeredActivities = dailyActivities.activities;
         }
         
+        // Verificar também no localStorage para o dia atual (backup)
+        const localStorageActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+        
+        // Mesclar registros: primeiro do registro parcial, depois do localStorage
+        const mergedActivities = {
+          questoes: [...(registeredActivities.questoes || []), ...(localStorageActivities.activities?.questoes || [])],
+          anki: [...(registeredActivities.anki || []), ...(localStorageActivities.activities?.anki || [])],
+          teoria: [...(registeredActivities.teoria || []), ...(localStorageActivities.activities?.teoria || [])]
+        };
+        
+        // Remover duplicatas
+        const uniqueActivities = {
+          questoes: this.removeDuplicateActivities(mergedActivities.questoes, 'assunto'),
+          anki: this.removeDuplicateActivities(mergedActivities.anki, 'deck'),
+          teoria: this.removeDuplicateActivities(mergedActivities.teoria, 'materia')
+        };
+        
         // Verificar se há tarefas
         const totalTasks = todayTasks.questoes.length + todayTasks.anki.length + todayTasks.teoria.length;
-        const registeredCount = (registeredActivities.questoes?.length || 0) + 
-                               (registeredActivities.anki?.length || 0) + 
-                               (registeredActivities.teoria?.length || 0);
+        const registeredCount = (uniqueActivities.questoes?.length || 0) + 
+                               (uniqueActivities.anki?.length || 0) + 
+                               (uniqueActivities.teoria?.length || 0);
         
         if (totalTasks === 0) {
           modalBody.innerHTML = `
@@ -3066,19 +3101,19 @@
         
         // Adicionar cards para questões com status
         todayTasks.questoes.forEach(questao => {
-          const isRegistered = registeredActivities.questoes?.some(q => q.assunto === questao.id);
+          const isRegistered = uniqueActivities.questoes?.some(q => q.assunto === questao.id);
           tasksHTML += this.createQuestaoCard(questao, isRegistered, false);
         });
         
         // Adicionar cards para Anki com status
         todayTasks.anki.forEach(deck => {
-          const isRegistered = registeredActivities.anki?.some(a => a.deck === deck.id);
+          const isRegistered = uniqueActivities.anki?.some(a => a.deck === deck.id);
           tasksHTML += this.createAnkiCard(deck, isRegistered, false);
         });
         
         // Adicionar cards para teoria com status
         todayTasks.teoria.forEach(materia => {
-          const isRegistered = registeredActivities.teoria?.some(t => t.materia === materia);
+          const isRegistered = uniqueActivities.teoria?.some(t => t.materia === materia);
           tasksHTML += this.createTeoriaCard(materia, isRegistered, false);
         });
         
@@ -3086,19 +3121,44 @@
         modalBody.innerHTML += tasksHTML;
       }
       
+      // NOVA FUNÇÃO: Remover atividades duplicadas
+      removeDuplicateActivities(activities, keyField) {
+        if (!activities || !Array.isArray(activities)) return [];
+        
+        const seen = new Set();
+        return activities.filter(activity => {
+          const key = activity[keyField];
+          if (seen.has(key)) {
+            return false;
+          }
+          seen.add(key);
+          return true;
+        });
+      }
+      
       // MODIFICADA: Criar card com status de registro
       createQuestaoCard(questao, isRegistered = false, isYesterday = false) {
         const modalId = isYesterday ? 'yesterdayModal' : 'registerModal';
-        const registeredData = isYesterday ? 
-          (this.yesterdayMemory.activities.questoes?.find(q => q.id === questao.id) || {}) :
-          (this.partialRegistration.activities.questoes?.find(q => q.assunto === questao.id) || {});
+        
+        // Buscar dados de registro
+        let registeredData;
+        if (isRegistered) {
+          const hojeStr = this.getDynamicDateString();
+          const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+          registeredData = dailyActivities.activities.questoes?.find(q => q.assunto === questao.id);
+          
+          // Se não encontrar no localStorage, busca no registro parcial
+          if (!registeredData && this.hasPartialRegistration()) {
+            registeredData = this.partialRegistration.activities.questoes?.find(q => q.assunto === questao.id);
+          }
+        }
         
         return `
           <div class="task-card ${isRegistered ? 'registered disabled' : 'disabled'}" 
                data-type="questoes" data-id="${questao.id}">
             <div class="task-header">
-              <div class="task-icon-large">🧩</div>
-              <div class="task-title">Questões: ${questao.disciplina}</div>
+              <div class="task-icon-large" style="color: ${isRegistered ? 'var(--success)' : 'inherit'}">🧩</div>
+              <div class="task-title" style="color: ${isRegistered ? 'var(--success)' : 'inherit'}">Questões: ${questao.disciplina}</div>
               ${isRegistered ? 
                 '<span class="task-status" style="background-color: var(--success); color: white;">✅</span>' : 
                 '<button class="activate-btn" onclick="chatBot.activateTask(this, \'' + modalId + '\')">Ativar</button>'}
@@ -3110,17 +3170,23 @@
               <div class="form-group">
                 <label for="questoes-feitas-${questao.id}">Quantidade de questões feitas</label>
                 <input type="number" id="questoes-feitas-${questao.id}" min="0" placeholder="Ex: 20" 
-                       ${isRegistered ? 'disabled' : 'disabled'} value="${isRegistered ? registeredData.feitas || '' : ''}">
+                       ${isRegistered ? 'disabled' : 'disabled'} 
+                       value="${isRegistered && registeredData ? registeredData.feitas || '' : ''}"
+                       style="${isRegistered ? 'background-color: rgba(76, 175, 80, 0.1); border-color: var(--success);' : ''}">
               </div>
               <div class="form-group">
                 <label for="questoes-erradas-${questao.id}">Quantidade de questões erradas</label>
                 <input type="number" id="questoes-erradas-${questao.id}" min="0" placeholder="Ex: 5" 
-                       ${isRegistered ? 'disabled' : 'disabled'} value="${isRegistered ? registeredData.erradas || '' : ''}">
+                       ${isRegistered ? 'disabled' : 'disabled'}
+                       value="${isRegistered && registeredData ? registeredData.erradas || '' : ''}"
+                       style="${isRegistered ? 'background-color: rgba(76, 175, 80, 0.1); border-color: var(--success);' : ''}">
               </div>
               <div class="form-group">
                 <label for="questoes-tempo-${questao.id}">Tempo total gasto (minutos)</label>
                 <input type="number" id="questoes-tempo-${questao.id}" min="0" placeholder="Ex: 45" 
-                       ${isRegistered ? 'disabled' : 'disabled'} value="${isRegistered ? registeredData.tempo || '' : ''}">
+                       ${isRegistered ? 'disabled' : 'disabled'}
+                       value="${isRegistered && registeredData ? registeredData.tempo || '' : ''}"
+                       style="${isRegistered ? 'background-color: rgba(76, 175, 80, 0.1); border-color: var(--success);' : ''}">
               </div>
             </div>
           </div>
@@ -3129,16 +3195,26 @@
       
       createAnkiCard(deck, isRegistered = false, isYesterday = false) {
         const modalId = isYesterday ? 'yesterdayModal' : 'registerModal';
-        const registeredData = isYesterday ? 
-          (this.yesterdayMemory.activities.anki?.find(a => a.id === deck.id) || {}) :
-          (this.partialRegistration.activities.anki?.find(a => a.deck === deck.id) || {});
+        
+        // Buscar dados de registro
+        let registeredData;
+        if (isRegistered) {
+          const hojeStr = this.getDynamicDateString();
+          const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+          registeredData = dailyActivities.activities.anki?.find(a => a.deck === deck.id);
+          
+          // Se não encontrar no localStorage, busca no registro parcial
+          if (!registeredData && this.hasPartialRegistration()) {
+            registeredData = this.partialRegistration.activities.anki?.find(a => a.deck === deck.id);
+          }
+        }
         
         return `
           <div class="task-card ${isRegistered ? 'registered disabled' : 'disabled'}" 
                data-type="anki" data-id="${deck.id}">
             <div class="task-header">
-              <div class="task-icon-large">${deck.emoji}</div>
-              <div class="task-title">Revisão Anki</div>
+              <div class="task-icon-large" style="color: ${isRegistered ? 'var(--success)' : 'inherit'}">${deck.emoji}</div>
+              <div class="task-title" style="color: ${isRegistered ? 'var(--success)' : 'inherit'}">Revisão Anki</div>
               ${isRegistered ? 
                 '<span class="task-status" style="background-color: var(--success); color: white;">✅</span>' : 
                 '<button class="activate-btn" onclick="chatBot.activateTask(this, \'' + modalId + '\')">Ativar</button>'}
@@ -3150,12 +3226,16 @@
               <div class="form-group">
                 <label for="anki-tempo-${deck.id}">Tempo de estudo (minutos)</label>
                 <input type="number" id="anki-tempo-${deck.id}" min="0" placeholder="Ex: 30" 
-                       ${isRegistered ? 'disabled' : 'disabled'} value="${isRegistered ? registeredData.tempo || '' : ''}">
+                       ${isRegistered ? 'disabled' : 'disabled'} 
+                       value="${isRegistered && registeredData ? registeredData.tempo || '' : ''}"
+                       style="${isRegistered ? 'background-color: rgba(76, 175, 80, 0.1); border-color: var(--success);' : ''}">
               </div>
               <div class="form-group">
                 <label for="anki-cards-${deck.id}">Quantidade de cards revisados</label>
                 <input type="number" id="anki-cards-${deck.id}" min="0" placeholder="Ex: 50" 
-                       ${isRegistered ? 'disabled' : 'disabled'} value="${isRegistered ? registeredData.cards || '' : ''}">
+                       ${isRegistered ? 'disabled' : 'disabled'}
+                       value="${isRegistered && registeredData ? registeredData.cards || '' : ''}"
+                       style="${isRegistered ? 'background-color: rgba(76, 175, 80, 0.1); border-color: var(--success);' : ''}">
               </div>
             </div>
           </div>
@@ -3164,16 +3244,26 @@
       
       createTeoriaCard(materia, isRegistered = false, isYesterday = false) {
         const modalId = isYesterday ? 'yesterdayModal' : 'registerModal';
-        const registeredData = isYesterday ? 
-          (this.yesterdayMemory.activities.teoria?.find(t => t === materia) || {}) :
-          (this.partialRegistration.activities.teoria?.find(t => t.materia === materia) || {});
+        
+        // Buscar dados de registro
+        let registeredData;
+        if (isRegistered) {
+          const hojeStr = this.getDynamicDateString();
+          const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+          registeredData = dailyActivities.activities.teoria?.find(t => t.materia === materia);
+          
+          // Se não encontrar no localStorage, busca no registro parcial
+          if (!registeredData && this.hasPartialRegistration()) {
+            registeredData = this.partialRegistration.activities.teoria?.find(t => t.materia === materia);
+          }
+        }
         
         return `
           <div class="task-card ${isRegistered ? 'registered disabled' : 'disabled'}" 
                data-type="teoria" data-id="${materia}">
             <div class="task-header">
-              <div class="task-icon-large">📚</div>
-              <div class="task-title">Estudo Teórico</div>
+              <div class="task-icon-large" style="color: ${isRegistered ? 'var(--success)' : 'inherit'}">📚</div>
+              <div class="task-title" style="color: ${isRegistered ? 'var(--success)' : 'inherit'}">Estudo Teórico</div>
               ${isRegistered ? 
                 '<span class="task-status" style="background-color: var(--success); color: white;">✅</span>' : 
                 '<button class="activate-btn" onclick="chatBot.activateTask(this, \'' + modalId + '\')">Ativar</button>'}
@@ -3185,17 +3275,23 @@
               <div class="form-group">
                 <label for="teoria-conteudo-${materia}">Conteúdo estudado (PDF/Aula)</label>
                 <input type="text" id="teoria-conteudo-${materia}" placeholder="Ex: PDF Aula 1, Video Aula 2" 
-                       ${isRegistered ? 'disabled' : 'disabled'} value="${isRegistered ? registeredData.conteudo || '' : ''}">
+                       ${isRegistered ? 'disabled' : 'disabled'}
+                       value="${isRegistered && registeredData ? registeredData.conteudo || '' : ''}"
+                       style="${isRegistered ? 'background-color: rgba(76, 175, 80, 0.1); border-color: var(--success);' : ''}">
               </div>
               <div class="form-group">
                 <label for="teoria-pagina-${materia}">Página/Progresso</label>
                 <input type="text" id="teoria-pagina-${materia}" placeholder="Ex: Página 42, 50% concluído" 
-                       ${isRegistered ? 'disabled' : 'disabled'} value="${isRegistered ? registeredData.pagina || '' : ''}">
+                       ${isRegistered ? 'disabled' : 'disabled'}
+                       value="${isRegistered && registeredData ? registeredData.pagina || '' : ''}"
+                       style="${isRegistered ? 'background-color: rgba(76, 175, 80, 0.1); border-color: var(--success);' : ''}">
               </div>
               <div class="form-group">
                 <label for="teoria-tempo-${materia}">Tempo de estudo (minutos)</label>
                 <input type="number" id="teoria-tempo-${materia}" min="0" placeholder="Ex: 60" 
-                       ${isRegistered ? 'disabled' : 'disabled'} value="${isRegistered ? registeredData.tempo || '' : ''}">
+                       ${isRegistered ? 'disabled' : 'disabled'}
+                       value="${isRegistered && registeredData ? registeredData.tempo || '' : ''}"
+                       style="${isRegistered ? 'background-color: rgba(76, 175, 80, 0.1); border-color: var(--success);' : ''}">
               </div>
             </div>
           </div>
