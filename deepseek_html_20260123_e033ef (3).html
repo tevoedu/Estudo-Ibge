@@ -1,0 +1,2061 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyFlow - Dashboard de Controle</title>
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #25D366;
+      --primary-dark: #128C7E;
+      --secondary: #34B7F1;
+      --success: #4CAF50;
+      --warning: #FF9800;
+      --danger: #F44336;
+      --light: #FFFFFF;
+      --dark: #1F2C34;
+      --gray: #667781;
+      --light-gray: #F0F0F0;
+      --sidebar-width: 280px;
+      --header-height: 70px;
+      --border-radius: 12px;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .dark-theme {
+      --primary: #00A884;
+      --primary-dark: #008069;
+      --secondary: #53BDEB;
+      --light: #111B21;
+      --dark: #E9EDEF;
+      --gray: #8696A0;
+      --light-gray: #202C33;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--light);
+      color: var(--dark);
+      transition: var(--transition);
+      overflow-x: hidden;
+    }
+
+    /* Layout Principal */
+    .dashboard-container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: var(--sidebar-width);
+      background-color: var(--light);
+      border-right: 1px solid var(--light-gray);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      height: 100vh;
+      z-index: 100;
+      transition: var(--transition);
+    }
+
+    .sidebar-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--light-gray);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      height: var(--header-height);
+    }
+
+    .logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 1.5rem 0;
+      overflow-y: auto;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0.8rem 1.5rem;
+      color: var(--dark);
+      text-decoration: none;
+      transition: var(--transition);
+      border-left: 3px solid transparent;
+    }
+
+    .nav-item:hover {
+      background-color: var(--light-gray);
+      border-left-color: var(--primary);
+    }
+
+    .nav-item.active {
+      background-color: rgba(37, 211, 102, 0.1);
+      border-left-color: var(--primary);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .nav-item i {
+      width: 20px;
+      text-align: center;
+    }
+
+    .sidebar-footer {
+      padding: 1.5rem;
+      border-top: 1px solid var(--light-gray);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Conteúdo Principal */
+    .main-content {
+      flex: 1;
+      margin-left: var(--sidebar-width);
+      padding: 1.5rem;
+      max-width: calc(100vw - var(--sidebar-width));
+    }
+
+    /* Header do Dashboard */
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--light-gray);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    /* Cards do Dashboard */
+    .dashboard-card {
+      background-color: var(--light);
+      border-radius: var(--border-radius);
+      border: 1px solid var(--light-gray);
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+
+    .dashboard-card:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--light-gray);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    /* Grid de Atividades */
+    .activities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .activity-card {
+      background-color: var(--light);
+      border-radius: var(--border-radius);
+      border: 1px solid var(--light-gray);
+      padding: 1.5rem;
+      transition: var(--transition);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .activity-card:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow);
+    }
+
+    .activity-card.completed {
+      border-color: var(--success);
+      background-color: rgba(76, 175, 80, 0.05);
+    }
+
+    .activity-card.pending {
+      border-color: var(--warning);
+      background-color: rgba(255, 152, 0, 0.05);
+    }
+
+    .activity-card.registered {
+      border-color: var(--primary);
+      background-color: rgba(37, 211, 102, 0.05);
+    }
+
+    .activity-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .activity-icon.questoes {
+      background-color: rgba(52, 183, 241, 0.1);
+      color: var(--secondary);
+    }
+
+    .activity-icon.anki {
+      background-color: rgba(255, 152, 0, 0.1);
+      color: var(--warning);
+    }
+
+    .activity-icon.teoria {
+      background-color: rgba(76, 175, 80, 0.1);
+      color: var(--success);
+    }
+
+    .activity-title {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .activity-description {
+      color: var(--gray);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .activity-meta {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.85rem;
+      color: var(--gray);
+    }
+
+    .activity-status {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .status-pending {
+      background-color: rgba(255, 152, 0, 0.1);
+      color: var(--warning);
+    }
+
+    .status-registered {
+      background-color: rgba(37, 211, 102, 0.1);
+      color: var(--primary);
+    }
+
+    .status-completed {
+      background-color: rgba(76, 175, 80, 0.1);
+      color: var(--success);
+    }
+
+    /* Progresso Global */
+    .progress-container {
+      background-color: var(--light);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .progress-bar {
+      height: 10px;
+      background-color: var(--light-gray);
+      border-radius: 5px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--success));
+      border-radius: 5px;
+      transition: width 0.5s ease;
+    }
+
+    .progress-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 1rem;
+      background-color: var(--light-gray);
+      border-radius: var(--border-radius);
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--gray);
+    }
+
+    /* Alertas e Notificações */
+    .alerts-container {
+      margin-bottom: 2rem;
+    }
+
+    .alert-card {
+      background-color: var(--light);
+      border-radius: var(--border-radius);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-left: 4px solid;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .alert-card.warning {
+      border-left-color: var(--warning);
+      background-color: rgba(255, 152, 0, 0.05);
+    }
+
+    .alert-card.danger {
+      border-left-color: var(--danger);
+      background-color: rgba(244, 67, 54, 0.05);
+    }
+
+    .alert-card.success {
+      border-left-color: var(--success);
+      background-color: rgba(76, 175, 80, 0.05);
+    }
+
+    .alert-card.info {
+      border-left-color: var(--secondary);
+      background-color: rgba(52, 183, 241, 0.05);
+    }
+
+    /* Modal Dashboard */
+    .modal-dashboard {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-dashboard.active {
+      display: flex;
+    }
+
+    .modal-content-dashboard {
+      background-color: var(--light);
+      border-radius: var(--border-radius);
+      width: 90%;
+      max-width: 800px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      animation: modalSlideIn 0.3s ease-out;
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-header-dashboard {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--light-gray);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-body-dashboard {
+      padding: 1.5rem;
+    }
+
+    .modal-footer-dashboard {
+      padding: 1.5rem;
+      border-top: 1px solid var(--light-gray);
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+
+    /* Formulários no Modal */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group-dashboard {
+      margin-bottom: 1rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .form-control-dashboard {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--light-gray);
+      border-radius: 8px;
+      background-color: var(--light);
+      color: var(--dark);
+      font-size: 0.95rem;
+      transition: var(--transition);
+    }
+
+    .form-control-dashboard:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.1);
+      outline: none;
+    }
+
+    /* Responsividade */
+    @media (max-width: 1200px) {
+      .activities-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      }
+    }
+
+    @media (max-width: 992px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      
+      .main-content {
+        margin-left: 0;
+        max-width: 100vw;
+      }
+      
+      .sidebar-toggle {
+        display: block !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .activities-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .progress-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Utilitários */
+    .badge {
+      padding: 0.35rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .badge-primary {
+      background-color: rgba(37, 211, 102, 0.1);
+      color: var(--primary);
+    }
+
+    .badge-secondary {
+      background-color: rgba(52, 183, 241, 0.1);
+      color: var(--secondary);
+    }
+
+    .badge-success {
+      background-color: rgba(76, 175, 80, 0.1);
+      color: var(--success);
+    }
+
+    .badge-warning {
+      background-color: rgba(255, 152, 0, 0.1);
+      color: var(--warning);
+    }
+
+    .badge-danger {
+      background-color: rgba(244, 67, 54, 0.1);
+      color: var(--danger);
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary);
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background-color: #2a9cd8;
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--light-gray);
+      color: var(--dark);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--light-gray);
+    }
+
+    .sidebar-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--dark);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* Animações */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    /* Estado do Dia Finalizado */
+    .day-finished-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(76, 175, 80, 0.9);
+      z-index: 999;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: white;
+      text-align: center;
+    }
+
+    .day-finished-overlay.active {
+      display: flex;
+    }
+
+    .day-finished-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Overlay de Dia Finalizado -->
+  <div class="day-finished-overlay" id="dayFinishedOverlay">
+    <div class="day-finished-icon">
+      <i class="fas fa-check-circle"></i>
+    </div>
+    <h2 class="mb-3">Dia Finalizado!</h2>
+    <p class="mb-4">Você completou todas as atividades de hoje. Volte amanhã para novas tarefas!</p>
+    <button class="btn btn-outline" onclick="document.getElementById('dayFinishedOverlay').classList.remove('active')" style="color: white; border-color: white;">
+      <i class="fas fa-eye"></i> Visualizar Resumo
+    </button>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <i class="fas fa-graduation-cap"></i>
+      </div>
+      <div>
+        <h4 style="margin: 0; font-size: 1.1rem;">StudyFlow</h4>
+        <small style="color: var(--gray);">Dashboard</small>
+      </div>
+    </div>
+
+    <div class="sidebar-nav">
+      <a href="#" class="nav-item active" onclick="dashboard.showTodayPanel()">
+        <i class="fas fa-calendar-day"></i>
+        <span>Hoje</span>
+      </a>
+      <a href="#" class="nav-item" onclick="dashboard.showProgressPanel()">
+        <i class="fas fa-chart-line"></i>
+        <span>Progresso</span>
+      </a>
+      <a href="#" class="nav-item" onclick="dashboard.showEditalPanel()">
+        <i class="fas fa-file-alt"></i>
+        <span>Edital</span>
+      </a>
+      <a href="#" class="nav-item" onclick="dashboard.showSimuladosPanel()">
+        <i class="fas fa-chart-bar"></i>
+        <span>Simulados</span>
+      </a>
+      <a href="#" class="nav-item" onclick="dashboard.showRevisoesPanel()">
+        <i class="fas fa-sync-alt"></i>
+        <span>Revisões</span>
+      </a>
+      <a href="#" class="nav-item" onclick="dashboard.showAnkiPanel()">
+        <i class="fas fa-layer-group"></i>
+        <span>Anki</span>
+      </a>
+      <a href="#" class="nav-item" onclick="dashboard.showCicloPanel()">
+        <i class="fas fa-recycle"></i>
+        <span>Ciclo Teórico</span>
+      </a>
+      
+      <div style="margin: 1.5rem 0; padding: 0 1.5rem;">
+        <small style="color: var(--gray); text-transform: uppercase; letter-spacing: 1px;">Configurações</small>
+      </div>
+      
+      <a href="#" class="nav-item" onclick="dashboard.showConfigPanel()">
+        <i class="fas fa-cog"></i>
+        <span>Configurações</span>
+      </a>
+      <a href="#" class="nav-item" onclick="dashboard.showRelatoriosPanel()">
+        <i class="fas fa-file-chart-line"></i>
+        <span>Relatórios</span>
+      </a>
+      <a href="#" class="nav-item" onclick="dashboard.showAjudaPanel()">
+        <i class="fas fa-question-circle"></i>
+        <span>Ajuda</span>
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <button class="btn btn-outline" onclick="dashboard.toggleTheme()" style="padding: 0.5rem;">
+        <i class="fas fa-moon"></i>
+      </button>
+      <div style="font-size: 0.85rem; color: var(--gray);">
+        v2.0 • Dashboard
+      </div>
+    </div>
+  </div>
+
+  <!-- Conteúdo Principal -->
+  <div class="main-content">
+    <!-- Header -->
+    <div class="dashboard-header">
+      <div>
+        <button class="sidebar-toggle" onclick="dashboard.toggleSidebar()">
+          <i class="fas fa-bars"></i>
+        </button>
+        <h2 style="margin: 0; display: inline-block; margin-left: 1rem;" id="currentPanelTitle">Painel do Dia</h2>
+        <div style="color: var(--gray); margin-top: 0.25rem;" id="currentDate"></div>
+      </div>
+      
+      <div class="header-actions">
+        <button class="btn btn-outline" onclick="dashboard.registerYesterday()">
+          <i class="fas fa-history"></i> Registrar Ontem
+        </button>
+        <button class="btn btn-primary" onclick="dashboard.openRegisterModal()">
+          <i class="fas fa-plus-circle"></i> Nova Atividade
+        </button>
+      </div>
+    </div>
+
+    <!-- Painel do Dia (Conteúdo Dinâmico) -->
+    <div id="dashboardContent">
+      <!-- O conteúdo será carregado dinamicamente aqui -->
+    </div>
+  </div>
+
+  <!-- Modal de Registro -->
+  <div class="modal-dashboard" id="registerModalDashboard">
+    <div class="modal-content-dashboard">
+      <div class="modal-header-dashboard">
+        <h3 style="margin: 0; display: flex; align-items: center; gap: 10px;">
+          <i class="fas fa-plus-circle"></i>
+          <span id="modalTitle">Registrar Atividade</span>
+        </h3>
+        <button class="btn btn-outline" onclick="dashboard.closeRegisterModal()" style="padding: 0.5rem 1rem;">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body-dashboard" id="registerModalBodyDashboard">
+        <!-- Conteúdo dinâmico -->
+      </div>
+      <div class="modal-footer-dashboard">
+        <button class="btn btn-outline" onclick="dashboard.closeRegisterModal()">
+          Cancelar
+        </button>
+        <button class="btn btn-primary" id="saveActivityBtn" onclick="dashboard.saveActivity()">
+          <i class="fas fa-save"></i> Salvar Atividade
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Detalhes -->
+  <div class="modal-dashboard" id="detailsModalDashboard">
+    <div class="modal-content-dashboard">
+      <div class="modal-header-dashboard">
+        <h3 style="margin: 0; display: flex; align-items: center; gap: 10px;">
+          <i class="fas fa-info-circle"></i>
+          <span id="detailsModalTitle">Detalhes da Atividade</span>
+        </h3>
+        <button class="btn btn-outline" onclick="dashboard.closeDetailsModal()" style="padding: 0.5rem 1rem;">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body-dashboard" id="detailsModalBodyDashboard">
+        <!-- Conteúdo dinâmico -->
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    class StudyFlowDashboard {
+      constructor() {
+        this.currentTheme = localStorage.getItem('theme') || 'light';
+        this.materiasPorDia = parseInt(localStorage.getItem('studyFlow_materiasPorDia')) || 1;
+        this.today = new Date().toISOString().split('T')[0];
+        
+        // Reutilizando a lógica existente do chatbot
+        this.chatBotLogic = {
+          yesterdayMemory: JSON.parse(localStorage.getItem('studyFlow_yesterdayMemory')) || {
+            activities: {},
+            date: null
+          },
+          partialRegistration: JSON.parse(localStorage.getItem('studyFlow_partialRegistration')) || {
+            date: null,
+            activities: {},
+            completed: false
+          }
+        };
+        
+        this.currentActivityType = null;
+        this.currentActivityId = null;
+        this.init();
+      }
+      
+      init() {
+        this.initTheme();
+        this.initEventListeners();
+        this.showTodayPanel();
+        this.updateDateDisplay();
+        this.checkDayFinished();
+      }
+      
+      initTheme() {
+        if (this.currentTheme === 'dark') {
+          document.body.classList.add('dark-theme');
+        }
+      }
+      
+      initEventListeners() {
+        // Event listeners serão adicionados dinamicamente
+      }
+      
+      toggleTheme() {
+        if (this.currentTheme === 'light') {
+          document.body.classList.add('dark-theme');
+          this.currentTheme = 'dark';
+        } else {
+          document.body.classList.remove('dark-theme');
+          this.currentTheme = 'light';
+        }
+        localStorage.setItem('theme', this.currentTheme);
+      }
+      
+      toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('active');
+      }
+      
+      updateDateDisplay() {
+        const hoje = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const dataFormatada = hoje.toLocaleDateString('pt-BR', options);
+        document.getElementById('currentDate').textContent = dataFormatada;
+      }
+      
+      // Métodos para navegação entre painéis
+      showTodayPanel() {
+        document.getElementById('currentPanelTitle').textContent = 'Painel do Dia';
+        this.updateNavActive('today');
+        this.loadTodayPanel();
+      }
+      
+      showProgressPanel() {
+        document.getElementById('currentPanelTitle').textContent = 'Progresso do Estudo';
+        this.updateNavActive('progress');
+        this.loadProgressPanel();
+      }
+      
+      showEditalPanel() {
+        document.getElementById('currentPanelTitle').textContent = 'Progresso do Edital';
+        this.updateNavActive('edital');
+        this.loadEditalPanel();
+      }
+      
+      showSimuladosPanel() {
+        document.getElementById('currentPanelTitle').textContent = 'Análise de Simulados';
+        this.updateNavActive('simulados');
+        this.loadSimuladosPanel();
+      }
+      
+      showRevisoesPanel() {
+        document.getElementById('currentPanelTitle').textContent = 'Revisões Pendentes';
+        this.updateNavActive('revisoes');
+        this.loadRevisoesPanel();
+      }
+      
+      showAnkiPanel() {
+        document.getElementById('currentPanelTitle').textContent = 'Baralhos Anki';
+        this.updateNavActive('anki');
+        this.loadAnkiPanel();
+      }
+      
+      showCicloPanel() {
+        document.getElementById('currentPanelTitle').textContent = 'Ciclo Teórico';
+        this.updateNavActive('ciclo');
+        this.loadCicloPanel();
+      }
+      
+      showConfigPanel() {
+        document.getElementById('currentPanelTitle').textContent = 'Configurações';
+        this.updateNavActive('config');
+        this.loadConfigPanel();
+      }
+      
+      showRelatoriosPanel() {
+        document.getElementById('currentPanelTitle').textContent = 'Relatórios';
+        this.updateNavActive('relatorios');
+        this.loadRelatoriosPanel();
+      }
+      
+      showAjudaPanel() {
+        document.getElementById('currentPanelTitle').textContent = 'Ajuda';
+        this.updateNavActive('ajuda');
+        this.loadAjudaPanel();
+      }
+      
+      updateNavActive(panel) {
+        document.querySelectorAll('.nav-item').forEach(item => {
+          item.classList.remove('active');
+        });
+        
+        // Adicionar lógica para destacar o item correto
+        // Esta é uma simplificação - na implementação real, mapearíamos cada painel
+        document.querySelector('.nav-item:nth-child(1)').classList.add('active');
+      }
+      
+      // ===== PAINEL DO DIA =====
+      loadTodayPanel() {
+        const hojeStr = this.getDynamicDateString();
+        const todayTasks = this.getTodayTasks();
+        const hasPartial = this.hasPartialRegistration();
+        const isDayFinished = this.isDayFinished();
+        
+        let content = `
+          <div class="progress-container fade-in">
+            <div class="progress-header">
+              <h4 style="margin: 0;">Progresso do Dia</h4>
+              ${isDayFinished ? 
+                '<span class="badge badge-success"><i class="fas fa-check-circle"></i> Dia Finalizado</span>' : 
+                '<span class="badge badge-primary"><i class="fas fa-clock"></i> Em Andamento</span>'}
+            </div>
+            
+            <div class="progress-bar">
+              <div class="progress-fill" id="dailyProgressFill" style="width: ${this.calculateDailyProgress()}%"></div>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--gray);">
+              <span>0%</span>
+              <span>${this.calculateDailyProgress()}%</span>
+              <span>100%</span>
+            </div>
+            
+            <div class="progress-stats">
+              <div class="stat-item">
+                <div class="stat-value" id="totalTime">0m</div>
+                <div class="stat-label">Tempo Total</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value" id="totalActivities">0/0</div>
+                <div class="stat-label">Atividades</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value" id="pendingCount">0</div>
+                <div class="stat-label">Pendentes</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value" id="completionStatus">${isDayFinished ? '✅' : '⏳'}</div>
+                <div class="stat-label">Status</div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        // Alertas
+        const alertas = this.checkAlerts();
+        if (alertas.length > 0) {
+          content += `<div class="alerts-container fade-in">`;
+          alertas.forEach(alerta => {
+            content += `
+              <div class="alert-card ${alerta.tipo === 'alert-danger' ? 'danger' : alerta.tipo === 'alert-warning' ? 'warning' : 'info'}">
+                <i class="fas fa-${alerta.icone}"></i>
+                <div>${alerta.mensagem}</div>
+              </div>
+            `;
+          });
+          content += `</div>`;
+        }
+        
+        // Atividades do Dia
+        content += `<div class="activities-grid fade-in" id="todayActivitiesGrid"></div>`;
+        
+        document.getElementById('dashboardContent').innerHTML = content;
+        
+        // Carregar atividades
+        this.loadTodayActivities();
+        this.updateTodayStats();
+      }
+      
+      loadTodayActivities() {
+        const hojeStr = this.getDynamicDateString();
+        const todayTasks = this.getTodayTasks();
+        const grid = document.getElementById('todayActivitiesGrid');
+        
+        if (!grid) return;
+        
+        let activitiesHTML = '';
+        
+        // Questões
+        if (todayTasks.questoes && todayTasks.questoes.length > 0) {
+          todayTasks.questoes.forEach(questao => {
+            const isRegistered = this.isQuestaoRegistered(questao.id);
+            activitiesHTML += this.createActivityCard('questoes', questao, isRegistered);
+          });
+        }
+        
+        // Anki
+        if (todayTasks.anki && todayTasks.anki.length > 0) {
+          todayTasks.anki.forEach(deck => {
+            const isRegistered = this.isAnkiRegistered(deck.id);
+            activitiesHTML += this.createActivityCard('anki', deck, isRegistered);
+          });
+        }
+        
+        // Teoria
+        if (todayTasks.teoria && todayTasks.teoria.length > 0) {
+          todayTasks.teoria.forEach(materia => {
+            const isRegistered = this.isTeoriaRegistered(materia);
+            activitiesHTML += this.createActivityCard('teoria', {id: materia, nome: materia}, isRegistered);
+          });
+        }
+        
+        if (!activitiesHTML) {
+          activitiesHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--gray);">
+              <i class="fas fa-check-circle" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+              <h4>Nenhuma atividade programada para hoje</h4>
+              <p>Configure seu ciclo de estudos ou adicione atividades manualmente.</p>
+            </div>
+          `;
+        }
+        
+        grid.innerHTML = activitiesHTML;
+      }
+      
+      createActivityCard(type, data, isRegistered) {
+        let icon, title, description, status, statusClass, cardClass, meta = '';
+        
+        switch(type) {
+          case 'questoes':
+            icon = '🧩';
+            title = `Questões: ${data.disciplina || data.nome}`;
+            description = `<strong>Assunto:</strong> ${data.nome}`;
+            if (isRegistered) {
+              const regData = this.getRegisteredQuestaoData(data.id);
+              if (regData) {
+                const acertos = regData.feitas - regData.erradas;
+                const taxaAcerto = regData.feitas > 0 ? Math.round((acertos / regData.feitas) * 100) : 0;
+                meta = `${regData.feitas} questões • ${taxaAcerto}% acerto • ${regData.tempo} min`;
+              }
+            }
+            break;
+            
+          case 'anki':
+            icon = '🔁';
+            title = `Revisão Anki`;
+            description = `<strong>Baralho:</strong> ${data.nome}`;
+            if (isRegistered) {
+              const regData = this.getRegisteredAnkiData(data.id);
+              if (regData) {
+                meta = `${regData.cards} cards • ${regData.tempo} min`;
+              }
+            }
+            break;
+            
+          case 'teoria':
+            icon = '📚';
+            title = `Estudo Teórico`;
+            description = `<strong>Matéria:</strong> ${data.nome}`;
+            if (isRegistered) {
+              const regData = this.getRegisteredTeoriaData(data.id);
+              if (regData) {
+                meta = `${regData.conteudo || regData.pagina || 'Estudo'} • ${regData.tempo} min`;
+              }
+            }
+            break;
+        }
+        
+        if (isRegistered) {
+          status = 'Registrado';
+          statusClass = 'status-registered';
+          cardClass = 'registered';
+        } else {
+          status = 'Pendente';
+          statusClass = 'status-pending';
+          cardClass = 'pending';
+        }
+        
+        return `
+          <div class="activity-card ${cardClass}" onclick="dashboard.openActivityModal('${type}', '${data.id}')">
+            <div class="activity-icon ${type}">
+              ${icon}
+            </div>
+            <span class="activity-status ${statusClass}">${status}</span>
+            
+            <div class="activity-title">
+              <span>${title}</span>
+            </div>
+            
+            <div class="activity-description">
+              ${description}
+            </div>
+            
+            ${meta ? `
+            <div class="activity-meta">
+              <span><i class="fas fa-clock"></i> ${meta}</span>
+            </div>
+            ` : ''}
+            
+            <div style="margin-top: 1rem;">
+              <button class="btn btn-outline" onclick="event.stopPropagation(); dashboard.registerActivity('${type}', '${data.id}')" 
+                style="width: 100%; padding: 0.5rem;" ${isRegistered ? 'disabled' : ''}>
+                <i class="fas fa-${isRegistered ? 'check' : 'plus'}"></i>
+                ${isRegistered ? 'Já Registrado' : 'Registrar'}
+              </button>
+            </div>
+          </div>
+        `;
+      }
+      
+      updateTodayStats() {
+        const hojeStr = this.getDynamicDateString();
+        const todayTasks = this.getTodayTasks();
+        const registeredActivities = this.getRegisteredActivities();
+        
+        const totalTasks = todayTasks.questoes.length + todayTasks.anki.length + todayTasks.teoria.length;
+        const registeredCount = this.countRegisteredActivities();
+        const pendingCount = totalTasks - registeredCount;
+        
+        // Calcular tempo total
+        let totalTime = 0;
+        
+        if (registeredActivities.questoes) {
+          registeredActivities.questoes.forEach(q => totalTime += q.tempo);
+        }
+        
+        if (registeredActivities.anki) {
+          registeredActivities.anki.forEach(a => totalTime += a.tempo);
+        }
+        
+        if (registeredActivities.teoria) {
+          registeredActivities.teoria.forEach(t => totalTime += t.tempo);
+        }
+        
+        // Atualizar elementos
+        const totalTimeEl = document.getElementById('totalTime');
+        const totalActivitiesEl = document.getElementById('totalActivities');
+        const pendingCountEl = document.getElementById('pendingCount');
+        const progressFillEl = document.getElementById('dailyProgressFill');
+        
+        if (totalTimeEl) totalTimeEl.textContent = `${totalTime}m`;
+        if (totalActivitiesEl) totalActivitiesEl.textContent = `${registeredCount}/${totalTasks}`;
+        if (pendingCountEl) pendingCountEl.textContent = pendingCount;
+        if (progressFillEl) {
+          const progress = totalTasks > 0 ? (registeredCount / totalTasks) * 100 : 0;
+          progressFillEl.style.width = `${progress}%`;
+        }
+      }
+      
+      calculateDailyProgress() {
+        const hojeStr = this.getDynamicDateString();
+        const todayTasks = this.getTodayTasks();
+        const registeredCount = this.countRegisteredActivities();
+        const totalTasks = todayTasks.questoes.length + todayTasks.anki.length + todayTasks.teoria.length;
+        
+        return totalTasks > 0 ? Math.round((registeredCount / totalTasks) * 100) : 0;
+      }
+      
+      // ===== MODAL DE REGISTRO =====
+      openRegisterModal() {
+        if (this.isDayFinished()) {
+          this.showAlert('O dia de hoje já foi finalizado! Você não pode mais registrar atividades para hoje.', 'warning');
+          return;
+        }
+        
+        const modal = document.getElementById('registerModalDashboard');
+        const modalBody = document.getElementById('registerModalBodyDashboard');
+        
+        document.getElementById('modalTitle').textContent = 'Registrar Nova Atividade';
+        document.getElementById('saveActivityBtn').innerHTML = '<i class="fas fa-save"></i> Salvar Atividade';
+        document.getElementById('saveActivityBtn').onclick = () => this.saveActivity();
+        
+        modalBody.innerHTML = `
+          <div class="form-grid">
+            <div class="form-group-dashboard">
+              <label class="form-label">Tipo de Atividade</label>
+              <select class="form-control-dashboard" id="activityTypeSelect" onchange="dashboard.onActivityTypeChange()">
+                <option value="">Selecione um tipo</option>
+                <option value="questoes">Questões</option>
+                <option value="anki">Revisão Anki</option>
+                <option value="teoria">Estudo Teórico</option>
+              </select>
+            </div>
+            
+            <div class="form-group-dashboard">
+              <label class="form-label">Atividade</label>
+              <select class="form-control-dashboard" id="activitySelect" disabled>
+                <option value="">Selecione primeiro o tipo</option>
+              </select>
+            </div>
+          </div>
+          
+          <div id="activityFormContainer" style="display: none;">
+            <!-- Formulário será carregado aqui -->
+          </div>
+        `;
+        
+        modal.classList.add('active');
+      }
+      
+      onActivityTypeChange() {
+        const typeSelect = document.getElementById('activityTypeSelect');
+        const activitySelect = document.getElementById('activitySelect');
+        const formContainer = document.getElementById('activityFormContainer');
+        
+        const type = typeSelect.value;
+        
+        if (!type) {
+          activitySelect.disabled = true;
+          activitySelect.innerHTML = '<option value="">Selecione primeiro o tipo</option>';
+          formContainer.style.display = 'none';
+          return;
+        }
+        
+        // Carregar atividades do tipo selecionado
+        let activities = [];
+        
+        switch(type) {
+          case 'questoes':
+            activities = this.getTodayTasks().questoes.filter(q => !this.isQuestaoRegistered(q.id));
+            break;
+          case 'anki':
+            activities = this.getTodayTasks().anki.filter(a => !this.isAnkiRegistered(a.id));
+            break;
+          case 'teoria':
+            activities = this.getTodayTasks().teoria.filter(t => !this.isTeoriaRegistered(t)).map(t => ({id: t, nome: t}));
+            break;
+        }
+        
+        // Preencher select de atividades
+        activitySelect.disabled = false;
+        activitySelect.innerHTML = '<option value="">Selecione uma atividade</option>';
+        
+        activities.forEach(activity => {
+          activitySelect.innerHTML += `<option value="${activity.id}">${activity.nome}</option>`;
+        });
+        
+        activitySelect.onchange = () => {
+          const activityId = activitySelect.value;
+          if (activityId) {
+            this.loadActivityForm(type, activityId);
+          } else {
+            formContainer.style.display = 'none';
+          }
+        };
+      }
+      
+      loadActivityForm(type, activityId) {
+        const formContainer = document.getElementById('activityFormContainer');
+        
+        let formHTML = '';
+        
+        switch(type) {
+          case 'questoes':
+            formHTML = `
+              <div class="form-grid">
+                <div class="form-group-dashboard">
+                  <label class="form-label">Quantidade de questões feitas</label>
+                  <input type="number" class="form-control-dashboard" id="questoes-feitas" min="0" placeholder="Ex: 20" required>
+                </div>
+                <div class="form-group-dashboard">
+                  <label class="form-label">Quantidade de questões erradas</label>
+                  <input type="number" class="form-control-dashboard" id="questoes-erradas" min="0" placeholder="Ex: 5">
+                </div>
+                <div class="form-group-dashboard">
+                  <label class="form-label">Tempo total gasto (minutos)</label>
+                  <input type="number" class="form-control-dashboard" id="questoes-tempo" min="0" placeholder="Ex: 45" required>
+                </div>
+              </div>
+            `;
+            break;
+            
+          case 'anki':
+            formHTML = `
+              <div class="form-grid">
+                <div class="form-group-dashboard">
+                  <label class="form-label">Tempo de estudo (minutos)</label>
+                  <input type="number" class="form-control-dashboard" id="anki-tempo" min="0" placeholder="Ex: 30" required>
+                </div>
+                <div class="form-group-dashboard">
+                  <label class="form-label">Quantidade de cards revisados</label>
+                  <input type="number" class="form-control-dashboard" id="anki-cards" min="0" placeholder="Ex: 50" required>
+                </div>
+              </div>
+            `;
+            break;
+            
+          case 'teoria':
+            formHTML = `
+              <div class="form-grid">
+                <div class="form-group-dashboard">
+                  <label class="form-label">Conteúdo estudado (PDF/Aula)</label>
+                  <input type="text" class="form-control-dashboard" id="teoria-conteudo" placeholder="Ex: PDF Aula 1, Video Aula 2">
+                </div>
+                <div class="form-group-dashboard">
+                  <label class="form-label">Página/Progresso</label>
+                  <input type="text" class="form-control-dashboard" id="teoria-pagina" placeholder="Ex: Página 42, 50% concluído">
+                </div>
+                <div class="form-group-dashboard">
+                  <label class="form-label">Tempo de estudo (minutos)</label>
+                  <input type="number" class="form-control-dashboard" id="teoria-tempo" min="0" placeholder="Ex: 60" required>
+                </div>
+              </div>
+            `;
+            break;
+        }
+        
+        formContainer.innerHTML = formHTML;
+        formContainer.style.display = 'block';
+        
+        // Salvar tipo e ID para uso no save
+        this.currentActivityType = type;
+        this.currentActivityId = activityId;
+      }
+      
+      saveActivity() {
+        const type = this.currentActivityType;
+        const id = this.currentActivityId;
+        
+        if (!type || !id) {
+          this.showAlert('Selecione uma atividade para registrar.', 'warning');
+          return;
+        }
+        
+        let isValid = true;
+        let data = {};
+        
+        switch(type) {
+          case 'questoes':
+            const feitas = document.getElementById('questoes-feitas').value;
+            const erradas = document.getElementById('questoes-erradas').value;
+            const tempo = document.getElementById('questoes-tempo').value;
+            
+            if (!feitas || !tempo) {
+              isValid = false;
+              this.showAlert('Preencha a quantidade de questões e o tempo gasto.', 'danger');
+            } else {
+              data = {
+                assunto: id,
+                feitas: parseInt(feitas),
+                erradas: parseInt(erradas || 0),
+                tempo: parseInt(tempo)
+              };
+            }
+            break;
+            
+          case 'anki':
+            const ankiTempo = document.getElementById('anki-tempo').value;
+            const cards = document.getElementById('anki-cards').value;
+            
+            if (!ankiTempo || !cards) {
+              isValid = false;
+              this.showAlert('Preencha o tempo e a quantidade de cards.', 'danger');
+            } else {
+              data = {
+                deck: id,
+                tempo: parseInt(ankiTempo),
+                cards: parseInt(cards)
+              };
+            }
+            break;
+            
+          case 'teoria':
+            const conteudo = document.getElementById('teoria-conteudo').value;
+            const pagina = document.getElementById('teoria-pagina').value;
+            const teoriaTempo = document.getElementById('teoria-tempo').value;
+            
+            if (!teoriaTempo) {
+              isValid = false;
+              this.showAlert('Preencha o tempo de estudo.', 'danger');
+            } else {
+              data = {
+                materia: id,
+                conteudo: conteudo || '',
+                pagina: pagina || '',
+                tempo: parseInt(teoriaTempo)
+              };
+            }
+            break;
+        }
+        
+        if (!isValid) return;
+        
+        // Salvar a atividade
+        this.saveToPartialRegistration({
+          type: type,
+          data: data
+        });
+        
+        // Fechar modal
+        this.closeRegisterModal();
+        
+        // Atualizar interface
+        this.showAlert('Atividade registrada com sucesso!', 'success');
+        this.loadTodayPanel();
+        
+        // Verificar se o dia está completo
+        const todayTasks = this.getTodayTasks();
+        const registeredCount = this.countRegisteredActivities();
+        const totalTasks = todayTasks.questoes.length + todayTasks.anki.length + todayTasks.teoria.length;
+        
+        if (registeredCount >= totalTasks && totalTasks > 0) {
+          setTimeout(() => {
+            this.finalizeDay();
+          }, 1000);
+        }
+      }
+      
+      closeRegisterModal() {
+        document.getElementById('registerModalDashboard').classList.remove('active');
+        this.currentActivityType = null;
+        this.currentActivityId = null;
+      }
+      
+      // ===== REGISTRO DIRETO DE ATIVIDADE =====
+      registerActivity(type, id) {
+        if (this.isDayFinished()) {
+          this.showAlert('O dia de hoje já foi finalizado!', 'warning');
+          return;
+        }
+        
+        // Verificar se já está registrado
+        let isRegistered = false;
+        switch(type) {
+          case 'questoes': isRegistered = this.isQuestaoRegistered(id); break;
+          case 'anki': isRegistered = this.isAnkiRegistered(id); break;
+          case 'teoria': isRegistered = this.isTeoriaRegistered(id); break;
+        }
+        
+        if (isRegistered) {
+          this.showAlert('Esta atividade já foi registrada hoje.', 'info');
+          return;
+        }
+        
+        // Abrir modal com formulário pré-preenchido
+        this.currentActivityType = type;
+        this.currentActivityId = id;
+        
+        const modal = document.getElementById('registerModalDashboard');
+        const modalBody = document.getElementById('registerModalBodyDashboard');
+        
+        let activityName = '';
+        const todayTasks = this.getTodayTasks();
+        
+        switch(type) {
+          case 'questoes':
+            const questao = todayTasks.questoes.find(q => q.id === id);
+            activityName = questao ? questao.nome : id;
+            break;
+          case 'anki':
+            const deck = todayTasks.anki.find(d => d.id === id);
+            activityName = deck ? deck.nome : id;
+            break;
+          case 'teoria':
+            activityName = id;
+            break;
+        }
+        
+        document.getElementById('modalTitle').textContent = `Registrar ${type === 'questoes' ? 'Questões' : type === 'anki' ? 'Revisão Anki' : 'Estudo Teórico'}`;
+        
+        let formHTML = '';
+        
+        switch(type) {
+          case 'questoes':
+            formHTML = `
+              <div style="margin-bottom: 1.5rem; padding: 1rem; background-color: rgba(52, 183, 241, 0.1); border-radius: 8px; border-left: 4px solid var(--secondary);">
+                <div><strong>Assunto:</strong> ${activityName}</div>
+              </div>
+              
+              <div class="form-grid">
+                <div class="form-group-dashboard">
+                  <label class="form-label">Quantidade de questões feitas</label>
+                  <input type="number" class="form-control-dashboard" id="questoes-feitas" min="0" placeholder="Ex: 20" required>
+                </div>
+                <div class="form-group-dashboard">
+                  <label class="form-label">Quantidade de questões erradas</label>
+                  <input type="number" class="form-control-dashboard" id="questoes-erradas" min="0" placeholder="Ex: 5">
+                </div>
+                <div class="form-group-dashboard">
+                  <label class="form-label">Tempo total gasto (minutos)</label>
+                  <input type="number" class="form-control-dashboard" id="questoes-tempo" min="0" placeholder="Ex: 45" required>
+                </div>
+              </div>
+            `;
+            break;
+            
+          case 'anki':
+            formHTML = `
+              <div style="margin-bottom: 1.5rem; padding: 1rem; background-color: rgba(255, 152, 0, 0.1); border-radius: 8px; border-left: 4px solid var(--warning);">
+                <div><strong>Baralho:</strong> ${activityName}</div>
+              </div>
+              
+              <div class="form-grid">
+                <div class="form-group-dashboard">
+                  <label class="form-label">Tempo de estudo (minutos)</label>
+                  <input type="number" class="form-control-dashboard" id="anki-tempo" min="0" placeholder="Ex: 30" required>
+                </div>
+                <div class="form-group-dashboard">
+                  <label class="form-label">Quantidade de cards revisados</label>
+                  <input type="number" class="form-control-dashboard" id="anki-cards" min="0" placeholder="Ex: 50" required>
+                </div>
+              </div>
+            `;
+            break;
+            
+          case 'teoria':
+            formHTML = `
+              <div style="margin-bottom: 1.5rem; padding: 1rem; background-color: rgba(76, 175, 80, 0.1); border-radius: 8px; border-left: 4px solid var(--success);">
+                <div><strong>Matéria:</strong> ${activityName}</div>
+              </div>
+              
+              <div class="form-grid">
+                <div class="form-group-dashboard">
+                  <label class="form-label">Conteúdo estudado (PDF/Aula)</label>
+                  <input type="text" class="form-control-dashboard" id="teoria-conteudo" placeholder="Ex: PDF Aula 1, Video Aula 2">
+                </div>
+                <div class="form-group-dashboard">
+                  <label class="form-label">Página/Progresso</label>
+                  <input type="text" class="form-control-dashboard" id="teoria-pagina" placeholder="Ex: Página 42, 50% concluído">
+                </div>
+                <div class="form-group-dashboard">
+                  <label class="form-label">Tempo de estudo (minutos)</label>
+                  <input type="number" class="form-control-dashboard" id="teoria-tempo" min="0" placeholder="Ex: 60" required>
+                </div>
+              </div>
+            `;
+            break;
+        }
+        
+        modalBody.innerHTML = formHTML;
+        document.getElementById('saveActivityBtn').innerHTML = '<i class="fas fa-save"></i> Salvar Atividade';
+        document.getElementById('saveActivityBtn').onclick = () => this.saveActivity();
+        
+        modal.classList.add('active');
+      }
+      
+      // ===== FUNÇÕES DE LÓGICA (REUTILIZADAS DO CHATBOT) =====
+      
+      // Reutilizando funções do chatbot com adaptações mínimas
+      getDynamicDateString() {
+        const hoje = new Date();
+        const year = hoje.getFullYear();
+        const month = String(hoje.getMonth() + 1).padStart(2, '0');
+        const day = String(hoje.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      }
+      
+      getTodayTasks(dateStr = null) {
+        // Esta função precisa ser implementada com a lógica original do chatbot
+        // Para simplificação, estou retornando uma estrutura vazia
+        // Na implementação real, esta função chamaria a lógica existente
+        return {
+          questoes: [],
+          anki: [],
+          teoria: []
+        };
+      }
+      
+      isQuestaoRegistered(questaoId, dateStr = null) {
+        const hojeStr = dateStr || this.getDynamicDateString();
+        
+        // Verificar no registro parcial
+        if (this.chatBotLogic.partialRegistration.date === hojeStr) {
+          const partialQuestoes = this.chatBotLogic.partialRegistration.activities.questoes || [];
+          if (partialQuestoes.some(q => q.assunto === questaoId)) return true;
+        }
+        
+        // Verificar no registro diário
+        const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+        const dailyQuestoes = dailyActivities.activities.questoes || [];
+        if (dailyQuestoes.some(q => q.assunto === questaoId)) return true;
+        
+        return false;
+      }
+      
+      isAnkiRegistered(deckId) {
+        const hojeStr = this.getDynamicDateString();
+        
+        // Verificar no registro parcial
+        if (this.chatBotLogic.partialRegistration.date === hojeStr) {
+          const partialAnki = this.chatBotLogic.partialRegistration.activities.anki || [];
+          if (partialAnki.some(a => a.deck === deckId)) return true;
+        }
+        
+        // Verificar no registro diário
+        const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+        const dailyAnki = dailyActivities.activities.anki || [];
+        if (dailyAnki.some(a => a.deck === deckId)) return true;
+        
+        return false;
+      }
+      
+      isTeoriaRegistered(materiaId) {
+        const hojeStr = this.getDynamicDateString();
+        
+        // Verificar no registro parcial
+        if (this.chatBotLogic.partialRegistration.date === hojeStr) {
+          const partialTeoria = this.chatBotLogic.partialRegistration.activities.teoria || [];
+          if (partialTeoria.some(t => t.materia === materiaId)) return true;
+        }
+        
+        // Verificar no registro diário
+        const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+        const dailyTeoria = dailyActivities.activities.teoria || [];
+        if (dailyTeoria.some(t => t.materia === materiaId)) return true;
+        
+        return false;
+      }
+      
+      getRegisteredQuestaoData(questaoId) {
+        const hojeStr = this.getDynamicDateString();
+        
+        // Verificar no registro parcial
+        if (this.chatBotLogic.partialRegistration.date === hojeStr) {
+          const partialQuestoes = this.chatBotLogic.partialRegistration.activities.questoes || [];
+          const found = partialQuestoes.find(q => q.assunto === questaoId);
+          if (found) return found;
+        }
+        
+        // Verificar no registro diário
+        const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+        const dailyQuestoes = dailyActivities.activities.questoes || [];
+        return dailyQuestoes.find(q => q.assunto === questaoId);
+      }
+      
+      getRegisteredAnkiData(deckId) {
+        const hojeStr = this.getDynamicDateString();
+        
+        // Verificar no registro parcial
+        if (this.chatBotLogic.partialRegistration.date === hojeStr) {
+          const partialAnki = this.chatBotLogic.partialRegistration.activities.anki || [];
+          const found = partialAnki.find(a => a.deck === deckId);
+          if (found) return found;
+        }
+        
+        // Verificar no registro diário
+        const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+        const dailyAnki = dailyActivities.activities.anki || [];
+        return dailyAnki.find(a => a.deck === deckId);
+      }
+      
+      getRegisteredTeoriaData(materiaId) {
+        const hojeStr = this.getDynamicDateString();
+        
+        // Verificar no registro parcial
+        if (this.chatBotLogic.partialRegistration.date === hojeStr) {
+          const partialTeoria = this.chatBotLogic.partialRegistration.activities.teoria || [];
+          const found = partialTeoria.find(t => t.materia === materiaId);
+          if (found) return found;
+        }
+        
+        // Verificar no registro diário
+        const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+        const dailyTeoria = dailyActivities.activities.teoria || [];
+        return dailyTeoria.find(t => t.materia === materiaId);
+      }
+      
+      getRegisteredActivities() {
+        const hojeStr = this.getDynamicDateString();
+        
+        // Combinar registro parcial e diário
+        let activities = {
+          questoes: [],
+          anki: [],
+          teoria: []
+        };
+        
+        // Adicionar do registro parcial
+        if (this.chatBotLogic.partialRegistration.date === hojeStr) {
+          activities.questoes = [...(this.chatBotLogic.partialRegistration.activities.questoes || [])];
+          activities.anki = [...(this.chatBotLogic.partialRegistration.activities.anki || [])];
+          activities.teoria = [...(this.chatBotLogic.partialRegistration.activities.teoria || [])];
+        }
+        
+        // Adicionar do registro diário (sobrescrevendo duplicatas)
+        const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+        
+        // Mesclar questoes
+        dailyActivities.activities.questoes?.forEach(q => {
+          const index = activities.questoes.findIndex(item => item.assunto === q.assunto);
+          if (index === -1) {
+            activities.questoes.push(q);
+          }
+        });
+        
+        // Mesclar anki
+        dailyActivities.activities.anki?.forEach(a => {
+          const index = activities.anki.findIndex(item => item.deck === a.deck);
+          if (index === -1) {
+            activities.anki.push(a);
+          }
+        });
+        
+        // Mesclar teoria
+        dailyActivities.activities.teoria?.forEach(t => {
+          const index = activities.teoria.findIndex(item => item.materia === t.materia);
+          if (index === -1) {
+            activities.teoria.push(t);
+          }
+        });
+        
+        return activities;
+      }
+      
+      countRegisteredActivities() {
+        const activities = this.getRegisteredActivities();
+        return activities.questoes.length + activities.anki.length + activities.teoria.length;
+      }
+      
+      hasPartialRegistration() {
+        const hojeStr = this.getDynamicDateString();
+        return this.chatBotLogic.partialRegistration.date === hojeStr && 
+               this.chatBotLogic.partialRegistration.activities && 
+               (this.chatBotLogic.partialRegistration.activities.questoes?.length > 0 ||
+                this.chatBotLogic.partialRegistration.activities.anki?.length > 0 ||
+                this.chatBotLogic.partialRegistration.activities.teoria?.length > 0);
+      }
+      
+      isDayFinished() {
+        const hojeStr = this.getDynamicDateString();
+        const dayData = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || {};
+        return dayData.completed === true || this.chatBotLogic.partialRegistration.completed === true;
+      }
+      
+      saveToPartialRegistration(activity) {
+        const hojeStr = this.getDynamicDateString();
+        
+        if (!this.chatBotLogic.partialRegistration.date || this.chatBotLogic.partialRegistration.date !== hojeStr) {
+          this.chatBotLogic.partialRegistration = {
+            date: hojeStr,
+            activities: {},
+            completed: false
+          };
+        }
+        
+        if (!this.chatBotLogic.partialRegistration.activities[activity.type]) {
+          this.chatBotLogic.partialRegistration.activities[activity.type] = [];
+        }
+        
+        // Remover duplicata se existir
+        const existingIndex = this.chatBotLogic.partialRegistration.activities[activity.type].findIndex(
+          item => {
+            if (activity.type === 'questoes') return item.assunto === activity.data.assunto;
+            if (activity.type === 'anki') return item.deck === activity.data.deck;
+            if (activity.type === 'teoria') return item.materia === activity.data.materia;
+            return false;
+          }
+        );
+        
+        if (existingIndex >= 0) {
+          this.chatBotLogic.partialRegistration.activities[activity.type].splice(existingIndex, 1);
+        }
+        
+        this.chatBotLogic.partialRegistration.activities[activity.type].push(activity.data);
+        
+        localStorage.setItem('studyFlow_partialRegistration', JSON.stringify(this.chatBotLogic.partialRegistration));
+        
+        // Atualizar módulos (reutilizando lógica do chatbot)
+        this.updateModuleWithActivity(activity);
+      }
+      
+      updateModuleWithActivity(activity) {
+        const hojeStr = this.getDynamicDateString();
+        
+        // Esta função precisaria chamar as funções originais do chatbot
+        // Para simplificação, estamos apenas salvando no localStorage
+        // Na implementação real, chamaríamos:
+        // if (activity.type === 'questoes') this.saveQuestoes(...)
+        // etc.
+        
+        console.log('Atividade salva:', activity);
+      }
+      
+      finalizeDay() {
+        const hojeStr = this.getDynamicDateString();
+        
+        if (this.hasPartialRegistration()) {
+          const dailyActivities = {
+            date: hojeStr,
+            activities: this.chatBotLogic.partialRegistration.activities,
+            completed: true
+          };
+          
+          localStorage.setItem(`dailyActivities_${hojeStr}`, JSON.stringify(dailyActivities));
+          
+          this.chatBotLogic.partialRegistration = {
+            date: null,
+            activities: {},
+            completed: true
+          };
+          localStorage.setItem('studyFlow_partialRegistration', JSON.stringify(this.chatBotLogic.partialRegistration));
+        } else {
+          const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || {
+            date: hojeStr,
+            activities: {},
+            completed: true
+          };
+          dailyActivities.completed = true;
+          localStorage.setItem(`dailyActivities_${hojeStr}`, JSON.stringify(dailyActivities));
+        }
+        
+        localStorage.setItem('lastRegisterDate', hojeStr);
+        
+        // Mostrar overlay de dia finalizado
+        document.getElementById('dayFinishedOverlay').classList.add('active');
+        
+        // Atualizar interface
+        setTimeout(() => {
+          this.loadTodayPanel();
+        }, 1000);
+      }
+      
+      checkDayFinished() {
+        if (this.isDayFinished()) {
+          setTimeout(() => {
+            document.getElementById('dayFinishedOverlay').classList.add('active');
+          }, 1000);
+        }
+      }
+      
+      checkAlerts() {
+        const alertas = [];
+        const hoje = new Date();
+        
+        // Verificar revisões atrasadas (lógica simplificada)
+        const revisoesAtrasadas = 0; // this.calculateOverdueReviews();
+        if (revisoesAtrasadas > 0) {
+          alertas.push({
+            tipo: 'alert-danger',
+            icone: 'exclamation-triangle',
+            mensagem: `Você tem ${revisoesAtrasadas} revisões atrasadas!`
+          });
+        }
+        
+        // Verificar se há atividades de ontem não registradas
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = yesterday.toISOString().split('T')[0];
+        
+        const yesterdayActivities = JSON.parse(localStorage.getItem(`dailyActivities_${yesterdayStr}`)) || { activities: {} };
+        if (!yesterdayActivities.activities || Object.keys(yesterdayActivities.activities).length === 0) {
+          if (this.chatBotLogic.yesterdayMemory.activities && 
+              (this.chatBotLogic.yesterdayMemory.activities.questoes?.length > 0 || 
+               this.chatBotLogic.yesterdayMemory.activities.anki?.length > 0 || 
+               this.chatBotLogic.yesterdayMemory.activities.teoria?.length > 0)) {
+            alertas.push({
+              tipo: 'alert-warning',
+              icone: 'history',
+              mensagem: 'Você tem atividades não registradas de ontem!'
+            });
+          }
+        }
+        
+        return alertas;
+      }
+      
+      // ===== FUNÇÕES AUXILIARES =====
+      
+      showAlert(message, type = 'info') {
+        // Criar elemento de alerta temporário
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert-card ${type}`;
+        alertDiv.style.position = 'fixed';
+        alertDiv.style.top = '20px';
+        alertDiv.style.right = '20px';
+        alertDiv.style.zIndex = '1000';
+        alertDiv.style.maxWidth = '400px';
+        alertDiv.style.animation = 'fadeIn 0.3s ease-out';
+        
+        const icon = type === 'danger' ? 'exclamation-circle' : 
+                    type === 'warning' ? 'exclamation-triangle' : 
+                    type === 'success' ? 'check-circle' : 'info-circle';
+        
+        alertDiv.innerHTML = `
+          <i class="fas fa-${icon}"></i>
+          <div>${message}</div>
+          <button class="btn btn-outline" onclick="this.parentElement.remove()" style="margin-left: auto; padding: 0.25rem 0.5rem;">
+            <i class="fas fa-times"></i>
+          </button>
+        `;
+        
+        document.body.appendChild(alertDiv);
+        
+        // Remover após 5 segundos
+        setTimeout(() => {
+          if (alertDiv.parentElement) {
+            alertDiv.remove();
+          }
+        }, 5000);
+      }
+      
+      registerYesterday() {
+        // Implementação simplificada - na realidade chamaria a lógica do chatbot
+        this.showAlert('Funcionalidade de registrar atividades de ontem', 'info');
+      }
+      
+      openActivityModal(type, id) {
+        // Abrir modal com detalhes da atividade
+        const modal = document.getElementById('detailsModalDashboard');
+        const modalBody = document.getElementById('detailsModalBodyDashboard');
+        
+        let content = '';
+        let activityName = '';
+        
+        const todayTasks = this.getTodayTasks();
+        
+        switch(type) {
+          case 'questoes':
+            const questao = todayTasks.questoes.find(q => q.id === id);
+            activityName = questao ? questao.nome : id;
+            
+            const questaoData = this.getRegisteredQuestaoData(id);
+            
+            content = `
+              <div style="margin-bottom: 1.5rem; padding: 1rem; background-color: rgba(52, 183, 241, 0.1); border-radius: 8px;">
+                <h4 style="margin: 0 0 0.5rem 0;">${activityName}</h4>
+                <div style="color: var(--gray);">Questões • ${questao?.disciplina || ''}</div>
+              </div>
+              
+              ${questaoData ? `
+              <div class="progress-stats">
+                <div class="stat-item">
+                  <div class="stat-value">${questaoData.feitas}</div>
+                  <div class="stat-label">Questões Feitas</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-value">${questaoData.feitas - questaoData.erradas}</div>
+                  <div class="stat-label">Acertos</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-value">${questaoData.erradas}</div>
+                  <div class="stat-label">Erros</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-value">${questaoData.tempo}m</div>
+                  <div class="stat-label">Tempo</div>
+                </div>
+              </div>
+              
+              <div style="margin-top: 1.5rem;">
+                <div style="font-weight: 600; margin-bottom: 0.5rem;">Estatísticas:</div>
+                <div style="background-color: var(--light-gray); padding: 1rem; border-radius: 8px;">
+                  Taxa de acerto: ${questaoData.feitas > 0 ? Math.round(((questaoData.feitas - questaoData.erradas) / questaoData.feitas) * 100) : 0}%
+                </div>
+              </div>
+              ` : `
+              <div style="text-align: center; padding: 2rem; color: var(--gray);">
+                <i class="fas fa-clock" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                <div>Esta atividade ainda não foi registrada hoje.</div>
+                <button class="btn btn-primary" onclick="dashboard.registerActivity('questoes', '${id}')" style="margin-top: 1rem;">
+                  <i class="fas fa-plus"></i> Registrar Agora
+                </button>
+              </div>
+              `}
+            `;
+            break;
+            
+          // Implementações similares para anki e teoria
+        }
+        
+        document.getElementById('detailsModalTitle').textContent = `Detalhes: ${activityName}`;
+        modalBody.innerHTML = content;
+        modal.classList.add('active');
+      }
+      
+      closeDetailsModal() {
+        document.getElementById('detailsModalDashboard').classList.remove('active');
+      }
+      
+      // ===== OUTROS PAINÉIS (ESBOÇOS) =====
+      
+      loadProgressPanel() {
+        document.getElementById('dashboardContent').innerHTML = `
+          <div class="dashboard-card fade-in">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fas fa-chart-line"></i>
+                <span>Progresso Geral</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <p>Painel de progresso em desenvolvimento.</p>
+              <p>Esta seção mostrará gráficos e estatísticas de seu progresso ao longo do tempo.</p>
+            </div>
+          </div>
+        `;
+      }
+      
+      loadEditalPanel() {
+        document.getElementById('dashboardContent').innerHTML = `
+          <div class="dashboard-card fade-in">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fas fa-file-alt"></i>
+                <span>Progresso no Edital</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <p>Painel do edital em desenvolvimento.</p>
+              <p>Esta seção mostrará seu progresso no edital verticalizado.</p>
+            </div>
+          </div>
+        `;
+      }
+      
+      // ... implementações similares para outros painéis
+    }
+
+    // Inicializar dashboard
+    let dashboard;
+    document.addEventListener('DOMContentLoaded', function() {
+      dashboard = new StudyFlowDashboard();
+    });
+  </script>
+</body>
+</html>
