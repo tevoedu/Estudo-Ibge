@@ -1195,7 +1195,6 @@
       </div>
     </div>
     <div class="chat-messages" id="chatMessages">
-      <!-- Mensagens serão adicionadas dinamicamente -->
     </div>
     <div class="chatbot-input">
       <div class="input-actions">
@@ -1213,7 +1212,6 @@
     </div>
   </div>
   
-  <!-- Modal de Registro Progressivo -->
   <div class="modal" id="registerModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -1221,7 +1219,6 @@
         <button class="close-modal" id="closeRegisterModal">&times;</button>
       </div>
       <div class="modal-body" id="registerModalBody">
-        <!-- Conteúdo dinâmico será inserido aqui -->
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" id="cancelRegister">Cancelar</button>
@@ -1230,7 +1227,6 @@
     </div>
   </div>
   
-  <!-- Modal: Registrar Atividades do Dia Anterior -->
   <div class="modal yesterday-modal" id="yesterdayModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -1238,7 +1234,6 @@
         <button class="close-modal" id="closeYesterdayModal">&times;</button>
       </div>
       <div class="modal-body" id="yesterdayModalBody">
-        <!-- Conteúdo dinâmico será inserido aqui -->
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" id="cancelYesterday">Cancelar</button>
@@ -1247,7 +1242,6 @@
     </div>
   </div>
   
-  <!-- Modal de Configuração de Matérias por Dia -->
   <div class="modal" id="configModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -1270,7 +1264,6 @@
     </div>
   </div>
   
-  <!-- Modal: Programar Simulado -->
   <div class="modal" id="simuladoModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -1299,7 +1292,6 @@
     </div>
   </div>
   
-  <!-- Modal: Relatório Periódico -->
   <div class="modal" id="relatorioModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -1326,7 +1318,6 @@
     </div>
   </div>
 
-  <!-- MODAL: Opções pós-salvar -->
   <div class="modal post-save-modal" id="postSaveModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -2474,15 +2465,25 @@
             </div> 
           `; 
         } else { 
-          summaryHTML += ` 
-            <div class="message-section"> 
-              <div class="message-section-title">Revisões Pendentes</div> 
-              <div class="message-alert message-alert-info"> 
-                <i class="fas fa-info-circle"></i> 
-                <div>Nenhuma revisão pendente para hoje</div> 
+          const questoesRegistradasHoje = this.getQuestoesRegistradasHoje(hojeStr);
+          if (questoesRegistradasHoje.length > 0) {
+            summaryHTML += ` 
+              <div class="message-alert message-alert-success">
+                <i class="fas fa-check-circle"></i>
+                <div><strong>Carga diária de questões completa!</strong> Você já registrou ${questoesRegistradasHoje.length} bloco(s) de questões hoje.</div>
+              </div>
+            `;
+          } else {
+            summaryHTML += ` 
+              <div class="message-section"> 
+                <div class="message-section-title">Revisões Pendentes</div> 
+                <div class="message-alert message-alert-info"> 
+                  <i class="fas fa-info-circle"></i> 
+                  <div>Nenhuma revisão pendente para hoje</div> 
+                </div> 
               </div> 
-            </div> 
-          `; 
+            `; 
+          }
         } 
         
         summaryHTML += ` 
@@ -3913,6 +3914,18 @@
         const targetDate = date || new Date();
         const targetTimestamp = targetDate.getTime();
         
+        const hoje = new Date();
+        const isToday = targetDate.toDateString() === hoje.toDateString();
+        
+        if (isToday) {
+          const hojeStr = this.getDynamicDateString();
+          const questoesRegistradasHoje = this.getQuestoesRegistradasHoje(hojeStr);
+          
+          if (questoesRegistradasHoje.length >= dailyReviewGoal) {
+            return [];
+          }
+        }
+        
         let pendingTopics = [];
         
         disciplines.forEach(disciplina => {
@@ -3949,7 +3962,23 @@
         
         pendingTopics.sort((a, b) => b.priority - a.priority);
         
+        if (isToday) {
+          const hojeStr = this.getDynamicDateString();
+          const questoesRegistradasHoje = this.getQuestoesRegistradasHoje(hojeStr);
+          const remainingSlots = Math.max(0, dailyReviewGoal - questoesRegistradasHoje.length);
+          
+          return pendingTopics.slice(0, remainingSlots);
+        }
+        
         return pendingTopics.slice(0, dailyReviewGoal);
+      }
+      
+      countQuestoesPendentesHoje(dateStr = null) {
+        const hojeStr = dateStr || this.getDynamicDateString();
+        const dailyReviewGoal = this.getModuleData('dailyReviewGoal') || 5;
+        const questoesRegistradasHoje = this.getQuestoesRegistradasHoje(hojeStr);
+        
+        return Math.max(0, dailyReviewGoal - questoesRegistradasHoje.length);
       }
       
       calculateOverdueReviews() {
@@ -5157,7 +5186,7 @@
             </div>
             <div class="message-card-content">
               <div class="message-text">
-                O que você gosteria de ver?
+                O que você gostaria de ver?
               </div>
               <div class="quick-actions" style="margin-top: 12px">
                 <button class="action-btn primary" onclick="chatBot.showUltimoSimuladoNota()">
