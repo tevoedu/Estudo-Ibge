@@ -2001,39 +2001,34 @@
         }
       }
       
-      // CORREÇÃO COMPLETA: Função saveTeoria agora persiste múltiplas matérias corretamente
+      // FUNÇÃO CORRIGIDA: saveTeoria com persistência múltipla correta
       saveTeoria(materiaId, conteudo, pagina, tempo, specificDate = null) {
-        console.log(`Salvando teoria: ${materiaId}, tempo: ${tempo} min`);
+        // CORREÇÃO: Garantir que todos os parâmetros sejam passados corretamente
+        const hojeStr = specificDate || this.getDynamicDateString();
         
-        // Atualizar ciclo de estudos
+        // Atualizar ciclo de estudos - COM TODOS OS PARÂMETROS
         const cicloAtualizado = this.updateStudyCycle(materiaId, tempo, specificDate);
         
         if (cicloAtualizado) {
-          console.log(`Ciclo atualizado para: ${materiaId}`);
-          
-          // Registrar sessão no módulo Home
+          // Registrar sessão no módulo Home (mantendo o funcionamento atual)
           this.registerHomeSession(`Teoria - ${materiaId}`, parseInt(tempo), specificDate);
           
-          // Salvar progresso da teoria
+          // CORREÇÃO: Atualizar progresso da teoria com conteúdo e página
           const teoriaProgress = this.getModuleData('teoriaProgress') || {};
+          
           teoriaProgress[materiaId] = {
-            conteudo: conteudo,
-            pagina: pagina,
+            conteudo: conteudo || '',
+            pagina: pagina || '',
             ultimaAtualizacao: new Date().toISOString(),
-            tempoTotal: (teoriaProgress[materiaId]?.tempoTotal || 0) + parseInt(tempo)
+            tempoEstudado: parseInt(tempo)
           };
+          
           this.setModuleData('teoriaProgress', teoriaProgress);
           
-          // Garantir que a sessão seja salva também no histórico específico
-          this.saveTheoreticalSessionToHistory(materiaId, tempo, conteudo, pagina, specificDate);
-          
           localStorage.setItem('ultimoEstudo', new Date().toISOString());
-          console.log(`Teoria salva com sucesso: ${materiaId}`);
-          return true;
-        } else {
-          console.error(`Falha ao salvar teoria: ${materiaId}`);
-          return false;
         }
+        
+        return cicloAtualizado;
       }
       
       saveAnki(deckId, tempo, cards, specificDate = null) {
@@ -2055,201 +2050,248 @@
         
         let sessions = this.getModuleData(dateKey) || [];
         
-        // Verificar se já existe uma sessão com o mesmo assunto
-        const existingIndex = sessions.findIndex(s => s.subject === subject && s.date === `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`);
+        // CORREÇÃO: Verificar se já existe uma sessão igual para evitar duplicação
+        const sessionExists = sessions.some(session => 
+          session.subject === subject && 
+          session.date === `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`
+        );
         
-        if (existingIndex >= 0) {
-          // Atualizar tempo da sessão existente
-          sessions[existingIndex].minutes += parseInt(minutes);
-          sessions[existingIndex].timestamp = date.toISOString();
-        } else {
-          // Adicionar nova sessão
+        if (!sessionExists) {
           sessions.push({
             subject: subject,
-            minutes: parseInt(minutes),
+            minutes: minutes,
             date: `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`,
             timestamp: date.toISOString()
           });
-        }
-        
-        this.setModuleData(dateKey, sessions);
-        console.log(`Sessão registrada no Home: ${subject} - ${minutes} min`);
-      }
-      
-      // NOVA FUNÇÃO: Salvar sessões teóricas em histórico separado
-      saveTheoreticalSessionToHistory(materiaId, tempo, conteudo, pagina, specificDate = null) {
-        const date = specificDate || this.getDynamicDateString();
-        const historyKey = `theorySessions_${date}`;
-        
-        let sessions = this.getModuleData(historyKey) || [];
-        
-        // Verificar se já existe uma sessão para esta matéria nesta data
-        const existingIndex = sessions.findIndex(s => s.materia === materiaId);
-        
-        if (existingIndex >= 0) {
-          // Atualizar sessão existente
-          sessions[existingIndex].tempo += parseInt(tempo);
-          sessions[existingIndex].conteudo = conteudo || sessions[existingIndex].conteudo;
-          sessions[existingIndex].pagina = pagina || sessions[existingIndex].pagina;
-          sessions[existingIndex].ultimaAtualizacao = new Date().toISOString();
+          
+          this.setModuleData(dateKey, sessions);
         } else {
-          // Adicionar nova sessão
-          sessions.push({
-            materia: materiaId,
-            tempo: parseInt(tempo),
-            conteudo: conteudo || '',
-            pagina: pagina || '',
-            data: date,
-            timestamp: new Date().toISOString()
-          });
+          // Se já existe, atualizar o tempo
+          const index = sessions.findIndex(session => 
+            session.subject === subject && 
+            session.date === `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`
+          );
+          
+          if (index !== -1) {
+            sessions[index].minutes += minutes;
+            this.setModuleData(dateKey, sessions);
+          }
         }
-        
-        this.setModuleData(historyKey, sessions);
-        console.log(`Sessão teórica salva no histórico: ${materiaId}`);
       }
       
-      // FUNÇÃO COMPLETAMENTE REESCRITA: Atualizar ciclo de estudos para múltiplas matérias
-      updateStudyCycle(materiaId, tempo, specificDate = null) {
-        const activeCycle = this.getActiveCycle();
-        const studyDate = specificDate || this.getDynamicDateString();
+      // CORREÇÃO APLICADA: Função updateReviewModule atualizada para aceitar data específica
+      updateReviewModule(assuntoId, feitas, corretas, tempo, dificuldade, specificDate = null) {
+        const disciplines = this.getModuleData('disciplines') || [];
+        const reviewDate = specificDate ? new Date(specificDate + 'T00:00:00') : new Date();
+        const reviewTimestamp = reviewDate.getTime();
         
-        if (!activeCycle || !activeCycle.generatedCycle) {
-          console.error('Ciclo de estudos não encontrado');
+        // Encontrar o assunto específico
+        let assuntoEncontrado = null;
+        let disciplinaEncontrada = null;
+        
+        for (const disciplina of disciplines) {
+          if (disciplina.assuntos && Array.isArray(disciplina.assuntos)) {
+            for (const assunto of disciplina.assuntos) {
+              if (assunto.nome === assuntoId) {
+                assuntoEncontrado = assunto;
+                disciplinaEncontrada = disciplina;
+                break;
+              }
+            }
+            if (assuntoEncontrado) break;
+          }
+        }
+        
+        if (assuntoEncontrado) {
+          // Atualizar estatísticas
+          assuntoEncontrado.questions = (assuntoEncontrado.questions || 0) + parseInt(feitas);
+          assuntoEncontrado.correct = (assuntoEncontrado.correct || 0) + parseInt(corretas);
+          assuntoEncontrado.incorrect = (assuntoEncontrado.incorrect || 0) + (parseInt(feitas) - parseInt(corretas));
+          
+          // Adicionar dificuldade ao histórico
+          if (!assuntoEncontrado.difficultyHistory) {
+            assuntoEncontrado.difficultyHistory = [];
+          }
+          assuntoEncontrado.difficultyHistory.push(parseInt(dificuldade));
+          
+          // Calcular acurácia
+          const accuracy = (parseInt(corretas) / parseInt(feitas)) * 100;
+          
+          // Determinar o método de revisão
+          if (assuntoEncontrado.reviewMethod === 'fixed') {
+            // Revisão por desempenho - usar a função do módulo de revisões
+            const interval = this.getPerformanceBasedInterval(accuracy);
+            assuntoEncontrado.interval = interval;
+            assuntoEncontrado.repetitions = (assuntoEncontrado.repetitions || 0) + 1;
+          } else {
+            // SM-2 - usar a função do módulo de revisões
+            const result = this.calculateNextReviewSM2(
+              parseInt(dificuldade),
+              assuntoEncontrado.easeFactor || 2.5,
+              assuntoEncontrado.interval || 1,
+              assuntoEncontrado.repetitions || 0
+            );
+            assuntoEncontrado.easeFactor = result.newEF;
+            assuntoEncontrado.interval = result.newInterval;
+            assuntoEncontrado.repetitions = result.repetitions;
+          }
+          
+          // CORREÇÃO APLICADA: Usar a data específica fornecida
+          assuntoEncontrado.lastReviewed = reviewTimestamp;
+          
+          // Calcular próxima data de revisão
+          const nextReviewDate = new Date(reviewTimestamp);
+          nextReviewDate.setDate(nextReviewDate.getDate() + assuntoEncontrado.interval);
+          assuntoEncontrado.nextReviewDate = nextReviewDate.getTime();
+          
+          // Calcular força da memória
+          assuntoEncontrado.memoryStrength = this.calculateMemoryStrength(assuntoEncontrado);
+          
+          // Salvar de volta no localStorage
+          this.setModuleData('disciplines', disciplines);
+          return true;
+        } else {
           return false;
         }
-
-        console.log(`Atualizando ciclo para matéria: ${materiaId}, data: ${studyDate}`);
-
-        try {
-          // Obter o índice atual do ciclo
+      }
+      
+      // FUNÇÃO ATUALIZADA: updateStudyCycle com persistência múltipla corrigida
+      updateStudyCycle(materiaId, tempo, specificDate = null) {
+        const activeCycle = this.getActiveCycle();
+        // CORREÇÃO: Usar a data específica fornecida ou a data atual
+        const studyDate = specificDate || new Date().toISOString().split('T')[0];
+        
+        if (activeCycle && activeCycle.generatedCycle) {
           const todayIndex = activeCycle.currentDay || 0;
           const cycleLength = activeCycle.generatedCycle.length;
           
-          if (cycleLength === 0) {
-            console.error('Ciclo gerado está vazio');
-            return false;
-          }
-
-          // Converter o índice para estar dentro dos limites do ciclo
-          const adjustedIndex = todayIndex % cycleLength;
+          // NOVA LÓGICA: Verificar se a matéria está no ciclo de HOJE, não apenas no índice atual
+          let materiaEncontrada = false;
           
-          // Obter as matérias do dia atual
-          const materiasDoDia = activeCycle.generatedCycle[adjustedIndex];
-          
-          // Verificar se a matéria está no dia atual
-          let materiaValida = false;
-          
-          if (Array.isArray(materiasDoDia)) {
-            // Se for array (múltiplas matérias), verificar se a matéria está presente
-            materiaValida = materiasDoDia.includes(materiaId);
-          } else {
-            // Se for string (uma matéria), comparar diretamente
-            materiaValida = materiasDoDia === materiaId;
-          }
-
-          if (!materiaValida) {
-            console.log(`Matéria ${materiaId} não está no dia atual do ciclo`);
-            return false;
-          }
-
-          // Inicializar estruturas de dados se não existirem
-          if (!activeCycle.completedSubjects) {
-            activeCycle.completedSubjects = {};
+          // Buscar a matéria em todo o ciclo gerado
+          for (let i = 0; i < cycleLength; i++) {
+            let cicloDia = activeCycle.generatedCycle[i];
+            
+            // Se for um array (múltiplas matérias no mesmo dia)
+            if (Array.isArray(cicloDia)) {
+              if (cicloDia.includes(materiaId)) {
+                materiaEncontrada = true;
+                break;
+              }
+            } else {
+              if (cicloDia === materiaId) {
+                materiaEncontrada = true;
+                break;
+              }
+            }
           }
           
-          if (!activeCycle.studyTime) {
-            activeCycle.studyTime = {};
+          if (materiaEncontrada) {
+            // CORREÇÃO CRÍTICA: Inicializar estruturas se não existirem
+            if (!activeCycle.completedSubjects) {
+              activeCycle.completedSubjects = {};
+            }
+            
+            // Usar array para armazenar múltiplas matérias completadas
+            if (!activeCycle.completedSubjects[studyDate]) {
+              activeCycle.completedSubjects[studyDate] = [];
+            }
+            
+            // CORREÇÃO: Adicionar a matéria se ainda não estiver registrada
+            if (!activeCycle.completedSubjects[studyDate].includes(materiaId)) {
+              activeCycle.completedSubjects[studyDate].push(materiaId);
+            }
+            
+            // CORREÇÃO: Atualizar estatísticas de progresso (ACUMULAR, não sobrescrever)
+            if (!activeCycle.studyTime) {
+              activeCycle.studyTime = {};
+            }
+            
+            // Acumular tempo para a data específica
+            activeCycle.studyTime[studyDate] = (activeCycle.studyTime[studyDate] || 0) + parseInt(tempo);
+            
+            // CORREÇÃO: Registrar sessão no módulo Home para CADA matéria
+            this.registerHomeSession(`Teoria - ${materiaId}`, parseInt(tempo), studyDate);
+            
+            // CORREÇÃO: Salvar progresso da teoria para CADA matéria
+            const teoriaProgress = this.getModuleData('teoriaProgress') || {};
+            const conteudo = ''; // Será preenchido pela função saveTeoria
+            const pagina = ''; // Será preenchido pela função saveTeoria
+            
+            teoriaProgress[materiaId] = {
+              conteudo: conteudo,
+              pagina: pagina,
+              ultimaAtualizacao: new Date().toISOString(),
+              tempoEstudado: parseInt(tempo)
+            };
+            
+            this.setModuleData('teoriaProgress', teoriaProgress);
+            
+            // CORREÇÃO: Verificar se o dia atual foi completamente estudado
+            // Mas NÃO avançar o ciclo aqui - isso será feito separadamente
+            
+            // Salvar de volta
+            this.setModuleData('StudyFlow_activeCycle', activeCycle);
+            
+            // CORREÇÃO ADICIONAL: Atualizar também o ciclo do módulo Planos
+            this.syncWithPlansModule(activeCycle);
+            
+            return true;
           }
+        }
+        return false;
+      }
+      
+      // ADICIONAR ESTA NOVA FUNÇÃO para sincronizar com o módulo Planos:
+      syncWithPlansModule(activeCycle) {
+        try {
+          // Buscar dados do módulo Planos
+          const planosData = JSON.parse(localStorage.getItem('StudyFlow_planos')) || {};
           
-          if (!activeCycle.studyDetails) {
-            activeCycle.studyDetails = {};
+          if (planosData.ciclos && Array.isArray(planosData.ciclos)) {
+            // Encontrar o ciclo ativo no módulo Planos
+            const cicloPlano = planosData.ciclos.find(c => c.id === activeCycle.id);
+            
+            if (cicloPlano) {
+              // Sincronizar completedSubjects
+              if (!cicloPlano.completedSubjects) {
+                cicloPlano.completedSubjects = {};
+              }
+              
+              // Copiar completedSubjects do chatbot para o plano
+              Object.keys(activeCycle.completedSubjects || {}).forEach(date => {
+                if (!cicloPlano.completedSubjects[date]) {
+                  cicloPlano.completedSubjects[date] = [];
+                }
+                
+                // Adicionar matérias que não estão no plano
+                activeCycle.completedSubjects[date].forEach(materia => {
+                  if (!cicloPlano.completedSubjects[date].includes(materia)) {
+                    cicloPlano.completedSubjects[date].push(materia);
+                  }
+                });
+              });
+              
+              // Sincronizar studyTime
+              if (!cicloPlano.studyTime) {
+                cicloPlano.studyTime = {};
+              }
+              
+              Object.keys(activeCycle.studyTime || {}).forEach(date => {
+                cicloPlano.studyTime[date] = (cicloPlano.studyTime[date] || 0) + activeCycle.studyTime[date];
+              });
+              
+              // Sincronizar currentDay
+              if (activeCycle.currentDay !== undefined) {
+                cicloPlano.currentDay = activeCycle.currentDay;
+              }
+              
+              // Salvar de volta no módulo Planos
+              localStorage.setItem('StudyFlow_planos', JSON.stringify(planosData));
+            }
           }
-
-          // Inicializar array de matérias completadas para esta data
-          if (!activeCycle.completedSubjects[studyDate]) {
-            activeCycle.completedSubjects[studyDate] = [];
-          }
-          
-          // Inicializar tempo de estudo para esta data
-          if (!activeCycle.studyTime[studyDate]) {
-            activeCycle.studyTime[studyDate] = 0;
-          }
-          
-          // Inicializar detalhes de estudo para esta data
-          if (!activeCycle.studyDetails[studyDate]) {
-            activeCycle.studyDetails[studyDate] = [];
-          }
-
-          // Adicionar matéria à lista de completadas (se ainda não estiver)
-          if (!activeCycle.completedSubjects[studyDate].includes(materiaId)) {
-            activeCycle.completedSubjects[studyDate].push(materiaId);
-          }
-
-          // Acumular tempo de estudo
-          activeCycle.studyTime[studyDate] += parseInt(tempo);
-
-          // Adicionar detalhes do estudo
-          const studyDetail = {
-            materia: materiaId,
-            tempo: parseInt(tempo),
-            timestamp: new Date().toISOString()
-          };
-          
-          // Verificar se já existe um detalhe para esta matéria nesta data
-          const existingIndex = activeCycle.studyDetails[studyDate].findIndex(
-            detail => detail.materia === materiaId
-          );
-          
-          if (existingIndex >= 0) {
-            // Atualizar tempo existente
-            activeCycle.studyDetails[studyDate][existingIndex].tempo += parseInt(tempo);
-            activeCycle.studyDetails[studyDate][existingIndex].timestamp = new Date().toISOString();
-          } else {
-            // Adicionar novo detalhe
-            activeCycle.studyDetails[studyDate].push(studyDetail);
-          }
-
-          // Verificar se todas as matérias do dia foram completadas
-          let todasMateriasDoDia = [];
-          
-          if (Array.isArray(materiasDoDia)) {
-            todasMateriasDoDia = materiasDoDia;
-          } else {
-            todasMateriasDoDia = [materiasDoDia];
-          }
-
-          const materiasCompletadas = activeCycle.completedSubjects[studyDate] || [];
-          
-          // Verificar se TODAS as matérias do dia foram completadas
-          const todasCompletadas = todasMateriasDoDia.every(materia => 
-            materiasCompletadas.includes(materia)
-          );
-
-          console.log(`Matérias do dia: ${todasMateriasDoDia.join(', ')}`);
-          console.log(`Matérias completadas: ${materiasCompletadas.join(', ')}`);
-          console.log(`Todas completadas? ${todasCompletadas}`);
-
-          // Só avançar o ciclo se todas as matérias foram completadas E não avançamos hoje
-          if (todasCompletadas && activeCycle.lastAdvanced !== studyDate) {
-            activeCycle.currentDay = (todayIndex + 1) % cycleLength;
-            activeCycle.lastAdvanced = studyDate;
-            console.log(`Ciclo avançado para o dia: ${activeCycle.currentDay}`);
-          }
-
-          // Salvar de volta no localStorage
-          this.setModuleData('StudyFlow_activeCycle', activeCycle);
-          
-          // Também salvar em uma chave específica para backup
-          const cycleBackup = JSON.parse(localStorage.getItem('StudyFlow_activeCycle_backup') || '{}');
-          cycleBackup[studyDate] = activeCycle;
-          localStorage.setItem('StudyFlow_activeCycle_backup', JSON.stringify(cycleBackup));
-
-          console.log(`Ciclo atualizado com sucesso para matéria: ${materiaId}`);
-          return true;
-
-        } catch (error) {
-          console.error('Erro ao atualizar ciclo de estudos:', error);
-          return false;
+        } catch (e) {
+          console.error('Erro ao sincronizar com módulo Planos:', e);
         }
       }
       
@@ -3287,21 +3329,6 @@
         
         tasksHTML += '</div>';
         modalBody.innerHTML += tasksHTML;
-      }
-      
-      // NOVA FUNÇÃO: Remover atividades duplicadas
-      removeDuplicateActivities(activities, keyField) {
-        if (!activities || !Array.isArray(activities)) return [];
-        
-        const seen = new Set();
-        return activities.filter(activity => {
-          const key = activity[keyField];
-          if (seen.has(key)) {
-            return false;
-          }
-          seen.add(key);
-          return true;
-        });
       }
       
       // MODIFICADA: Criar card com status de registro - ATUALIZADA PARA CORREÇÃO
@@ -5356,7 +5383,7 @@
             </div>
             <div class="message-card-content">
               <div class="message-text">
-                O que você gostaria de ver?
+                O que você gosteria de ver?
               </div>
               <div class="quick-actions" style="margin-top: 12px">
                 <button class="action-btn primary" onclick="chatBot.showUltimoSimuladoNota()">
@@ -5660,24 +5687,6 @@
         dateDiv.className = 'chat-date';
         dateDiv.innerHTML = `<span>${dataFormatada}</span>`;
         chatMessages.appendChild(dateDiv);
-      }
-      
-      // NOVA FUNÇÃO: Verificar estado do ciclo para debug
-      debugCycleState() {
-        const activeCycle = this.getActiveCycle();
-        const hojeStr = this.getDynamicDateString();
-        
-        console.log('=== DEBUG CICLO DE ESTUDOS ===');
-        console.log('Data atual:', hojeStr);
-        console.log('Ciclo ativo:', activeCycle ? 'Sim' : 'Não');
-        
-        if (activeCycle) {
-          console.log('Dia atual no ciclo:', activeCycle.currentDay);
-          console.log('Matérias do dia:', this.getTodaySubjects());
-          console.log('Matérias completadas hoje:', activeCycle.completedSubjects?.[hojeStr] || []);
-          console.log('Tempo de estudo hoje:', activeCycle.studyTime?.[hojeStr] || 0);
-          console.log('Último avanço:', activeCycle.lastAdvanced);
-        }
       }
     }
     
