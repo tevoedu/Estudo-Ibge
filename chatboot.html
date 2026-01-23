@@ -23,6 +23,7 @@
       --border-radius: 18px;
       --shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --sidebar-width: 320px;
     }
     
     .dark-theme {
@@ -56,11 +57,17 @@
       overflow: hidden;
     }
     
+    .main-container {
+      display: flex;
+      height: 100vh;
+      width: 100%;
+    }
+    
     .chatbot-container {
       display: flex;
       flex-direction: column;
       height: 100vh;
-      width: 100%;
+      flex: 1;
       background-color: var(--chat-bg);
       background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%239C92AC' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
       overflow: hidden;
@@ -1171,47 +1178,397 @@
       color: var(--success) !important;
       opacity: 0.8 !important;
     }
+
+    /* NOVO: Painel Lateral */
+    .sidebar {
+      width: var(--sidebar-width);
+      background-color: var(--light);
+      border-left: 1px solid var(--light-gray);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      transition: var(--transition);
+      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .sidebar-header {
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid var(--light-gray);
+    }
+
+    .sidebar-header h3 {
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+      color: var(--dark);
+    }
+
+    .sidebar-header p {
+      font-size: 0.85rem;
+      color: var(--gray);
+    }
+
+    .sidebar-content {
+      flex: 1;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      overflow-y: auto;
+    }
+
+    .sidebar-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .sidebar-section h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--dark);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .sidebar-activities {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .sidebar-activity {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 0.8rem;
+      background-color: var(--light-gray);
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+
+    .sidebar-activity:hover {
+      background-color: rgba(37, 211, 102, 0.1);
+    }
+
+    .sidebar-activity.completed {
+      background-color: rgba(76, 175, 80, 0.1);
+      border-left: 3px solid var(--success);
+    }
+
+    .sidebar-activity.pending {
+      opacity: 0.7;
+      background-color: var(--light-gray);
+    }
+
+    .activity-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      background-color: var(--primary);
+      color: white;
+      font-size: 0.8rem;
+    }
+
+    .activity-info {
+      flex: 1;
+    }
+
+    .activity-name {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    .activity-type {
+      font-size: 0.7rem;
+      color: var(--gray);
+      margin-top: 2px;
+    }
+
+    .activity-status {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid var(--light-gray);
+    }
+
+    .activity-status.completed {
+      background-color: var(--success);
+      border-color: var(--success);
+    }
+
+    .activity-status.pending {
+      background-color: transparent;
+    }
+
+    .sidebar-progress {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background-color: var(--light-gray);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background-color: var(--primary);
+      transition: width 0.5s ease;
+    }
+
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+
+    .progress-text strong {
+      color: var(--dark);
+      font-weight: 600;
+    }
+
+    .sidebar-time {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--dark);
+      text-align: center;
+      margin: 0.5rem 0;
+    }
+
+    .time-label {
+      font-size: 0.8rem;
+      color: var(--gray);
+      text-align: center;
+    }
+
+    .sidebar-footer {
+      padding: 1.2rem 1.5rem;
+      border-top: 1px solid var(--light-gray);
+      background-color: rgba(76, 175, 80, 0.1);
+      text-align: center;
+    }
+
+    .sidebar-footer.completed {
+      background-color: rgba(76, 175, 80, 0.2);
+    }
+
+    .day-completed-message {
+      font-weight: 600;
+      color: var(--success);
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+
+    .day-stats {
+      font-size: 0.8rem;
+      color: var(--success);
+    }
+
+    .sidebar-toggle {
+      display: none;
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 4px 0 0 4px;
+      padding: 0.5rem;
+      cursor: pointer;
+      z-index: 100;
+    }
+
+    @media (max-width: 1200px) {
+      .sidebar {
+        position: fixed;
+        right: -var(--sidebar-width);
+        top: 0;
+        z-index: 1000;
+        box-shadow: -2px 0 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .sidebar.open {
+        right: 0;
+      }
+
+      .sidebar-toggle {
+        display: block;
+        left: -32px;
+        right: auto;
+      }
+
+      .main-container {
+        width: 100%;
+      }
+    }
+
+    /* Toast de confirmação simplificado */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--success);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: toastSlideUp 0.3s ease;
+      max-width: 400px;
+      width: 90%;
+    }
+
+    @keyframes toastSlideUp {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    .toast.hide {
+      animation: toastSlideDown 0.3s ease forwards;
+    }
+
+    @keyframes toastSlideDown {
+      from {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+      }
+    }
+
+    .toast i {
+      font-size: 1.2rem;
+    }
+
+    .toast-content {
+      flex: 1;
+    }
+
+    .toast-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .toast-message {
+      font-size: 0.8rem;
+      opacity: 0.9;
+    }
+
+    .sidebar-toggle i {
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar.open .sidebar-toggle i {
+      transform: rotate(180deg);
+    }
   </style>
 </head>
 <body>
-  <div class="chatbot-container">
-    <div class="chatbot-header">
-      <div class="header-left">
-        <div class="bot-avatar">
-          <i class="fas fa-robot"></i>
+  <div class="main-container">
+    <div class="chatbot-container">
+      <div class="chatbot-header">
+        <div class="header-left">
+          <div class="bot-avatar">
+            <i class="fas fa-robot"></i>
+          </div>
+          <div class="header-info">
+            <h1>StudyFlow Assistant</h1>
+            <p><span class="status-dot"></span> Online • Seu assistente de estudos</p>
+          </div>
         </div>
-        <div class="header-info">
-          <h1>StudyFlow Assistant</h1>
-          <p><span class="status-dot"></span> Online • Seu assistente de estudos</p>
+        <div class="header-actions">
+          <button class="header-btn" id="themeToggle">
+            <i class="fas fa-moon"></i>
+          </button>
+          <button class="header-btn" id="sidebarToggle">
+            <i class="fas fa-chart-bar"></i>
+          </button>
+          <button class="header-btn" id="infoBtn">
+            <i class="fas fa-info"></i>
+          </button>
         </div>
       </div>
-      <div class="header-actions">
-        <button class="header-btn" id="themeToggle">
-          <i class="fas fa-moon"></i>
-        </button>
-        <button class="header-btn" id="infoBtn">
-          <i class="fas fa-info"></i>
+      <div class="chat-messages" id="chatMessages">
+      </div>
+      <div class="chatbot-input">
+        <div class="input-actions">
+          <button class="input-btn" id="attachBtn">
+            <i class="fas fa-paperclip"></i>
+          </button>
+          <button class="input-btn" id="emojiBtn">
+            <i class="far fa-smile"></i>
+          </button>
+        </div>
+        <input type="text" id="messageInput" placeholder="Digite uma mensagem...">
+        <button class="send-btn" id="sendMessage">
+          <i class="fas fa-paper-plane"></i>
         </button>
       </div>
     </div>
-    <div class="chat-messages" id="chatMessages">
-    </div>
-    <div class="chatbot-input">
-      <div class="input-actions">
-        <button class="input-btn" id="attachBtn">
-          <i class="fas fa-paperclip"></i>
-        </button>
-        <button class="input-btn" id="emojiBtn">
-          <i class="far fa-smile"></i>
-        </button>
-      </div>
-      <input type="text" id="messageInput" placeholder="Digite uma mensagem...">
-      <button class="send-btn" id="sendMessage">
-        <i class="fas fa-paper-plane"></i>
+    
+    <!-- Painel Lateral Fixo -->
+    <div class="sidebar" id="sidebar">
+      <button class="sidebar-toggle" id="sidebarToggleBtn">
+        <i class="fas fa-chevron-left"></i>
       </button>
+      <div class="sidebar-header">
+        <h3>Resumo do Dia</h3>
+        <p id="sidebar-date"></p>
+      </div>
+      <div class="sidebar-content">
+        <div class="sidebar-section">
+          <h4>Atividades do Dia</h4>
+          <div class="sidebar-activities" id="sidebar-activities">
+            <!-- Atividades serão inseridas aqui dinamicamente -->
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <h4>Progresso Diário</h4>
+          <div class="sidebar-progress">
+            <div class="progress-bar">
+              <div class="progress-fill" id="sidebar-progress-fill"></div>
+            </div>
+            <div class="progress-text">
+              <span>Concluído</span>
+              <span><strong id="sidebar-progress-count">0/0</strong> atividades</span>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <h4>Tempo Estudado</h4>
+          <div class="sidebar-time" id="sidebar-time">0 min</div>
+          <div class="time-label">Total de hoje</div>
+        </div>
+      </div>
+      <div class="sidebar-footer" id="sidebar-footer">
+        <!-- Conteúdo dinâmico para dia completo -->
+      </div>
     </div>
   </div>
   
+  <!-- Modais (mantidos, mas com comportamento ajustado) -->
   <div class="modal" id="registerModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -1242,104 +1599,8 @@
     </div>
   </div>
   
-  <div class="modal" id="configModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3><i class="fas fa-cog"></i> Configurar Matérias por Dia</h3>
-        <button class="close-modal" id="closeConfigModal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label for="materiasPorDia">Quantidade de matérias por dia:</label>
-          <input type="number" id="materiasPorDia" min="1" max="5" value="1">
-        </div>
-        <div class="message-muted">
-          Esta configuração define quantas matérias serão mostradas no resumo diário.
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" id="cancelConfig">Cancelar</button>
-        <button class="btn btn-primary" id="saveConfig">Salvar</button>
-      </div>
-    </div>
-  </div>
+  <!-- Removido o modal postSaveModal -->
   
-  <div class="modal" id="simuladoModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3><i class="fas fa-calendar-alt"></i> Programar Simulado</h3>
-        <button class="close-modal" id="closeSimuladoModal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label for="simuladoInterval">Intervalo entre simulados:</label>
-          <select id="simuladoInterval">
-            <option value="0">Nenhum (não programar)</option>
-            <option value="7">7 dias</option>
-            <option value="10">10 dias</option>
-            <option value="15">15 dias</option>
-            <option value="30">30 dias</option>
-          </select>
-        </div>
-        <div class="message-muted">
-          Quando chegar o dia do simulado, o chatbot irá alertar.
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" id="cancelSimulado">Cancelar</button>
-        <button class="btn btn-primary" id="saveSimulado">Salvar</button>
-      </div>
-    </div>
-  </div>
-  
-  <div class="modal" id="relatorioModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3><i class="fas fa-chart-bar"></i> Relatório Periódico</h3>
-        <button class="close-modal" id="closeRelatorioModal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label for="relatorioPeriodo">Período do relatório:</label>
-          <select id="relatorioPeriodo">
-            <option value="7">7 dias</option>
-            <option value="15">15 dias</option>
-            <option value="30">30 dias</option>
-          </select>
-        </div>
-        <div class="message-muted">
-          O relatório somará todos os dados do período selecionado e comparará com o período anterior.
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" id="cancelRelatorio">Cancelar</button>
-        <button class="btn btn-primary" id="generateRelatorio">Gerar Relatório</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal post-save-modal" id="postSaveModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3><i class="fas fa-check-circle"></i> Atividade Registrada!</h3>
-      </div>
-      <div class="modal-body">
-        <p>Sua atividade foi registrada com sucesso!</p>
-        <div class="post-save-options">
-          <button class="post-save-btn add" id="addAnotherActivity">
-            <i class="fas fa-plus"></i> Adicionar nova atividade
-          </button>
-          <button class="post-save-btn finish" id="finishDay">
-            <i class="fas fa-check"></i> Finalizar o dia de hoje
-          </button>
-          <button class="post-save-btn later" id="closeWithoutAction">
-            <i class="fas fa-clock"></i> Vou adicionar depois
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <script>
     class StudyFlowChatBot {
       constructor() {
@@ -1378,6 +1639,7 @@
         this.initTheme();
         this.initChat();
         this.initEventListeners();
+        this.initSidebar();
         this.showWelcomeMessage();
         
         this.updateYesterdayMemory();
@@ -1403,6 +1665,9 @@
       initEventListeners() {
         document.getElementById('themeToggle').addEventListener('click', () => this.toggleTheme());
         
+        document.getElementById('sidebarToggle').addEventListener('click', () => this.toggleSidebar());
+        document.getElementById('sidebarToggleBtn').addEventListener('click', () => this.toggleSidebar());
+        
         document.getElementById('infoBtn').addEventListener('click', () => this.showInfo());
         
         document.getElementById('sendMessage').addEventListener('click', () => this.sendMessage());
@@ -1423,39 +1688,9 @@
         document.getElementById('cancelYesterday').addEventListener('click', () => this.closeYesterdayModal());
         document.getElementById('saveYesterday').addEventListener('click', () => this.saveYesterdayTasks());
         
-        document.getElementById('closeConfigModal').addEventListener('click', () => this.closeConfigModal());
-        document.getElementById('cancelConfig').addEventListener('click', () => this.closeConfigModal());
-        document.getElementById('saveConfig').addEventListener('click', () => this.saveConfig());
-        
-        document.getElementById('closeSimuladoModal').addEventListener('click', () => this.closeSimuladoModal());
-        document.getElementById('cancelSimulado').addEventListener('click', () => this.closeSimuladoModal());
-        document.getElementById('saveSimulado').addEventListener('click', () => this.saveSimuladoConfig());
-        
-        document.getElementById('closeRelatorioModal').addEventListener('click', () => this.closeRelatorioModal());
-        document.getElementById('cancelRelatorio').addEventListener('click', () => this.closeRelatorioModal());
-        document.getElementById('generateRelatorio').addEventListener('click', () => this.generateRelatorio());
-        
-        document.getElementById('addAnotherActivity').addEventListener('click', () => {
-          document.getElementById('postSaveModal').style.display = 'none';
-          this.openRegisterModal();
-        });
-        
-        document.getElementById('finishDay').addEventListener('click', () => {
-          document.getElementById('postSaveModal').style.display = 'none';
-          this.finalizeDay();
-        });
-        
-        document.getElementById('closeWithoutAction').addEventListener('click', () => {
-          document.getElementById('postSaveModal').style.display = 'none';
-        });
-        
         window.addEventListener('click', (e) => {
           const registerModal = document.getElementById('registerModal');
           const yesterdayModal = document.getElementById('yesterdayModal');
-          const configModal = document.getElementById('configModal');
-          const simuladoModal = document.getElementById('simuladoModal');
-          const relatorioModal = document.getElementById('relatorioModal');
-          const postSaveModal = document.getElementById('postSaveModal');
           
           if (e.target === registerModal) {
             this.closeRegisterModal();
@@ -1463,19 +1698,148 @@
           if (e.target === yesterdayModal) {
             this.closeYesterdayModal();
           }
-          if (e.target === configModal) {
-            this.closeConfigModal();
-          }
-          if (e.target === simuladoModal) {
-            this.closeSimuladoModal();
-          }
-          if (e.target === relatorioModal) {
-            this.closeRelatorioModal();
-          }
-          if (e.target === postSaveModal) {
-            document.getElementById('postSaveModal').style.display = 'none';
+        });
+      }
+      
+      initSidebar() {
+        this.updateSidebar();
+        // Abrir sidebar por padrão em telas grandes
+        if (window.innerWidth > 1200) {
+          document.getElementById('sidebar').classList.add('open');
+        }
+      }
+      
+      updateSidebar() {
+        const hoje = this.getDynamicDateObject();
+        const hojeStr = this.getDynamicDateString();
+        
+        // Atualizar data
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('sidebar-date').textContent = hoje.toLocaleDateString('pt-BR', options);
+        
+        // Obter atividades do dia
+        const todayTasks = this.getTodayTasks();
+        const atividades = [];
+        
+        // Adicionar revisões por questões
+        todayTasks.questoes.forEach(questao => {
+          atividades.push({
+            id: `questao-${questao.id}`,
+            name: questao.nome,
+            type: 'Revisão por Questões',
+            icon: '🧩',
+            completed: this.isQuestaoRegistered(questao.id),
+            data: questao
+          });
+        });
+        
+        // Adicionar estudo teórico
+        todayTasks.teoria.forEach(materia => {
+          atividades.push({
+            id: `teoria-${materia}`,
+            name: materia,
+            type: 'Estudo Teórico',
+            icon: '📚',
+            completed: this.isTeoriaRegistered(materia),
+            data: { materia }
+          });
+        });
+        
+        // Adicionar Anki
+        todayTasks.anki.forEach(deck => {
+          atividades.push({
+            id: `anki-${deck.id}`,
+            name: deck.nome,
+            type: 'Anki',
+            icon: '🔁',
+            completed: this.isAnkiRegistered(deck.id),
+            data: deck
+          });
+        });
+        
+        // Atualizar lista de atividades
+        const sidebarActivities = document.getElementById('sidebar-activities');
+        sidebarActivities.innerHTML = '';
+        
+        if (atividades.length === 0) {
+          sidebarActivities.innerHTML = `
+            <div style="text-align: center; color: var(--gray); padding: 1rem; font-size: 0.9rem;">
+              <i class="fas fa-check-circle" style="font-size: 1.5rem; margin-bottom: 0.5rem; opacity: 0.5;"></i>
+              <p>Nenhuma atividade programada para hoje</p>
+            </div>
+          `;
+        } else {
+          atividades.forEach(atividade => {
+            const activityElement = document.createElement('div');
+            activityElement.className = `sidebar-activity ${atividade.completed ? 'completed' : 'pending'}`;
+            activityElement.innerHTML = `
+              <div class="activity-icon">${atividade.icon}</div>
+              <div class="activity-info">
+                <div class="activity-name">${atividade.name}</div>
+                <div class="activity-type">${atividade.type}</div>
+              </div>
+              <div class="activity-status ${atividade.completed ? 'completed' : 'pending'}"></div>
+            `;
+            sidebarActivities.appendChild(activityElement);
+          });
+        }
+        
+        // Calcular progresso
+        const totalAtividades = atividades.length;
+        const concluidas = atividades.filter(a => a.completed).length;
+        const porcentagem = totalAtividades > 0 ? (concluidas / totalAtividades) * 100 : 0;
+        
+        // Atualizar barra de progresso
+        document.getElementById('sidebar-progress-fill').style.width = `${porcentagem}%`;
+        document.getElementById('sidebar-progress-count').textContent = `${concluidas}/${totalAtividades}`;
+        
+        // Calcular tempo estudado
+        const totalTime = this.calculateTotalTimeToday();
+        document.getElementById('sidebar-time').textContent = `${totalTime} min`;
+        
+        // Atualizar footer se dia completo
+        const sidebarFooter = document.getElementById('sidebar-footer');
+        if (this.isDayFinished() || (totalAtividades > 0 && concluidas === totalAtividades)) {
+          sidebarFooter.className = 'sidebar-footer completed';
+          sidebarFooter.innerHTML = `
+            <div class="day-completed-message">Dia concluído com sucesso!</div>
+            <div class="day-stats">${concluidas} atividades • ${totalTime} minutos</div>
+          `;
+        } else {
+          sidebarFooter.className = 'sidebar-footer';
+          sidebarFooter.innerHTML = '';
+        }
+      }
+      
+      calculateTotalTimeToday() {
+        const hojeStr = this.getDynamicDateString();
+        let totalTime = 0;
+        
+        // Tempo das atividades registradas
+        if (this.partialRegistration.date === hojeStr) {
+          Object.values(this.partialRegistration.activities).forEach(activities => {
+            activities.forEach(activity => {
+              totalTime += activity.tempo || 0;
+            });
+          });
+        }
+        
+        // Tempo das atividades salvas
+        const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+        Object.values(dailyActivities.activities).forEach(activities => {
+          if (Array.isArray(activities)) {
+            activities.forEach(activity => {
+              totalTime += activity.tempo || 0;
+            });
           }
         });
+        
+        return totalTime;
+      }
+      
+      toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('open');
       }
       
       showWelcomeMessage() {
@@ -1496,10 +1860,7 @@
       addQuickActions() {
         const quickActionsHTML = `
           <div class="quick-actions">
-            <button class="action-btn primary" onclick="chatBot.showDailySummary()">
-              <i class="fas fa-calendar-day"></i> Resumo do Dia
-            </button>
-            <button class="action-btn secondary" onclick="chatBot.openRegisterModal()">
+            <button class="action-btn primary" onclick="chatBot.openRegisterModal()">
               <i class="fas fa-plus-circle"></i> Registrar Atividade
             </button>
             <button class="action-btn info" onclick="chatBot.openYesterdayModal()">
@@ -1511,23 +1872,8 @@
             <button class="action-btn info" onclick="chatBot.showSimuladosMenu()">
               <i class="fas fa-chart-line"></i> Simulados
             </button>
-            <button class="action-btn info" onclick="chatBot.showSimuladoModal()">
-              <i class="fas fa-calendar-alt"></i> Programar Simulado
-            </button>
-            <button class="action-btn info" onclick="chatBot.showRelatorioModal()">
-              <i class="fas fa-chart-bar"></i> Relatório
-            </button>
-            <button class="action-btn info" onclick="chatBot.trocarBaralhos()">
-              <i class="fas fa-sync-alt"></i> Trocar Baralhos
-            </button>
-            <button class="action-btn info" onclick="chatBot.showConfigModal()">
-              <i class="fas fa-cog"></i> Configurar
-            </button>
             <button class="action-btn info" onclick="chatBot.showHelp()">
               <i class="fas fa-question-circle"></i> Ajuda
-            </button>
-            <button class="action-btn reset" onclick="chatBot.showResetConfirmation()">
-              <i class="fas fa-exclamation-triangle"></i> Reset
             </button>
           </div>
         `;
@@ -1694,7 +2040,7 @@
         if (this.partialRegistration.date === hojeStr && 
             this.partialRegistration.activities && 
             Object.keys(this.partialRegistration.activities).length > 0) {
-          console.log('Registro parcial encontrado para hoje:', this.partialRegistration);
+          this.updateSidebar();
         }
       }
       
@@ -1902,7 +2248,7 @@
         this.closeYesterdayModal();
         
         if (savedCount > 0) {
-          this.showRegistrationSummary(savedCount, totalTime, activities, true);
+          this.showToast('Atividades de ontem registradas!', 'Seu progresso foi salvo com sucesso.');
         }
       }
       
@@ -1934,1208 +2280,6 @@
         }
         
         return tasks;
-      }
-      
-      showDailySummary() {
-        const hoje = this.getDynamicDateObject();
-        const hojeStr = this.getDynamicDateString();
-        
-        this.checkSimuladoDay();
-        
-        this.updateAnkiProgress();
-        
-        if (this.isDayFinished()) {
-          this.showTodaySummary(hojeStr);
-        } else if (this.hasPartialRegistration()) {
-          this.showPartialSummary(hojeStr, true);
-        } else {
-          const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
-          const hasRegistered = dailyActivities.activities && 
-                               (dailyActivities.activities.questoes?.length > 0 ||
-                                dailyActivities.activities.anki?.length > 0 ||
-                                dailyActivities.activities.teoria?.length > 0);
-          
-          if (hasRegistered) {
-            this.showPartialSummary(hojeStr, false);
-          } else {
-            this.showPendingTasks(hojeStr);
-          }
-        }
-        
-        this.addYesterdayButtonIfNeeded();
-      }
-      
-      addYesterdayButtonIfNeeded() {
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        const yesterdayStr = yesterday.toISOString().split('T')[0];
-        
-        const yesterdayActivities = JSON.parse(localStorage.getItem(`dailyActivities_${yesterdayStr}`)) || { activities: {} };
-        
-        if (!yesterdayActivities.activities || Object.keys(yesterdayActivities.activities).length === 0) {
-          if (this.yesterdayMemory.activities && 
-              (this.yesterdayMemory.activities.questoes.length > 0 || 
-               this.yesterdayMemory.activities.anki.length > 0 || 
-               this.yesterdayMemory.activities.teoria.length > 0)) {
-            
-            setTimeout(() => {
-              this.addBotMessage(`
-                <div class="message-alert message-alert-warning">
-                  <i class="fas fa-history"></i>
-                  <div><strong>Você tem atividades não registradas de ontem!</strong></div>
-                </div>
-                <div class="quick-actions">
-                  <button class="action-btn info" onclick="chatBot.openYesterdayModal()">
-                    <i class="fas fa-history"></i> Registrar Atividades de Ontem
-                  </button>
-                </div>
-              `, false);
-            }, 1000);
-          }
-        }
-      }
-      
-      saveQuestoes(assuntoId, feitas, erradas, tempo, specificDate = null) {
-        const corretas = parseInt(feitas) - parseInt(erradas);
-        const dificuldade = 2;
-        
-        const revisaoAtualizada = this.updateReviewModule(assuntoId, feitas, corretas, tempo, dificuldade, specificDate);
-        
-        if (revisaoAtualizada) {
-          let dailyCompletedReviews = this.getModuleData('dailyCompletedReviews') || 0;
-          dailyCompletedReviews += 1;
-          this.setModuleData('dailyCompletedReviews', dailyCompletedReviews);
-          
-          const hoje = specificDate ? new Date(specificDate + 'T00:00:00') : new Date();
-          this.setModuleData('lastReviewDate', hoje.toISOString().split('T')[0]);
-          
-          this.registerHomeSession(`Questões - ${assuntoId}`, parseInt(tempo), specificDate);
-          localStorage.setItem('ultimoEstudo', new Date().toISOString());
-        }
-      }
-      
-      saveTeoria(materiaId, conteudo, pagina, tempo, specificDate = null) {
-        const hojeStr = specificDate || this.getDynamicDateString();
-        
-        const cicloAtualizado = this.updateStudyCycle(materiaId, tempo, specificDate);
-        
-        if (cicloAtualizado) {
-          const teoriaProgress = this.getModuleData('teoriaProgress') || {};
-          
-          teoriaProgress[materiaId] = {
-            conteudo: conteudo || '',
-            pagina: pagina || '',
-            ultimaAtualizacao: new Date().toISOString(),
-            tempoEstudado: parseInt(tempo)
-          };
-          
-          this.setModuleData('teoriaProgress', teoriaProgress);
-          
-          localStorage.setItem('ultimoEstudo', new Date().toISOString());
-        }
-        
-        return cicloAtualizado;
-      }
-      
-      saveAnki(deckId, tempo, cards, specificDate = null) {
-        const ankiData = this.getModuleData('ciclos_focus_v1');
-        const deck = ankiData && ankiData.decks ? ankiData.decks.find(d => d.id === deckId) : null;
-        const deckNome = deck ? deck.name : deckId;
-        
-        this.registerHomeSession(`Anki - ${deckNome}`, parseInt(tempo), specificDate);
-        
-        localStorage.setItem('ultimoEstudo', new Date().toISOString());
-      }
-      
-      registerHomeSession(subject, minutes, specificDate = null) {
-        const date = specificDate ? new Date(specificDate + 'T00:00:00') : new Date();
-        const dateKey = `sessions-${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`;
-        
-        let sessions = this.getModuleData(dateKey) || [];
-        
-        const existingSessionIndex = sessions.findIndex(session => 
-          session.subject === subject && 
-          session.date === `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`
-        );
-        
-        if (existingSessionIndex === -1) {
-          sessions.push({
-            subject: subject,
-            minutes: minutes,
-            date: `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`,
-            timestamp: date.toISOString()
-          });
-        } else {
-          sessions[existingSessionIndex].minutes = minutes;
-          sessions[existingSessionIndex].timestamp = date.toISOString();
-        }
-        
-        this.setModuleData(dateKey, sessions);
-      }
-      
-      updateReviewModule(assuntoId, feitas, corretas, tempo, dificuldade, specificDate = null) {
-        const disciplines = this.getModuleData('disciplines') || [];
-        const reviewDate = specificDate ? new Date(specificDate + 'T00:00:00') : new Date();
-        const reviewTimestamp = reviewDate.getTime();
-        
-        let assuntoEncontrado = null;
-        let disciplinaEncontrada = null;
-        
-        for (const disciplina of disciplines) {
-          if (disciplina.assuntos && Array.isArray(disciplina.assuntos)) {
-            for (const assunto of disciplina.assuntos) {
-              if (assunto.nome === assuntoId) {
-                assuntoEncontrado = assunto;
-                disciplinaEncontrada = disciplina;
-                break;
-              }
-            }
-            if (assuntoEncontrado) break;
-          }
-        }
-        
-        if (assuntoEncontrado) {
-          assuntoEncontrado.questions = (assuntoEncontrado.questions || 0) + parseInt(feitas);
-          assuntoEncontrado.correct = (assuntoEncontrado.correct || 0) + parseInt(corretas);
-          assuntoEncontrado.incorrect = (assuntoEncontrado.incorrect || 0) + (parseInt(feitas) - parseInt(corretas));
-          
-          if (!assuntoEncontrado.difficultyHistory) {
-            assuntoEncontrado.difficultyHistory = [];
-          }
-          assuntoEncontrado.difficultyHistory.push(parseInt(dificuldade));
-          
-          const accuracy = (parseInt(corretas) / parseInt(feitas)) * 100;
-          
-          if (assuntoEncontrado.reviewMethod === 'fixed') {
-            const interval = this.getPerformanceBasedInterval(accuracy);
-            assuntoEncontrado.interval = interval;
-            assuntoEncontrado.repetitions = (assuntoEncontrado.repetitions || 0) + 1;
-          } else {
-            const result = this.calculateNextReviewSM2(
-              parseInt(dificuldade),
-              assuntoEncontrado.easeFactor || 2.5,
-              assuntoEncontrado.interval || 1,
-              assuntoEncontrado.repetitions || 0
-            );
-            assuntoEncontrado.easeFactor = result.newEF;
-            assuntoEncontrado.interval = result.newInterval;
-            assuntoEncontrado.repetitions = result.repetitions;
-          }
-          
-          assuntoEncontrado.lastReviewed = reviewTimestamp;
-          
-          const nextReviewDate = new Date(reviewTimestamp);
-          nextReviewDate.setDate(nextReviewDate.getDate() + assuntoEncontrado.interval);
-          assuntoEncontrado.nextReviewDate = nextReviewDate.getTime();
-          
-          assuntoEncontrado.memoryStrength = this.calculateMemoryStrength(assuntoEncontrado);
-          
-          this.setModuleData('disciplines', disciplines);
-          return true;
-        } else {
-          return false;
-        }
-      }
-      
-      updateStudyCycle(materiaId, tempo, specificDate = null) {
-        const activeCycle = this.getActiveCycle();
-        const studyDate = specificDate || new Date().toISOString().split('T')[0];
-        
-        if (activeCycle && activeCycle.generatedCycle) {
-          const todayIndex = activeCycle.currentDay || 0;
-          const cycleLength = activeCycle.generatedCycle.length;
-          
-          let materiaEncontrada = false;
-          
-          for (let i = 0; i < cycleLength; i++) {
-            let cicloDia = activeCycle.generatedCycle[i];
-            
-            if (Array.isArray(cicloDia)) {
-              if (cicloDia.includes(materiaId)) {
-                materiaEncontrada = true;
-                break;
-              }
-            } else {
-              if (cicloDia === materiaId) {
-                materiaEncontrada = true;
-                break;
-              }
-            }
-          }
-          
-          if (materiaEncontrada) {
-            if (!activeCycle.completedSubjects) {
-              activeCycle.completedSubjects = {};
-            }
-            
-            if (!activeCycle.completedSubjects[studyDate]) {
-              activeCycle.completedSubjects[studyDate] = [];
-            }
-            
-            if (!activeCycle.completedSubjects[studyDate].includes(materiaId)) {
-              activeCycle.completedSubjects[studyDate].push(materiaId);
-            }
-            
-            if (!activeCycle.studyTime) {
-              activeCycle.studyTime = {};
-            }
-            
-            activeCycle.studyTime[studyDate] = (activeCycle.studyTime[studyDate] || 0) + parseInt(tempo);
-            
-            this.registerHomeSession(`Teoria - ${materiaId}`, parseInt(tempo), studyDate);
-            
-            const teoriaProgress = this.getModuleData('teoriaProgress') || {};
-            
-            teoriaProgress[materiaId] = {
-              conteudo: '',
-              pagina: '',
-              ultimaAtualizacao: new Date().toISOString(),
-              tempoEstudado: parseInt(tempo)
-            };
-            
-            this.setModuleData('teoriaProgress', teoriaProgress);
-            
-            this.setModuleData('StudyFlow_activeCycle', activeCycle);
-            
-            this.syncWithPlansModule(activeCycle);
-            
-            return true;
-          }
-        }
-        return false;
-      }
-      
-      syncWithPlansModule(activeCycle) {
-        try {
-          const planosData = JSON.parse(localStorage.getItem('StudyFlow_planos')) || {};
-          
-          if (planosData.ciclos && Array.isArray(planosData.ciclos)) {
-            const cicloPlano = planosData.ciclos.find(c => c.id === activeCycle.id);
-            
-            if (cicloPlano) {
-              if (!cicloPlano.completedSubjects) {
-                cicloPlano.completedSubjects = {};
-              }
-              
-              Object.keys(activeCycle.completedSubjects || {}).forEach(date => {
-                if (!cicloPlano.completedSubjects[date]) {
-                  cicloPlano.completedSubjects[date] = [];
-                }
-                
-                activeCycle.completedSubjects[date].forEach(materia => {
-                  if (!cicloPlano.completedSubjects[date].includes(materia)) {
-                    cicloPlano.completedSubjects[date].push(materia);
-                  }
-                });
-              });
-              
-              if (!cicloPlano.studyTime) {
-                cicloPlano.studyTime = {};
-              }
-              
-              Object.keys(activeCycle.studyTime || {}).forEach(date => {
-                cicloPlano.studyTime[date] = (cicloPlano.studyTime[date] || 0) + activeCycle.studyTime[date];
-              });
-              
-              if (activeCycle.currentDay !== undefined) {
-                cicloPlano.currentDay = activeCycle.currentDay;
-              }
-              
-              localStorage.setItem('StudyFlow_planos', JSON.stringify(planosData));
-            }
-          }
-        } catch (e) {
-          console.error('Erro ao sincronizar com módulo Planos:', e);
-        }
-      }
-      
-      showResetConfirmation() { 
-        const confirmationHTML = ` 
-          <div class="message-card"> 
-            <div class="message-card-header"> 
-              <i class="fas fa-exclamation-triangle" style="color: var(--danger)"></i> 
-              <div class="message-card-title">Reset Temporário</div> 
-            </div> 
-            <div class="message-card-content"> 
-              <div class="message-alert message-alert-danger"> 
-                <i class="fas fa-exclamation-circle"></i> 
-                <div><strong>Atenção!</strong> Esta função executa um reset temporário do módulo do Chatbot, útil para corrigir travamentos ou inconsistências nos dados do dia. Nenhum outro módulo será afetado. Deseja continuar?</div> 
-              </div> 
-              <div class="quick-actions"> 
-                <button class="action-btn reset" onclick="chatBot.resetChatbotData()"> 
-                  <i class="fas fa-sync-alt"></i> Confirmar Reset 
-                </button> 
-                <button class="action-btn info" onclick="chatBot.addBotMessage('Reset cancelado. O sistema permanece inalterado.', false)"> 
-                  <i class="fas fa-times"></i> Cancelar 
-                </button> 
-              </div> 
-            </div> 
-          </div> 
-        `; 
-        this.addBotMessage(confirmationHTML, false); 
-      } 
-      
-      resetChatbotData() { 
-        const hoje = new Date(); 
-        const hojeStr = hoje.toLocaleDateString('pt-BR'); 
-        
-        localStorage.removeItem('lastRegisterDate'); 
-        localStorage.removeItem('dailyActivities'); 
-        
-        this.partialRegistration = {
-          date: null,
-          activities: {},
-          completed: false
-        };
-        localStorage.removeItem('studyFlow_partialRegistration');
-        
-        const successHTML = ` 
-          <div class="message-card"> 
-            <div class="message-card-header"> 
-              <i class="fas fa-check-circle" style="color: var(--success)"></i> 
-              <div class="message-card-title">Reset Concluído</div> 
-            </div> 
-            <div class="message-card-content"> 
-              <div class="message-alert message-alert-success"> 
-                <i class="fas fa-check-circle"></i> 
-                <div><strong>Reset realizado com sucesso!</strong> Dados do módulo Chatbot reiniciados em ${hojeStr}.</div> 
-              </div> 
-              <div class="message-text"> 
-                Agora você pode visualizar e registrar as atividades reais do dia. O sistema voltará a funcionar normalmente a partir de amanhã. 
-              </div> 
-              <div class="quick-actions"> 
-                <button class="action-btn primary" onclick="chatBot.showDailySummary()"> 
-                  <i class="fas fa-calendar-day"></i> Ver Resumo do Dia 
-                </button> 
-                <button class="action-btn secondary" onclick="chatBot.openRegisterModal()"> 
-                  <i class="fas fa-plus-circle"></i> Registrar Atividades 
-                </button> 
-              </div> 
-            </div> 
-          </div> 
-        `; 
-        this.addBotMessage(successHTML, false); 
-      } 
-      
-      getDynamicDateString() { 
-        const hoje = new Date(); 
-        const year = hoje.getFullYear(); 
-        const month = String(hoje.getMonth() + 1).padStart(2, '0'); 
-        const day = String(hoje.getDate()).padStart(2, '0'); 
-        return `${year}-${month}-${day}`; 
-      } 
-      
-      getDynamicDateObject() { 
-        return new Date(); 
-      } 
-      
-      formatDynamicDate(date) { 
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; 
-        return date.toLocaleDateString('pt-BR', options); 
-      } 
-      
-      isToday(dateString) { 
-        const hoje = this.getDynamicDateString(); 
-        return dateString === hoje; 
-      } 
-      
-      hasStudiedToday() { 
-        const hojeStr = this.getDynamicDateString();
-        const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} }; 
-        return dailyActivities.activities && 
-               (dailyActivities.activities.questoes?.length > 0 ||
-                dailyActivities.activities.anki?.length > 0 ||
-                dailyActivities.activities.teoria?.length > 0);
-      } 
-      
-      showDailySummary() { 
-        const hoje = this.getDynamicDateObject();
-        const hojeStr = this.getDynamicDateString();
-        
-        this.checkSimuladoDay();
-        
-        this.updateAnkiProgress(); 
-        
-        if (this.isDayFinished()) {
-          this.showTodaySummary(hojeStr);
-          return;
-        }
-        
-        if (this.hasPartialRegistration()) {
-          this.showPartialSummary(hojeStr, true);
-          return;
-        }
-        
-        if (this.hasStudiedToday()) { 
-          this.showTodaySummary(hojeStr); 
-        } else { 
-          this.showPendingTasks(hojeStr); 
-        } 
-      } 
-      
-      checkSimuladoDay() {
-        const simuladoConfig = JSON.parse(localStorage.getItem('studyFlow_simuladoConfig')) || {};
-        
-        if (simuladoConfig.interval && simuladoConfig.nextSimulado) {
-          const hoje = new Date();
-          const nextSimulado = new Date(simuladoConfig.nextSimulado);
-          
-          if (hoje.toDateString() === nextSimulado.toDateString()) {
-            this.addBotMessage(`
-              <div class="message-alert message-alert-warning">
-                <i class="fas fa-bullhorn"></i>
-                <div><strong>Hoje é dia de simulado!</strong> Faça o simulado como se fosse o dia da prova real.</div>
-              </div>
-            `, false);
-          }
-        }
-      }
-      
-      updateAnkiProgress() { 
-        const ankiData = this.getModuleData('ciclos_focus_v1'); 
-        if (!ankiData) return; 
-        
-        const today = new Date().toDateString(); 
-        if (ankiData.lastUpdated !== today) { 
-          const totalDecks = ankiData.decks.length; 
-          const perDay = ankiData.perDay; 
-          const totalBlocks = Math.ceil(totalDecks / perDay); 
-          
-          const startDate = new Date(ankiData.startDate || new Date()); 
-          const diffTime = new Date() - startDate; 
-          const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); 
-          
-          ankiData.blockIndex = diffDays % totalBlocks; 
-          ankiData.lastUpdated = today; 
-          this.setModuleData('ciclos_focus_v1', ankiData); 
-        } 
-      } 
-      
-      showPendingTasks(hojeStr) { 
-        const hoje = new Date(hojeStr + 'T00:00:00');
-        const dataFormatada = this.formatDynamicDate(hoje);
-        
-        const dailyReviewGoal = this.getModuleData('dailyReviewGoal') || 5; 
-        const dailyCompletedReviews = this.getModuleData('dailyCompletedReviews') || 0; 
-        
-        const revisoesHoje = this.calculateTodayReviews(); 
-        
-        const progressoMeta = Math.min((dailyCompletedReviews / dailyReviewGoal) * 100, 100); 
-        
-        const alertas = this.checkAlerts(); 
-        
-        const materiasCiclo = this.getTodaySubjects(); 
-        
-        const baralhosAnki = this.getTodayDecks(); 
-        
-        const todayTasks = this.getTodayTasks();
-        const totalTasks = this.countPendingTasks(todayTasks, {}, true);
-        
-        let summaryHTML = ` 
-          <div class="message-card"> 
-            <div class="message-card-header"> 
-              <i class="fas fa-calendar-day"></i> 
-              <div class="message-card-title">Resumo do Dia - ${dataFormatada}</div> 
-            </div> 
-            <div class="message-card-content"> 
-              <div class="message-text"> 
-                <strong>Olá! Aqui estão suas tarefas para hoje:</strong> 
-              </div> 
-        `; 
-        
-        if (revisoesHoje.length > 0) { 
-          summaryHTML += ` 
-            <div class="message-section"> 
-              <div class="message-section-title">Revisões Pendentes</div> 
-              <div class="message-list"> 
-          `; 
-          revisoesHoje.forEach(revisao => { 
-            summaryHTML += ` 
-                <div class="message-list-item"> 
-                  <div class="message-list-icon"><i class="fas fa-book"></i></div> 
-                  <div class="message-list-content"> 
-                    <div class="message-list-title">${revisao.nome}</div> 
-                    <div class="message-list-description">${revisao.disciplina}</div> 
-                  </div> 
-                </div> 
-            `; 
-          }); 
-          summaryHTML += ` 
-              </div> 
-            </div> 
-          `; 
-        } else { 
-          const questoesRegistradasHoje = this.getQuestoesRegistradasHoje(hojeStr);
-          if (questoesRegistradasHoje.length > 0) {
-            summaryHTML += ` 
-              <div class="message-alert message-alert-success">
-                <i class="fas fa-check-circle"></i>
-                <div><strong>Carga diária de questões completa!</strong> Você já registrou ${questoesRegistradasHoje.length} bloco(s) de questões hoje.</div>
-              </div>
-            `;
-          } else {
-            summaryHTML += ` 
-              <div class="message-section"> 
-                <div class="message-section-title">Revisões Pendentes</div> 
-                <div class="message-alert message-alert-info"> 
-                  <i class="fas fa-info-circle"></i> 
-                  <div>Nenhuma revisão pendente para hoje</div> 
-                </div> 
-              </div> 
-            `; 
-          }
-        } 
-        
-        summaryHTML += ` 
-          <div class="message-section"> 
-            <div class="message-section-title">Matérias de Hoje</div> 
-        `; 
-        
-        if (materiasCiclo.length > 0) { 
-          summaryHTML += `<div class="message-list">`; 
-          materiasCiclo.forEach(materia => { 
-            const teoriaProgress = this.getModuleData('teoriaProgress'); 
-            const ultimoEstudo = teoriaProgress && teoriaProgress[materia]; 
-            
-            summaryHTML += ` 
-              <div class="message-list-item"> 
-                <div class="message-list-icon"><i class="fas fa-book"></i></div> 
-                <div class="message-list-content"> 
-                  <div class="message-list-title">${materia}</div> 
-                  ${ultimoEstudo ? ` 
-                    <div class="message-list-description"> 
-                      Último estudo: ${ultimoEstudo.conteudo} ${ultimoEstudo.pagina ? `(${ultimoEstudo.pagina})` : ''} 
-                    </div>` : ` 
-                    <div class="message-list-description">Nenhum registro anterior</div>` 
-                  } 
-                </div> 
-              </div> 
-            `; 
-          }); 
-          summaryHTML += `</div>`; 
-        } else { 
-          summaryHTML += ` 
-            <div class="message-alert message-alert-warning"> 
-              <i class="fas fa-exclamation-triangle"></i> 
-              <div>Nenhuma matéria encontrada no ciclo de estudos ativo</div> 
-            </div> 
-          `; 
-        } 
-        
-        summaryHTML += `</div>`; 
-        
-        summaryHTML += ` 
-          <div class="message-section"> 
-            <div class="message-section-title">Baralhos Anki</div> 
-            <div class="message-list"> 
-        `; 
-        
-        if (baralhosAnki.length > 0) { 
-          baralhosAnki.forEach(deck => { 
-            summaryHTML += ` 
-              <div class="message-list-item"> 
-                <div class="message-list-icon"><i class="fas fa-layer-group"></i></div> 
-                <div class="message-list-content"> 
-                  <div class="message-list-title">${deck}</div> 
-                </div> 
-              </div> 
-            `; 
-          }); 
-        } else { 
-          summaryHTML += ` 
-            <div class="message-alert message-alert-info"> 
-              <i class="fas fa-info-circle"></i> 
-              <div>Nenhum baralho programado para hoje</div> 
-            </div> 
-          `; 
-        } 
-        
-        summaryHTML += ` 
-            </div> 
-          </div> 
-        `; 
-        
-        if (alertas.length > 0) { 
-          summaryHTML += ` 
-            <div class="message-section"> 
-              <div class="message-section-title">Alertas</div> 
-          `; 
-          alertas.forEach(alerta => { 
-            const alertClass = `message-alert-${alerta.tipo === 'alert-danger' ? 'danger' : alerta.tipo === 'alert-warning' ? 'warning' : 'info'}`; 
-            summaryHTML += ` 
-              <div class="message-alert ${alertClass}"> 
-                <i class="fas fa-${alerta.icone}"></i> 
-                <div>${alerta.mensagem}</div> 
-              </div> 
-            `; 
-          }); 
-          summaryHTML += `</div>`; 
-        } 
-        
-        summaryHTML += ` 
-            </div> 
-          </div> 
-        `; 
-        
-        this.addBotMessage(summaryHTML, true, 'pending-summary'); 
-        
-        setTimeout(() => { 
-          this.addBotMessage(` 
-            <div class="quick-actions"> 
-              <button class="action-btn primary" onclick="chatBot.openRegisterModal()"> 
-                <i class="fas fa-plus-circle"></i> Registrar Atividades 
-              </button> 
-              <button class="action-btn info" onclick="chatBot.trocarBaralhos()"> 
-                <i class="fas fa-sync-alt"></i> Trocar Baralhos 
-              </button> 
-              <button class="action-btn info" onclick="chatBot.showHelp()"> 
-                <i class="fas fa-question-circle"></i> Preciso de Ajuda 
-              </button> 
-            </div> 
-          `, false); 
-        }, 500); 
-      } 
-      
-      showTodaySummary(hojeStr) { 
-        const hoje = new Date(hojeStr + 'T00:00:00');
-        const dataFormatada = this.formatDynamicDate(hoje);
-        
-        const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
-        const atividades = dailyActivities.activities; 
-        
-        let totalTime = 0; 
-        let totalAnkiDecks = 0; 
-        let totalQuestoes = 0;
-        let totalTeoria = 0;
-        
-        if (atividades.questoes && atividades.questoes.length > 0) { 
-          atividades.questoes.forEach(q => {
-            totalTime += q.tempo;
-            totalQuestoes++;
-          }); 
-        } 
-        
-        if (atividades.anki && atividades.anki.length > 0) { 
-          atividades.anki.forEach(a => { 
-            totalTime += a.tempo; 
-            totalAnkiDecks++; 
-          }); 
-        } 
-        
-        if (atividades.teoria && atividades.teoria.length > 0) { 
-          atividades.teoria.forEach(t => {
-            totalTime += t.tempo;
-            totalTeoria++;
-          }); 
-        } 
-        
-        const hours = Math.floor(totalTime / 60); 
-        const minutes = totalTime % 60; 
-        
-        let summaryHTML = ` 
-          <div class="message-card"> 
-            <div class="message-card-header"> 
-              <i class="fas fa-calendar-day"></i> 
-              <div class="message-card-title">Resumo do Dia - ${dataFormatada}</div> 
-            </div> 
-            <div class="message-card-content"> 
-        `;
-        
-        if (dailyActivities.completed === true || this.isDayFinished()) {
-          summaryHTML += `
-            <div class="day-finished-banner">
-              <i class="fas fa-check-circle"></i>
-              <div><strong>Dia finalizado!</strong> Você não pode mais registrar atividades para hoje.</div>
-            </div>
-          `;
-        } else {
-          summaryHTML += `
-            <div class="message-alert message-alert-success">
-              <i class="fas fa-check-circle"></i>
-              <div><strong>Parabéns! Você já estudou hoje.</strong></div>
-            </div>
-          `;
-        }
-        
-        if (atividades.questoes && atividades.questoes.length > 0) { 
-          summaryHTML += ` 
-            <div class="message-section"> 
-              <div class="message-section-title">Questões Realizadas</div> 
-              <div class="message-list"> 
-          `; 
-          atividades.questoes.forEach(q => { 
-            const acertos = q.feitas - q.erradas; 
-            const taxaAcerto = q.feitas > 0 ? Math.round((acertos / q.feitas) * 100) : 0; 
-            
-            summaryHTML += ` 
-                <div class="message-list-item"> 
-                  <div class="message-list-icon"><i class="fas fa-check"></i></div> 
-                  <div class="message-list-content"> 
-                    <div class="message-list-title">${q.assunto}</div> 
-                    <div class="message-list-description">${q.feitas} questões • ${taxaAcerto}% de acerto • ${q.tempo} min</div> 
-                  </div> 
-                </div> 
-            `; 
-          }); 
-          summaryHTML += ` 
-              </div> 
-            </div> 
-          `; 
-        } 
-        
-        if (atividades.anki && atividades.anki.length > 0) { 
-          summaryHTML += ` 
-            <div class="message-section"> 
-              <div class="message-section-title">Revisões Anki</div> 
-              <div class="message-list"> 
-          `; 
-          atividades.anki.forEach(a => { 
-            summaryHTML += ` 
-                <div class="message-list-item"> 
-                  <div class="message-list-icon"><i class="fas fa-check"></i></div> 
-                  <div class="message-list-content"> 
-                    <div class="message-list-title">${a.deck}</div> 
-                    <div class="message-list-description">${a.cards} cards revisados • ${a.tempo} min</div> 
-                  </div> 
-                </div> 
-            `; 
-          }); 
-          summaryHTML += ` 
-              </div> 
-            </div> 
-          `; 
-        } 
-        
-        if (atividades.teoria && atividades.teoria.length > 0) { 
-          summaryHTML += ` 
-            <div class="message-section"> 
-              <div class="message-section-title">Estudo Teórico</div> 
-              <div class="message-list"> 
-          `; 
-          atividades.teoria.forEach(t => { 
-            summaryHTML += ` 
-                <div class="message-list-item"> 
-                  <div class="message-list-icon"><i class="fas fa-check"></i></div> 
-                  <div class="message-list-content"> 
-                    <div class="message-list-title">${t.materia}</div> 
-                    <div class="message-list-description">${t.conteudo || t.pagina || 'Estudo concluído'} • ${t.tempo} min</div> 
-                  </div> 
-                </div> 
-            `; 
-          }); 
-          summaryHTML += ` 
-              </div> 
-            </div> 
-          `; 
-        } 
-        
-        summaryHTML += ` 
-              <div class="message-divider"></div> 
-              <div class="message-stats"> 
-                <div class="message-stat"> 
-                  <div class="message-stat-value">${hours}h ${minutes}m</div> 
-                  <div class="message-stat-label">Tempo Total</div> 
-                </div> 
-                <div class="message-stat"> 
-                  <div class="message-stat-value">${totalAnkiDecks}</div> 
-                  <div class="message-stat-label">Baralhos Revisados</div> 
-                </div> 
-                <div class="message-stat"> 
-                  <div class="message-stat-value">${totalQuestoes}</div> 
-                  <div class="message-stat-label">Blocos de Questões</div> 
-                </div> 
-                <div class="message-stat"> 
-                  <div class="message-stat-value">${totalTeoria}</div> 
-                  <div class="message-stat-label">Estudos Teóricos</div> 
-                </div> 
-              </div> 
-        `;
-        
-        const comparacaoHTML = this.generateComparacaoComOntem(hojeStr, atividades, totalTime);
-        summaryHTML += comparacaoHTML;
-        
-        summaryHTML += ` 
-              <div class="message-alert message-alert-info"> 
-                <i class="fas fa-info-circle"></i> 
-                <div><strong>Volte amanhã para novas atividades!</strong></div> 
-              </div> 
-        `; 
-        
-        summaryHTML += ` 
-            </div> 
-          </div> 
-        `; 
-        
-        this.addBotMessage(summaryHTML, true, 'today-summary'); 
-        
-        setTimeout(() => { 
-          this.addBotMessage(` 
-            <div class="quick-actions"> 
-              <button class="action-btn info" onclick="chatBot.showHelp()"> 
-                <i class="fas fa-question-circle"></i> Preciso de Ajuda 
-              </button> 
-            </div> 
-          `, false); 
-        }, 500); 
-      } 
-      
-      showPartialSummary(hojeStr, fromPartial = false) {
-        const hoje = new Date(hojeStr + 'T00:00:00');
-        const dataFormatada = this.formatDynamicDate(hoje);
-        
-        let atividades;
-        let isPartial = fromPartial;
-        
-        if (fromPartial) {
-          atividades = this.partialRegistration.activities;
-        } else {
-          const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
-          atividades = dailyActivities.activities;
-          isPartial = false;
-        }
-        
-        let totalTime = 0;
-        let totalActivities = 0;
-        
-        if (atividades.questoes && atividades.questoes.length > 0) {
-          totalActivities += atividades.questoes.length;
-          atividades.questoes.forEach(q => totalTime += q.tempo);
-        }
-        
-        if (atividades.anki && atividades.anki.length > 0) {
-          totalActivities += atividades.anki.length;
-          atividades.anki.forEach(a => totalTime += a.tempo);
-        }
-        
-        if (atividades.teoria && atividades.teoria.length > 0) {
-          totalActivities += atividades.teoria.length;
-          atividades.teoria.forEach(t => totalTime += t.tempo);
-        }
-        
-        const todayTasks = this.getTodayTasks();
-        const pendingCount = this.countPendingTasks(todayTasks, atividades, true);
-        
-        let summaryHTML = `
-          <div class="message-card">
-            <div class="message-card-header">
-              <i class="fas fa-calendar-day"></i>
-              <div class="message-card-title">Resumo do Dia - ${dataFormatada}</div>
-            </div>
-            <div class="message-card-content">
-              <div class="message-alert ${isPartial ? 'message-alert-warning' : 'message-alert-info'}">
-                <i class="fas fa-info-circle"></i>
-                <div><strong>Você já registrou ${totalActivities} atividade(s) hoje${isPartial ? ' (registro parcial)' : ''}</strong></div>
-              </div>
-              
-              <div class="message-stats">
-                <div class="message-stat">
-                  <div class="message-stat-value">${totalTime}m</div>
-                  <div class="message-stat-label">Tempo Total</div>
-                </div>
-                <div class="message-stat">
-                  <div class="message-stat-value">${totalActivities}</div>
-                  <div class="message-stat-label">Atividades</div>
-                </div>
-                <div class="message-stat">
-                  <div class="message-stat-value">${pendingCount}</div>
-                  <div class="message-stat-label">Pendentes</div>
-                </div>
-                <div class="message-stat">
-                  <div class="message-stat-value">${isPartial ? '⏳' : '✅'}</div>
-                  <div class="message-stat-label">${isPartial ? 'Parcial' : 'Salvo'}</div>
-                </div>
-              </div>
-              
-              <div class="progress-visual">
-                <div class="progress-bar-container">
-                  <div class="progress-bar-fill" style="width: ${(totalActivities / (totalActivities + pendingCount)) * 100}%"></div>
-                </div>
-                <span>${totalActivities}/${totalActivities + pendingCount}</span>
-              </div>
-        `;
-        
-        if (atividades.questoes && atividades.questoes.length > 0) {
-          summaryHTML += `
-            <div class="message-section">
-              <div class="message-section-title">Questões Realizadas</div>
-              <div class="message-list">
-          `;
-          atividades.questoes.forEach(q => {
-            const acertos = q.feitas - q.erradas;
-            const taxaAcerto = q.feitas > 0 ? Math.round((acertos / q.feitas) * 100) : 0;
-            summaryHTML += `
-              <div class="message-list-item">
-                <div class="message-list-icon"><i class="fas fa-check"></i></div>
-                <div class="message-list-content">
-                  <div class="message-list-title">${q.assunto}</div>
-                  <div class="message-list-description">${q.feitas} questões • ${taxaAcerto}% acerto • ${q.tempo} min</div>
-                </div>
-              </div>
-            `;
-          });
-          summaryHTML += `</div></div>`;
-        }
-        
-        if (atividades.anki && atividades.anki.length > 0) {
-          summaryHTML += `
-            <div class="message-section">
-              <div class="message-section-title">Revisões Anki</div>
-              <div class="message-list">
-          `;
-          atividades.anki.forEach(a => {
-            summaryHTML += `
-              <div class="message-list-item">
-                <div class="message-list-icon"><i class="fas fa-check"></i></div>
-                <div class="message-list-content">
-                  <div class="message-list-title">${a.deck}</div>
-                  <div class="message-list-description">${a.cards} cards • ${a.tempo} min</div>
-                </div>
-              </div>
-            `;
-          });
-          summaryHTML += `</div></div>`;
-        }
-        
-        if (atividades.teoria && atividades.teoria.length > 0) {
-          summaryHTML += `
-            <div class="message-section">
-              <div class="message-section-title">Estudo Teórico</div>
-              <div class="message-list">
-          `;
-          atividades.teoria.forEach(t => {
-            summaryHTML += `
-              <div class="message-list-item">
-                <div class="message-list-icon"><i class="fas fa-check"></i></div>
-                <div class="message-list-content">
-                  <div class="message-list-title">${t.materia}</div>
-                  <div class="message-list-description">${t.conteudo || t.pagina || 'Estudo'} • ${t.tempo} min</div>
-                </div>
-              </div>
-            `;
-          });
-          summaryHTML += `</div></div>`;
-        }
-        
-        if (pendingCount > 0) {
-          summaryHTML += `
-              <div class="message-alert message-alert-warning">
-                <i class="fas fa-clock"></i>
-                <div><strong>${pendingCount} atividade(s) pendente(s)</strong> - continue registrando ou finalize o dia.</div>
-              </div>
-            </div>
-          </div>
-          `;
-        } else {
-          summaryHTML += `
-              <div class="message-alert message-alert-success">
-                <i class="fas fa-check-circle"></i>
-                <div><strong>Todas as atividades registradas!</strong> O dia será finalizado automaticamente.</div>
-              </div>
-            </div>
-          </div>
-          `;
-          
-          setTimeout(() => {
-            this.finalizeDay();
-          }, 1000);
-        }
-        
-        this.addBotMessage(summaryHTML, true, 'partial-summary');
-        
-        if (pendingCount > 0) {
-          setTimeout(() => {
-            this.addBotMessage(`
-              <div class="quick-actions">
-                <button class="action-btn primary" onclick="chatBot.openRegisterModal()">
-                  <i class="fas fa-plus-circle"></i> Registrar Mais Atividades
-                </button>
-                <button class="action-btn secondary" onclick="chatBot.finalizeDay()">
-                  <i class="fas fa-check"></i> Finalizar Dia
-                </button>
-                <button class="action-btn info" onclick="chatBot.showHelp()">
-                  <i class="fas fa-question-circle"></i> Ajuda
-                </button>
-              </div>
-            `, false);
-          }, 500);
-        }
-      }
-      
-      countPendingTasks(todayTasks, registeredActivities, checkAllSources = false) {
-        let count = 0;
-        
-        todayTasks.questoes.forEach(questao => {
-          if (checkAllSources) {
-            if (!this.isQuestaoRegistered(questao.id)) count++;
-          } else {
-            const registeredQuestoes = registeredActivities.questoes?.map(q => q.assunto) || [];
-            if (!registeredQuestoes.includes(questao.id)) count++;
-          }
-        });
-        
-        todayTasks.anki.forEach(deck => {
-          if (checkAllSources) {
-            if (!this.isAnkiRegistered(deck.id)) count++;
-          } else {
-            const registeredAnki = registeredActivities.anki?.map(a => a.deck) || [];
-            if (!registeredAnki.includes(deck.id)) count++;
-          }
-        });
-        
-        todayTasks.teoria.forEach(materia => {
-          if (checkAllSources) {
-            if (!this.isTeoriaRegistered(materia)) count++;
-          } else {
-            const registeredTeoria = registeredActivities.teoria?.map(t => t.materia) || [];
-            if (!registeredTeoria.includes(materia)) count++;
-          }
-        });
-        
-        return count;
-      }
-      
-      generateComparacaoComOntem(hojeStr, atividades, totalTime) {
-        const ontem = new Date();
-        ontem.setDate(ontem.getDate() - 1);
-        const ontemStr = ontem.toISOString().split('T')[0];
-        const ontemActivities = JSON.parse(localStorage.getItem(`dailyActivities_${ontemStr}`)) || { activities: {} };
-        
-        if (!ontemActivities.activities || Object.keys(ontemActivities.activities).length === 0) {
-          return '';
-        }
-        
-        let ontemTotalTime = 0;
-        let ontemTotalQuestoes = 0;
-        let ontemTotalAcertos = 0;
-        let ontemTotalAnkiDecks = 0;
-        
-        if (ontemActivities.activities.questoes && ontemActivities.activities.questoes.length > 0) {
-          ontemActivities.activities.questoes.forEach(q => {
-            ontemTotalTime += q.tempo;
-            ontemTotalQuestoes += q.feitas;
-            ontemTotalAcertos += (q.feitas - q.erradas);
-          });
-        }
-        
-        if (ontemActivities.activities.anki && ontemActivities.activities.anki.length > 0) {
-          ontemTotalAnkiDecks += ontemActivities.activities.anki.length;
-          ontemActivities.activities.anki.forEach(a => {
-            ontemTotalTime += a.tempo;
-          });
-        }
-        
-        if (ontemActivities.activities.teoria && ontemActivities.activities.teoria.length > 0) {
-          ontemActivities.activities.teoria.forEach(t => {
-            ontemTotalTime += t.tempo;
-          });
-        }
-        
-        let hojeTotalQuestoes = 0;
-        let hojeTotalAcertos = 0;
-        
-        if (atividades.questoes && atividades.questoes.length > 0) {
-          atividades.questoes.forEach(q => {
-            hojeTotalQuestoes += q.feitas;
-            hojeTotalAcertos += (q.feitas - q.erradas);
-          });
-        }
-        
-        const diffTime = totalTime - ontemTotalTime;
-        const diffQuestoes = hojeTotalQuestoes - ontemTotalQuestoes;
-        const diffAnkiDecks = (atividades.anki ? atividades.anki.length : 0) - ontemTotalAnkiDecks;
-        
-        const hojeAcertosPercent = hojeTotalQuestoes > 0 ? (hojeTotalAcertos / hojeTotalQuestoes) * 100 : 0;
-        const ontemAcertosPercent = ontemTotalQuestoes > 0 ? (ontemTotalAcertos / ontemTotalQuestoes) * 100 : 0;
-        const diffAcertosPercent = hojeAcertosPercent - ontemAcertosPercent;
-        
-        let comparacaoHTML = `
-          <div class="message-section">
-            <div class="message-section-title">Comparação com Ontem</div>
-            <div class="message-list">
-        `;
-        
-        let timeIcon = '⏱️';
-        let timeText = '';
-        if (diffTime > 0) {
-          timeText = `<span style="color: var(--success)">+${diffTime} min</span> em relação a ontem`;
-        } else if (diffTime < 0) {
-          timeText = `<span style="color: var(--danger)">${diffTime} min</span> em relação a ontem`;
-        } else {
-          timeText = `Mesmo tempo de estudo que ontem`;
-        }
-        comparacaoHTML += `
-          <div class="message-list-item">
-            <div class="message-list-icon">${timeIcon}</div>
-            <div class="message-list-content">
-              <div class="message-list-title">Horas estudadas</div>
-              <div class="message-list-description">${timeText}</div>
-            </div>
-          </div>
-        `;
-        
-        let questoesIcon = '🧩';
-        let questoesText = '';
-        if (diffQuestoes > 0) {
-          questoesText = `<span style="color: var(--success)">+${diffQuestoes} questões</span> em relação a ontem`;
-        } else if (diffQuestoes < 0) {
-          questoesText = `<span style="color: var(--danger)">${diffQuestoes} questões</span> em relação a ontem`;
-        } else {
-          questoesText = `Mesma quantidade de questões que ontem`;
-        }
-        comparacaoHTML += `
-          <div class="message-list-item">
-            <div class="message-list-icon">${questoesIcon}</div>
-            <div class="message-list-content">
-              <div class="message-list-title">Questões resolvidas</div>
-              <div class="message-list-description">${questoesText}</div>
-            </div>
-          </div>
-        `;
-        
-        let acertosIcon = '📊';
-        let acertosText = '';
-        if (diffAcertosPercent > 0) {
-          acertosText = `<span style="color: var(--success)">+${diffAcertosPercent.toFixed(1)}%</span> em relação a ontem`;
-        } else if (diffAcertosPercent < 0) {
-          acertosText = `<span style="color: var(--danger)">${diffAcertosPercent.toFixed(1)}%</span> em relação a ontem`;
-        } else {
-          acertosText = `Mesma porcentagem de acertos que ontem`;
-        }
-        comparacaoHTML += `
-          <div class="message-list-item">
-            <div class="message-list-icon">${acertosIcon}</div>
-            <div class="message-list-content">
-              <div class="message-list-title">Porcentagem de acertos</div>
-              <div class="message-list-description">${acertosText}</div>
-            </div>
-          </div>
-        `;
-        
-        let flashcardsIcon = '🔁';
-        let flashcardsText = '';
-        if (diffAnkiDecks > 0) {
-          flashcardsText = `<span style="color: var(--success)">+${diffAnkiDecks} baralhos</span> em relação a ontem`;
-        } else if (diffAnkiDecks < 0) {
-          flashcardsText = `<span style="color: var(--danger)">${diffAnkiDecks} baralhos</span> em relação a ontem`;
-        } else {
-          flashcardsText = `Mesma quantidade de baralhos que ontem`;
-        }
-        comparacaoHTML += `
-          <div class="message-list-item">
-            <div class="message-list-icon">${flashcardsIcon}</div>
-            <div class="message-list-content">
-              <div class="message-list-title">Flashcards revisados</div>
-              <div class="message-list-description">${flashcardsText}</div>
-            </div>
-          </div>
-        `;
-        
-        comparacaoHTML += `
-            </div>
-          </div>
-        `;
-        
-        return comparacaoHTML;
       }
       
       openRegisterModal() {
@@ -3553,13 +2697,44 @@
           if (pendingCount === 0) {
             this.finalizeDay();
           } else {
-            this.showRegistrationSummary(savedCount, totalTime, activities, false);
+            // Mostrar toast de confirmação simplificado
+            this.showToast('Atividade registrada!', 'Seu progresso foi salvo e suas revisões foram atualizadas.');
             
-            setTimeout(() => {
-              this.showPostSaveModal();
-            }, 500);
+            // Atualizar sidebar imediatamente
+            this.updateSidebar();
           }
         }
+      }
+      
+      showToast(title, message) {
+        // Remover toast existente
+        const existingToast = document.querySelector('.toast');
+        if (existingToast) {
+          existingToast.remove();
+        }
+        
+        // Criar novo toast
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerHTML = `
+          <i class="fas fa-check-circle"></i>
+          <div class="toast-content">
+            <div class="toast-title">${title}</div>
+            <div class="toast-message">${message}</div>
+          </div>
+        `;
+        
+        document.body.appendChild(toast);
+        
+        // Remover toast após 3 segundos
+        setTimeout(() => {
+          toast.classList.add('hide');
+          setTimeout(() => {
+            if (toast.parentNode) {
+              toast.parentNode.removeChild(toast);
+            }
+          }, 300);
+        }, 3000);
       }
       
       saveToPartialRegistration(activity) {
@@ -3609,17 +2784,6 @@
         }
       }
       
-      showPostSaveModal() {
-        const modal = document.getElementById('postSaveModal');
-        modal.style.display = 'flex';
-        
-        modal.onclick = (e) => {
-          if (e.target === modal) {
-            modal.style.display = 'none';
-          }
-        };
-      }
-      
       finalizeDay() {
         const hojeStr = this.getDynamicDateString();
         
@@ -3650,175 +2814,325 @@
         
         localStorage.setItem('lastRegisterDate', hojeStr);
         
-        this.typeMessage(`Dia ${hojeStr} finalizado com sucesso!`);
+        // Atualizar sidebar para mostrar dia completo
+        this.updateSidebar();
         
-        setTimeout(() => {
-          this.showDailySummary();
-        }, 1000);
+        // Mostrar mensagem curta no chat
+        this.typeMessage(`Dia finalizado com sucesso! Você completou todas as atividades de hoje.`);
       }
       
       closeRegisterModal() {
         document.getElementById('registerModal').style.display = 'none';
       }
       
-      showRegistrationSummary(savedCount, totalTime, activities, isYesterday = false) {
-        const successMessage = `
-          <div class="message-bubble bot-bubble message-alert-success">
-            <div class="message-content">
-              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
-                <i class="fas fa-check-circle" style="color: var(--success)"></i>
-                <strong>${savedCount} atividade(s) registrada(s) com sucesso${isYesterday ? ' para ontem' : ''}!</strong>
-              </div>
-              <div class="message-text">
-                Seu progresso foi salvo e suas próximas revisões foram atualizadas.
-              </div>
-            </div>
-            <div class="bubble-time">${this.formatTime(new Date())}</div>
-          </div>
-        `;
+      countPendingTasks(todayTasks, registeredActivities, checkAllSources = false) {
+        let count = 0;
         
-        const chatMessages = document.getElementById('chatMessages');
-        const messageContainer = document.createElement('div');
-        messageContainer.className = 'message-container bot-container';
-        const avatar = document.createElement('div');
-        avatar.className = 'avatar bot-avatar-small';
-        avatar.innerHTML = '<i class="fas fa-robot"></i>';
-        messageContainer.appendChild(avatar);
-        messageContainer.innerHTML = successMessage;
-        chatMessages.appendChild(messageContainer);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        todayTasks.questoes.forEach(questao => {
+          if (checkAllSources) {
+            if (!this.isQuestaoRegistered(questao.id)) count++;
+          } else {
+            const registeredQuestoes = registeredActivities.questoes?.map(q => q.assunto) || [];
+            if (!registeredQuestoes.includes(questao.id)) count++;
+          }
+        });
         
-        setTimeout(() => {
-          let summaryHTML = `
-            <div class="message-card">
-              <div class="message-card-header">
-                <i class="fas fa-chart-bar"></i>
-                <div class="message-card-title">Resumo das Atividades${isYesterday ? ' de Ontem' : ' de Hoje'}</div>
-              </div>
-              <div class="message-card-content">
-          `;
-          
-          if (activities.questoes.length > 0) {
-            summaryHTML += `<div class="message-section-title">🧩 Questões</div>`;
-            activities.questoes.forEach(q => {
-              const acertos = q.feitas - q.erradas;
-              const taxaAcerto = q.feitas > 0 ? Math.round((acertos / q.feitas) * 100) : 0;
-              
-              summaryHTML += `
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-check"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">${q.assunto}</div>
-                    <div class="message-list-description">${q.feitas} questões (${taxaAcerto}% acerto)</div>
-                  </div>
-                </div>
-              `;
-            });
+        todayTasks.anki.forEach(deck => {
+          if (checkAllSources) {
+            if (!this.isAnkiRegistered(deck.id)) count++;
+          } else {
+            const registeredAnki = registeredActivities.anki?.map(a => a.deck) || [];
+            if (!registeredAnki.includes(deck.id)) count++;
           }
-          
-          if (activities.anki.length > 0) {
-            summaryHTML += `<div class="message-section-title">🔁 Anki</div>`;
-            activities.anki.forEach(a => {
-              summaryHTML += `
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-check"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">${a.deck}</div>
-                    <div class="message-list-description">${a.cards} cards revisados</div>
-                  </div>
-                </div>
-              `;
-            });
+        });
+        
+        todayTasks.teoria.forEach(materia => {
+          if (checkAllSources) {
+            if (!this.isTeoriaRegistered(materia)) count++;
+          } else {
+            const registeredTeoria = registeredActivities.teoria?.map(t => t.materia) || [];
+            if (!registeredTeoria.includes(materia)) count++;
           }
-          
-          if (activities.teoria.length > 0) {
-            summaryHTML += `<div class="message-section-title">📚 Teoria</div>`;
-            activities.teoria.forEach(t => {
-              summaryHTML += `
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-check"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">${t.materia}</div>
-                    <div class="message-list-description">${t.conteudo || t.pagina || 'Estudo'}</div>
-                  </div>
-                </div>
-              `;
-            });
-          }
-          
-          summaryHTML += `
-                <div class="message-divider"></div>
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-clock"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Tempo Total</div>
-                    <div class="message-list-description">${totalTime} minutos</div>
-                  </div>
-                </div>
-          `;
-          
-          summaryHTML += `</div></div>`;
-          this.addBotMessage(summaryHTML, false);
-          
-          setTimeout(() => {
-            const nextReviews = this.getNextReviewDates();
-            if (nextReviews.length > 0) {
-              let nextReviewsHTML = `
-                <div class="message-card">
-                  <div class="message-card-header">
-                    <i class="fas fa-calendar-alt"></i>
-                    <div class="message-card-title">Próximas Revisões</div>
-                  </div>
-                  <div class="message-card-content">
-              `;
-              
-              nextReviews.forEach(review => {
-                nextReviewsHTML += `
-                  <div class="message-list-item">
-                    <div class="message-list-icon"><i class="fas fa-calendar-day"></i></div>
-                    <div class="message-list-content">
-                      <div class="message-list-title">${review.assunto}</div>
-                      <div class="message-list-description">${review.data}</div>
-                    </div>
-                  </div>
-                `;
-              });
-              
-              nextReviewsHTML += `</div></div>`;
-              this.addBotMessage(nextReviewsHTML, false);
-            }
-          }, 500);
-        }, 500);
+        });
+        
+        return count;
       }
       
-      getNextReviewDates() {
-        const disciplines = this.getModuleData('disciplines');
-        const nextReviews = [];
-        const hoje = new Date();
+      saveQuestoes(assuntoId, feitas, erradas, tempo, specificDate = null) {
+        const corretas = parseInt(feitas) - parseInt(erradas);
+        const dificuldade = 2;
         
-        if (disciplines && Array.isArray(disciplines)) {
-          disciplines.forEach(disciplina => {
-            if (disciplina.assuntos && Array.isArray(disciplina.assuntos)) {
-              disciplina.assuntos.forEach(assunto => {
-                if (assunto.nextReviewDate) {
-                  const nextDate = new Date(assunto.nextReviewDate);
-                  if (nextDate > hoje) {
-                    nextReviews.push({
-                      assunto: assunto.nome,
-                      disciplina: disciplina.name,
-                      data: nextDate.toLocaleDateString('pt-BR')
-                    });
-                  }
-                }
-              });
-            }
-          });
+        const revisaoAtualizada = this.updateReviewModule(assuntoId, feitas, corretas, tempo, dificuldade, specificDate);
+        
+        if (revisaoAtualizada) {
+          let dailyCompletedReviews = this.getModuleData('dailyCompletedReviews') || 0;
+          dailyCompletedReviews += 1;
+          this.setModuleData('dailyCompletedReviews', dailyCompletedReviews);
+          
+          const hoje = specificDate ? new Date(specificDate + 'T00:00:00') : new Date();
+          this.setModuleData('lastReviewDate', hoje.toISOString().split('T')[0]);
+          
+          this.registerHomeSession(`Questões - ${assuntoId}`, parseInt(tempo), specificDate);
+          localStorage.setItem('ultimoEstudo', new Date().toISOString());
+        }
+      }
+      
+      saveTeoria(materiaId, conteudo, pagina, tempo, specificDate = null) {
+        const hojeStr = specificDate || this.getDynamicDateString();
+        
+        const cicloAtualizado = this.updateStudyCycle(materiaId, tempo, specificDate);
+        
+        if (cicloAtualizado) {
+          const teoriaProgress = this.getModuleData('teoriaProgress') || {};
+          
+          teoriaProgress[materiaId] = {
+            conteudo: conteudo || '',
+            pagina: pagina || '',
+            ultimaAtualizacao: new Date().toISOString(),
+            tempoEstudado: parseInt(tempo)
+          };
+          
+          this.setModuleData('teoriaProgress', teoriaProgress);
+          
+          localStorage.setItem('ultimoEstudo', new Date().toISOString());
         }
         
-        return nextReviews
-          .sort((a, b) => new Date(a.data) - new Date(b.data))
-          .slice(0, 3);
+        return cicloAtualizado;
       }
+      
+      saveAnki(deckId, tempo, cards, specificDate = null) {
+        const ankiData = this.getModuleData('ciclos_focus_v1');
+        const deck = ankiData && ankiData.decks ? ankiData.decks.find(d => d.id === deckId) : null;
+        const deckNome = deck ? deck.name : deckId;
+        
+        this.registerHomeSession(`Anki - ${deckNome}`, parseInt(tempo), specificDate);
+        
+        localStorage.setItem('ultimoEstudo', new Date().toISOString());
+      }
+      
+      registerHomeSession(subject, minutes, specificDate = null) {
+        const date = specificDate ? new Date(specificDate + 'T00:00:00') : new Date();
+        const dateKey = `sessions-${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`;
+        
+        let sessions = this.getModuleData(dateKey) || [];
+        
+        const existingSessionIndex = sessions.findIndex(session => 
+          session.subject === subject && 
+          session.date === `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`
+        );
+        
+        if (existingSessionIndex === -1) {
+          sessions.push({
+            subject: subject,
+            minutes: minutes,
+            date: `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`,
+            timestamp: date.toISOString()
+          });
+        } else {
+          sessions[existingSessionIndex].minutes = minutes;
+          sessions[existingSessionIndex].timestamp = date.toISOString();
+        }
+        
+        this.setModuleData(dateKey, sessions);
+      }
+      
+      updateReviewModule(assuntoId, feitas, corretas, tempo, dificuldade, specificDate = null) {
+        const disciplines = this.getModuleData('disciplines') || [];
+        const reviewDate = specificDate ? new Date(specificDate + 'T00:00:00') : new Date();
+        const reviewTimestamp = reviewDate.getTime();
+        
+        let assuntoEncontrado = null;
+        let disciplinaEncontrada = null;
+        
+        for (const disciplina of disciplines) {
+          if (disciplina.assuntos && Array.isArray(disciplina.assuntos)) {
+            for (const assunto of disciplina.assuntos) {
+              if (assunto.nome === assuntoId) {
+                assuntoEncontrado = assunto;
+                disciplinaEncontrada = disciplina;
+                break;
+              }
+            }
+            if (assuntoEncontrado) break;
+          }
+        }
+        
+        if (assuntoEncontrado) {
+          assuntoEncontrado.questions = (assuntoEncontrado.questions || 0) + parseInt(feitas);
+          assuntoEncontrado.correct = (assuntoEncontrado.correct || 0) + parseInt(corretas);
+          assuntoEncontrado.incorrect = (assuntoEncontrado.incorrect || 0) + (parseInt(feitas) - parseInt(corretas));
+          
+          if (!assuntoEncontrado.difficultyHistory) {
+            assuntoEncontrado.difficultyHistory = [];
+          }
+          assuntoEncontrado.difficultyHistory.push(parseInt(dificuldade));
+          
+          const accuracy = (parseInt(corretas) / parseInt(feitas)) * 100;
+          
+          if (assuntoEncontrado.reviewMethod === 'fixed') {
+            const interval = this.getPerformanceBasedInterval(accuracy);
+            assuntoEncontrado.interval = interval;
+            assuntoEncontrado.repetitions = (assuntoEncontrado.repetitions || 0) + 1;
+          } else {
+            const result = this.calculateNextReviewSM2(
+              parseInt(dificuldade),
+              assuntoEncontrado.easeFactor || 2.5,
+              assuntoEncontrado.interval || 1,
+              assuntoEncontrado.repetitions || 0
+            );
+            assuntoEncontrado.easeFactor = result.newEF;
+            assuntoEncontrado.interval = result.newInterval;
+            assuntoEncontrado.repetitions = result.repetitions;
+          }
+          
+          assuntoEncontrado.lastReviewed = reviewTimestamp;
+          
+          const nextReviewDate = new Date(reviewTimestamp);
+          nextReviewDate.setDate(nextReviewDate.getDate() + assuntoEncontrado.interval);
+          assuntoEncontrado.nextReviewDate = nextReviewDate.getTime();
+          
+          assuntoEncontrado.memoryStrength = this.calculateMemoryStrength(assuntoEncontrado);
+          
+          this.setModuleData('disciplines', disciplines);
+          return true;
+        } else {
+          return false;
+        }
+      }
+      
+      updateStudyCycle(materiaId, tempo, specificDate = null) {
+        const activeCycle = this.getActiveCycle();
+        const studyDate = specificDate || new Date().toISOString().split('T')[0];
+        
+        if (activeCycle && activeCycle.generatedCycle) {
+          const todayIndex = activeCycle.currentDay || 0;
+          const cycleLength = activeCycle.generatedCycle.length;
+          
+          let materiaEncontrada = false;
+          
+          for (let i = 0; i < cycleLength; i++) {
+            let cicloDia = activeCycle.generatedCycle[i];
+            
+            if (Array.isArray(cicloDia)) {
+              if (cicloDia.includes(materiaId)) {
+                materiaEncontrada = true;
+                break;
+              }
+            } else {
+              if (cicloDia === materiaId) {
+                materiaEncontrada = true;
+                break;
+              }
+            }
+          }
+          
+          if (materiaEncontrada) {
+            if (!activeCycle.completedSubjects) {
+              activeCycle.completedSubjects = {};
+            }
+            
+            if (!activeCycle.completedSubjects[studyDate]) {
+              activeCycle.completedSubjects[studyDate] = [];
+            }
+            
+            if (!activeCycle.completedSubjects[studyDate].includes(materiaId)) {
+              activeCycle.completedSubjects[studyDate].push(materiaId);
+            }
+            
+            if (!activeCycle.studyTime) {
+              activeCycle.studyTime = {};
+            }
+            
+            activeCycle.studyTime[studyDate] = (activeCycle.studyTime[studyDate] || 0) + parseInt(tempo);
+            
+            this.registerHomeSession(`Teoria - ${materiaId}`, parseInt(tempo), studyDate);
+            
+            const teoriaProgress = this.getModuleData('teoriaProgress') || {};
+            
+            teoriaProgress[materiaId] = {
+              conteudo: '',
+              pagina: '',
+              ultimaAtualizacao: new Date().toISOString(),
+              tempoEstudado: parseInt(tempo)
+            };
+            
+            this.setModuleData('teoriaProgress', teoriaProgress);
+            
+            this.setModuleData('StudyFlow_activeCycle', activeCycle);
+            
+            this.syncWithPlansModule(activeCycle);
+            
+            return true;
+          }
+        }
+        return false;
+      }
+      
+      syncWithPlansModule(activeCycle) {
+        try {
+          const planosData = JSON.parse(localStorage.getItem('StudyFlow_planos')) || {};
+          
+          if (planosData.ciclos && Array.isArray(planosData.ciclos)) {
+            const cicloPlano = planosData.ciclos.find(c => c.id === activeCycle.id);
+            
+            if (cicloPlano) {
+              if (!cicloPlano.completedSubjects) {
+                cicloPlano.completedSubjects = {};
+              }
+              
+              Object.keys(activeCycle.completedSubjects || {}).forEach(date => {
+                if (!cicloPlano.completedSubjects[date]) {
+                  cicloPlano.completedSubjects[date] = [];
+                }
+                
+                activeCycle.completedSubjects[date].forEach(materia => {
+                  if (!cicloPlano.completedSubjects[date].includes(materia)) {
+                    cicloPlano.completedSubjects[date].push(materia);
+                  }
+                });
+              });
+              
+              if (!cicloPlano.studyTime) {
+                cicloPlano.studyTime = {};
+              }
+              
+              Object.keys(activeCycle.studyTime || {}).forEach(date => {
+                cicloPlano.studyTime[date] = (cicloPlano.studyTime[date] || 0) + activeCycle.studyTime[date];
+              });
+              
+              if (activeCycle.currentDay !== undefined) {
+                cicloPlano.currentDay = activeCycle.currentDay;
+              }
+              
+              localStorage.setItem('StudyFlow_planos', JSON.stringify(planosData));
+            }
+          }
+        } catch (e) {
+          console.error('Erro ao sincronizar com módulo Planos:', e);
+        }
+      }
+      
+      getDynamicDateString() { 
+        const hoje = new Date(); 
+        const year = hoje.getFullYear(); 
+        const month = String(hoje.getMonth() + 1).padStart(2, '0'); 
+        const day = String(hoje.getDate()).padStart(2, '0'); 
+        return `${year}-${month}-${day}`; 
+      } 
+      
+      getDynamicDateObject() { 
+        return new Date(); 
+      } 
+      
+      formatDynamicDate(date) { 
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; 
+        return date.toLocaleDateString('pt-BR', options); 
+      } 
+      
+      isToday(dateString) { 
+        const hoje = this.getDynamicDateString(); 
+        return dateString === hoje; 
+      } 
       
       toggleTheme() {
         if (this.currentTheme === 'light') {
@@ -3973,36 +3287,6 @@
         return pendingTopics.slice(0, dailyReviewGoal);
       }
       
-      countQuestoesPendentesHoje(dateStr = null) {
-        const hojeStr = dateStr || this.getDynamicDateString();
-        const dailyReviewGoal = this.getModuleData('dailyReviewGoal') || 5;
-        const questoesRegistradasHoje = this.getQuestoesRegistradasHoje(hojeStr);
-        
-        return Math.max(0, dailyReviewGoal - questoesRegistradasHoje.length);
-      }
-      
-      calculateOverdueReviews() {
-        const disciplines = this.getModuleData('disciplines');
-        if (!disciplines || !Array.isArray(disciplines)) return 0;
-        
-        const hoje = new Date();
-        const todayTimestamp = hoje.getTime();
-        
-        let atrasadas = 0;
-        
-        disciplines.forEach(disciplina => {
-          if (disciplina.assuntos && Array.isArray(disciplina.assuntos)) {
-            disciplina.assuntos.forEach(assunto => {
-              if (assunto.nextReviewDate && assunto.nextReviewDate < todayTimestamp && !assunto.suspended) {
-                atrasadas++;
-              }
-            });
-          }
-        });
-        
-        return atrasadas;
-      }
-      
       getTodaySubjects(date = null) {
         const activeCycle = this.getActiveCycle();
         if (!activeCycle || !activeCycle.generatedCycle) {
@@ -4098,23 +3382,17 @@
         return today.getTime();
       }
       
-      trocarBaralhos() {
+      getTodayDecks() {
         const ankiData = this.getModuleData('ciclos_focus_v1');
-        if (!ankiData) {
-          this.typeMessage("Não foi possível encontrar os dados dos baralhos Anki.");
-          return;
-        }
-
-        const totalDecks = ankiData.decks.length;
+        if (!ankiData || !ankiData.decks || !ankiData.perDay) return [];
+        
         const perDay = ankiData.perDay;
-        const totalBlocks = Math.ceil(totalDecks / perDay);
-
-        ankiData.blockIndex = (ankiData.blockIndex + 1) % totalBlocks;
-        ankiData.lastUpdated = new Date().toDateString();
-
-        this.setModuleData('ciclos_focus_v1', ankiData);
-
-        this.typeMessage(`Baralhos trocados! Agora são os baralhos do bloco ${ankiData.blockIndex + 1} de ${totalBlocks}.`);
+        const blockIndex = ankiData.blockIndex || 0;
+        
+        const startIndex = blockIndex * perDay;
+        const todayDecks = ankiData.decks.slice(startIndex, startIndex + perDay);
+        
+        return todayDecks.map(deck => deck.name);
       }
       
       addMessageToChat(content, isUser = false, timestamp = null, messageId = null) {
@@ -4326,11 +3604,9 @@
         const lowerMessage = message.toLowerCase();
         
         if (lowerMessage.includes('resumo') || lowerMessage.includes('como estou') || lowerMessage.includes('tarefas')) {
-          this.showDailySummary();
+          this.typeMessage("Seu progresso está visível no painel lateral à direita. Lá você pode ver todas as atividades do dia, seu progresso e tempo estudado.");
         } else if (lowerMessage.includes('registrar') || lowerMessage.includes('adicionar')) {
           this.openRegisterModal();
-        } else if (lowerMessage.includes('configurar') || lowerMessage.includes('config')) {
-          this.showConfigModal();
         } else if (lowerMessage.includes('ajuda') || lowerMessage.includes('comandos')) {
           this.showHelp();
         } else if (lowerMessage.includes('info') || lowerMessage.includes('sobre')) {
@@ -4339,10 +3615,8 @@
           this.showEditalMenu();
         } else if (lowerMessage.includes('simulado')) {
           this.showSimuladosMenu();
-        } else if (lowerMessage.includes('reset')) {
-          this.showResetConfirmation();
         } else {
-          this.typeMessage("Entendi sua mensagem! Posso te ajudar com:\n\n• <strong>Resumo do dia</strong>\n• <strong>Registrar atividades</strong>\n• <strong>Edital</strong>\n• <strong>Simulados</strong>\n• <strong>Configurações</strong>\n• <strong>Ajuda e informações</strong>\n\nO que você gostaria de fazer?");
+          this.typeMessage("Posso te ajudar com:\n\n• <strong>Registrar atividades</strong>\n• <strong>Visualizar edital</strong>\n• <strong>Ver simulados</strong>\n• <strong>Outras dúvidas</strong>\n\nSeu progresso diário está sempre visível no painel lateral!");
         }
       }
       
@@ -4354,91 +3628,51 @@
               <div class="message-card-title">Como posso ajudá-lo?</div>
             </div>
             <div class="message-card-content">
+              <div class="message-text">
+                <strong>Seu progresso está sempre visível no painel lateral à direita!</strong>
+                <br><br>
+                Lá você encontra:
+              </div>
               <div class="message-list">
                 <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-calendar-day"></i></div>
+                  <div class="message-list-icon"><i class="fas fa-tasks"></i></div>
                   <div class="message-list-content">
-                    <div class="message-list-title">Resumo do dia</div>
-                    <div class="message-list-description">Mostrar tarefas e progresso atual</div>
-                  </div>
-                </div>
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-plus-circle"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Registrar atividades</div>
-                    <div class="message-list-description">Questões, Anki ou teoria</div>
-                  </div>
-                </div>
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-history"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Registrar atividades de ontem</div>
-                    <div class="message-list-description">Para quando esqueceu de registrar no dia anterior</div>
-                  </div>
-                </div>
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-file-alt"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Edital</div>
-                    <div class="message-list-description">Ver progresso no edital completo ou por matéria</div>
+                    <div class="message-list-title">Atividades do dia</div>
+                    <div class="message-list-description">Status atual de cada tarefa</div>
                   </div>
                 </div>
                 <div class="message-list-item">
                   <div class="message-list-icon"><i class="fas fa-chart-line"></i></div>
                   <div class="message-list-content">
-                    <div class="message-list-title">Simulados</div>
-                    <div class="message-list-description">Ver notas e relatórios de simulados</div>
+                    <div class="message-list-title">Progresso diário</div>
+                    <div class="message-list-description">Barra visual de conclusão</div>
                   </div>
                 </div>
                 <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-calendar-alt"></i></div>
+                  <div class="message-list-icon"><i class="fas fa-clock"></i></div>
                   <div class="message-list-content">
-                    <div class="message-list-title">Programar Simulado</div>
-                    <div class="message-list-description">Definir intervalos para simulados</div>
+                    <div class="message-list-title">Tempo estudado</div>
+                    <div class="message-list-description">Total de minutos hoje</div>
                   </div>
                 </div>
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-chart-bar"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Relatório Periódico</div>
-                    <div class="message-list-description">Gerar relatórios de desempenho</div>
-                  </div>
-                </div>
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-sync-alt"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Trocar Baralhos</div>
-                    <div class="message-list-description">Corrigir manualmente a ordem dos baralhos do dia</div>
-                  </div>
-                </div>
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-cog"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Configurar</div>
-                    <div class="message-list-description">Ajustar quantidade de matérias por dia</div>
-                  </div>
-                </div>
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-question-circle"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Ajuda</div>
-                    <div class="message-list-description">Mostrar esta mensagem de ajuda</div>
-                  </div>
-                </div>
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-info"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Informações</div>
-                    <div class="message-list-description">Sobre o StudyFlow</div>
-                  </div>
-                </div>
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-exclamation-triangle"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Reset</div>
-                    <div class="message-list-description">Função temporária para corrigir travamentos</div>
-                  </div>
-                </div>
+              </div>
+              <div class="message-divider"></div>
+              <div class="message-text">
+                <strong>Comandos disponíveis:</strong>
+              </div>
+              <div class="quick-actions">
+                <button class="action-btn primary" onclick="chatBot.openRegisterModal()">
+                  <i class="fas fa-plus-circle"></i> Registrar Atividade
+                </button>
+                <button class="action-btn info" onclick="chatBot.openYesterdayModal()">
+                  <i class="fas fa-history"></i> Registrar Atividades de Ontem
+                </button>
+                <button class="action-btn info" onclick="chatBot.showEditalMenu()">
+                  <i class="fas fa-file-alt"></i> Edital
+                </button>
+                <button class="action-btn info" onclick="chatBot.showSimuladosMenu()">
+                  <i class="fas fa-chart-line"></i> Simulados
+                </button>
               </div>
             </div>
           </div>
@@ -4458,61 +3692,32 @@
                 O StudyFlow é seu assistente pessoal de estudos, integrando todas as suas ferramentas de aprendizado em um só lugar.
               </div>
               <div class="message-muted" style="margin-top: 10px">
-                Comigo você pode:
+                <strong>Novo: Painel de Progresso</strong><br>
+                Agora seu progresso está sempre visível no painel lateral, sem precisar perguntar ao chat!
               </div>
               <div class="message-list" style="margin-top: 8px">
                 <div class="message-list-item">
                   <div class="message-list-icon"><i class="fas fa-check"></i></div>
                   <div class="message-list-content">
-                    <div class="message-list-title">Gerenciar seu ciclo de estudos</div>
+                    <div class="message-list-title">Progresso visual contínuo</div>
                   </div>
                 </div>
                 <div class="message-list-item">
                   <div class="message-list-icon"><i class="fas fa-check"></i></div>
                   <div class="message-list-content">
-                    <div class="message-list-title">Registrar questões e revisões</div>
+                    <div class="message-list-title">Registro silencioso de atividades</div>
                   </div>
                 </div>
                 <div class="message-list-item">
                   <div class="message-list-icon"><i class="fas fa-check"></i></div>
                   <div class="message-list-content">
-                    <div class="message-list-title">Acompanhar seu progresso no edital</div>
+                    <div class="message-list-title">Chat limpo e focado em conversas</div>
                   </div>
                 </div>
                 <div class="message-list-item">
                   <div class="message-list-icon"><i class="fas fa-check"></i></div>
                   <div class="message-list-content">
-                    <div class="message-list-title">Analisar desempenho em simulados</div>
-                  </div>
-                </div>
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-check"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Receber alertas e lembretes</div>
-                  </div>
-                </div>
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-check"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Programar simulados</div>
-                  </div>
-                </div>
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-check"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Gerar relatórios periódicos</div>
-                  </div>
-                </div>
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-check"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Corrigir manualmente a ordem dos baralhos</div>
-                  </div>
-                </div>
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-check"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Registrar atividades do dia anterior</div>
+                    <div class="message-list-title">Feedback visual instantâneo</div>
                   </div>
                 </div>
               </div>
@@ -4525,11 +3730,8 @@
       showQuickActions() {
         this.addBotMessage(`
           <div class="quick-actions">
-            <button class="action-btn primary" onclick="chatBot.showDailySummary()">
-              <i class="fas fa-calendar-day"></i> Resumo do Dia
-            </button>
-            <button class="action-btn secondary" onclick="chatBot.openRegisterModal()">
-              <i class="fas fa-plus-circle"></i> Registrar
+            <button class="action-btn primary" onclick="chatBot.openRegisterModal()">
+              <i class="fas fa-plus-circle"></i> Registrar Atividade
             </button>
             <button class="action-btn info" onclick="chatBot.openYesterdayModal()">
               <i class="fas fa-history"></i> Registrar Atividades de Ontem
@@ -4540,26 +3742,8 @@
             <button class="action-btn info" onclick="chatBot.showSimuladosMenu()">
               <i class="fas fa-chart-line"></i> Simulados
             </button>
-            <button class="action-btn info" onclick="chatBot.showSimuladoModal()">
-              <i class="fas fa-calendar-alt"></i> Programar Simulado
-            </button>
-            <button class="action-btn info" onclick="chatBot.showRelatorioModal()">
-              <i class="fas fa-chart-bar"></i> Relatório
-            </button>
-            <button class="action-btn info" onclick="chatBot.trocarBaralhos()">
-              <i class="fas fa-sync-alt"></i> Trocar Baralhos
-            </button>
-            <button class="action-btn info" onclick="chatBot.showConfigModal()">
-              <i class="fas fa-cog"></i> Configurar
-            </button>
             <button class="action-btn info" onclick="chatBot.showHelp()">
               <i class="fas fa-question-circle"></i> Ajuda
-            </button>
-            <button class="action-btn info" onclick="chatBot.showInfo()">
-              <i class="fas fa-info"></i> Informações
-            </button>
-            <button class="action-btn reset" onclick="chatBot.showResetConfirmation()">
-              <i class="fas fa-exclamation-triangle"></i> Reset
             </button>
           </div>
         `, false);
@@ -4581,297 +3765,6 @@
         const input = document.getElementById('messageInput');
         input.value += emoji;
         input.focus();
-      }
-      
-      showConfigModal() {
-        document.getElementById('configModal').style.display = 'flex';
-        document.getElementById('materiasPorDia').value = this.materiasPorDia;
-      }
-      
-      closeConfigModal() {
-        document.getElementById('configModal').style.display = 'none';
-      }
-      
-      saveConfig() {
-        const materiasPorDia = parseInt(document.getElementById('materiasPorDia').value);
-        if (materiasPorDia >= 1 && materiasPorDia <= 5) {
-          this.materiasPorDia = materiasPorDia;
-          localStorage.setItem('studyFlow_materiasPorDia', materiasPorDia.toString());
-          this.closeConfigModal();
-          this.typeMessage(`Configuração salva! Agora você verá ${materiasPorDia} matéria(s) por dia.`);
-        } else {
-          alert('Por favor, informe um número entre 1 e 5.');
-        }
-      }
-      
-      showSimuladoModal() {
-        document.getElementById('simuladoModal').style.display = 'flex';
-        const simuladoConfig = JSON.parse(localStorage.getItem('studyFlow_simuladoConfig')) || {};
-        document.getElementById('simuladoInterval').value = simuladoConfig.interval || '0';
-      }
-      
-      closeSimuladoModal() {
-        document.getElementById('simuladoModal').style.display = 'none';
-      }
-      
-      saveSimuladoConfig() {
-        const interval = parseInt(document.getElementById('simuladoInterval').value);
-        const simuladoConfig = {
-          interval: interval
-        };
-        
-        if (interval > 0) {
-          const hoje = new Date();
-          const nextSimulado = new Date();
-          nextSimulado.setDate(hoje.getDate() + interval);
-          simuladoConfig.nextSimulado = nextSimulado.toISOString();
-        }
-        
-        localStorage.setItem('studyFlow_simuladoConfig', JSON.stringify(simuladoConfig));
-        this.closeSimuladoModal();
-        this.typeMessage('Configuração de simulado salva!');
-      }
-      
-      showRelatorioModal() {
-        document.getElementById('relatorioModal').style.display = 'flex';
-      }
-      
-      closeRelatorioModal() {
-        document.getElementById('relatorioModal').style.display = 'none';
-      }
-      
-      generateRelatorio() {
-        const periodo = parseInt(document.getElementById('relatorioPeriodo').value);
-        this.closeRelatorioModal();
-        
-        const hoje = new Date();
-        const periodData = this.getPeriodData(periodo);
-        const previousPeriodData = this.getPeriodData(periodo, periodo);
-        
-        const atualTotais = this.calculatePeriodTotals(periodData);
-        const anteriorTotais = this.calculatePeriodTotals(previousPeriodData);
-        
-        const relatorioHTML = this.generateRelatorioHTML(periodo, atualTotais, anteriorTotais);
-        this.addBotMessage(relatorioHTML, true, 'relatorio-periodico');
-      }
-      
-      getPeriodData(dias, offset = 0) {
-        const data = [];
-        const hoje = new Date();
-        
-        for (let i = offset + dias - 1; i >= offset; i--) {
-          const dataItem = new Date();
-          dataItem.setDate(hoje.getDate() - i);
-          const dataStr = dataItem.toISOString().split('T')[0];
-          const atividades = JSON.parse(localStorage.getItem(`dailyActivities_${dataStr}`)) || { activities: {} };
-          
-          if (Object.keys(atividades.activities).length > 0) {
-            data.push({
-              date: dataStr,
-              atividades: atividades.activities
-            });
-          }
-        }
-        
-        return data;
-      }
-      
-      calculatePeriodTotals(periodData) {
-        const totais = {
-          totalTime: 0,
-          totalQuestoes: 0,
-          totalAcertos: 0,
-          totalAnkiDecks: 0,
-          totalFlashcards: 0
-        };
-        
-        periodData.forEach(dia => {
-          if (dia.atividades.questoes && dia.atividades.questoes.length > 0) {
-            dia.atividades.questoes.forEach(q => {
-              totais.totalTime += q.tempo;
-              totais.totalQuestoes += q.feitas;
-              totais.totalAcertos += (q.feitas - q.erradas);
-            });
-          }
-          
-          if (dia.atividades.anki && dia.atividades.anki.length > 0) {
-            totais.totalAnkiDecks += dia.atividades.anki.length;
-            dia.atividades.anki.forEach(a => {
-              totais.totalTime += a.tempo;
-              totais.totalFlashcards += a.cards;
-            });
-          }
-          
-          if (dia.atividades.teoria && dia.atividades.teoria.length > 0) {
-            dia.atividades.teoria.forEach(t => {
-              totais.totalTime += t.tempo;
-            });
-          }
-        });
-        
-        return totais;
-      }
-      
-      generateRelatorioHTML(periodo, atualTotais, anteriorTotais) {
-        const diffTime = atualTotais.totalTime - anteriorTotais.totalTime;
-        const diffQuestoes = atualTotais.totalQuestoes - anteriorTotais.totalQuestoes;
-        const diffAnkiDecks = atualTotais.totalAnkiDecks - anteriorTotais.totalAnkiDecks;
-        const diffFlashcards = atualTotais.totalFlashcards - anteriorTotais.totalFlashcards;
-        
-        const atualAcertosPercent = atualTotais.totalQuestoes > 0 ? (atualTotais.totalAcertos / atualTotais.totalQuestoes) * 100 : 0;
-        const anteriorAcertosPercent = anteriorTotais.totalQuestoes > 0 ? (anteriorTotais.totalAcertos / anteriorTotais.totalQuestoes) * 100 : 0;
-        const diffAcertosPercent = atualAcertosPercent - anteriorAcertosPercent;
-        
-        const atualHours = Math.floor(atualTotais.totalTime / 60);
-        const atualMinutes = atualTotais.totalTime % 60;
-        
-        return `
-          <div class="message-card">
-            <div class="message-card-header">
-              <i class="fas fa-chart-bar"></i>
-              <div class="message-card-title">Relatório Periódico (${periodo} dias)</div>
-            </div>
-            <div class="message-card-content">
-              <div class="message-stats">
-                <div class="message-stat">
-                  <div class="message-stat-value">${atualHours}h ${atualMinutes}m</div>
-                  <div class="message-stat-label">Tempo Total</div>
-                </div>
-                <div class="message-stat">
-                  <div class="message-stat-value">${atualTotais.totalQuestoes}</div>
-                  <div class="message-stat-label">Questões</div>
-                </div>
-                <div class="message-stat">
-                  <div class="message-stat-value">${atualAcertosPercent.toFixed(1)}%</div>
-                  <div class="message-stat-label">Acertos</div>
-                </div>
-                <div class="message-stat">
-                  <div class="message-stat-value">${atualTotais.totalFlashcards}</div>
-                  <div class="message-stat-label">Flashcards</div>
-                </div>
-              </div>
-              
-              <div class="message-section">
-                <div class="message-section-title">Comparação com Período Anterior</div>
-                <div class="message-list">
-                  <div class="message-list-item">
-                    <div class="message-list-icon">⏱️</div>
-                    <div class="message-list-content">
-                      <div class="message-list-title">Horas estudadas</div>
-                      <div class="message-list-description">
-                        ${diffTime > 0 ? 
-                          `<span style="color: var(--success)">+${diffTime} min</span> em relação ao período anterior` : 
-                          diffTime < 0 ? 
-                          `<span style="color: var(--danger)">${diffTime} min</span> em relação ao período anterior` : 
-                          'Mesmo tempo de estudo que o período anterior'}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div class="message-list-item">
-                    <div class="message-list-icon">🧩</div>
-                    <div class="message-list-content">
-                      <div class="message-list-title">Questões resolvidas</div>
-                      <div class="message-list-description">
-                        ${diffQuestoes > 0 ? 
-                          `<span style="color: var(--success)">+${diffQuestoes} questões</span> em relação ao período anterior` : 
-                          diffQuestoes < 0 ? 
-                          `<span style="color: var(--danger)">${diffQuestoes} questões</span> em relação ao período anterior` : 
-                          'Mesma quantidade de questões que o período anterior'}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div class="message-list-item">
-                    <div class="message-list-icon">📊</div>
-                    <div class="message-list-content">
-                      <div class="message-list-title">Porcentagem de acertos</div>
-                      <div class="message-list-description">
-                        ${diffAcertosPercent > 0 ? 
-                          `<span style="color: var(--success)">+${diffAcertosPercent.toFixed(1)}%</span> em relação ao período anterior` : 
-                          diffAcertosPercent < 0 ? 
-                          `<span style="color: var(--danger)">${diffAcertosPercent.toFixed(1)}%</span> em relação ao período anterior` : 
-                          'Mesma porcentagem de acertos que o período anterior'}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div class="message-list-item">
-                    <div class="message-list-icon">🔁</div>
-                    <div class="message-list-content">
-                      <div class="message-list-title">Flashcards revisados</div>
-                      <div class="message-list-description">
-                        ${diffFlashcards > 0 ? 
-                          `<span style="color: var(--success)">+${diffFlashcards} flashcards</span> em relação ao período anterior` : 
-                          diffFlashcards < 0 ? 
-                          `<span style="color: var(--danger)">${diffFlashcards} flashcards</span> em relação ao período anterior` : 
-                          'Mesma quantidade de flashcards que o período anterior'}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-      }
-      
-      getTodayDecks() {
-        const ankiData = this.getModuleData('ciclos_focus_v1');
-        if (!ankiData || !ankiData.decks || !ankiData.perDay) return [];
-        
-        const perDay = ankiData.perDay;
-        const blockIndex = ankiData.blockIndex || 0;
-        
-        const startIndex = blockIndex * perDay;
-        const todayDecks = ankiData.decks.slice(startIndex, startIndex + perDay);
-        
-        return todayDecks.map(deck => deck.name);
-      }
-      
-      checkAlerts() {
-        const alertas = [];
-        const hoje = new Date();
-        
-        const revisoesAtrasadas = this.calculateOverdueReviews();
-        if (revisoesAtrasadas > 0) {
-          alertas.push({
-            tipo: 'alert-danger',
-            icone: 'exclamation-triangle',
-            mensagem: `Você tem ${revisoesAtrasadas} revisões atrasadas!`
-          });
-        }
-        
-        const dailyCompletedReviews = this.getModuleData('dailyCompletedReviews') || 0;
-        const dailyReviewGoal = this.getModuleData('dailyReviewGoal') || 5;
-        
-        const lastReviewDate = this.getModuleData('lastReviewDate');
-        const hojeStr = hoje.toISOString().split('T')[0];
-        
-        if (lastReviewDate !== hojeStr) {
-          this.setModuleData('dailyCompletedReviews', 0);
-          this.setModuleData('lastReviewDate', hojeStr);
-        } else if (dailyCompletedReviews < dailyReviewGoal / 2) {
-          alertas.push({
-            tipo: 'alert-warning',
-            icone: 'bullseye',
-            mensagem: `Você completou apenas ${dailyCompletedReviews} de ${dailyReviewGoal} revisões hoje.`
-          });
-        }
-        
-        const ultimoEstudo = localStorage.getItem('ultimoEstudo');
-        if (ultimoEstudo) {
-          const diasSemEstudo = Math.floor((hoje - new Date(ultimoEstudo)) / (1000 * 60 * 60 * 24));
-          if (diasSemEstudo >= 2) {
-            alertas.push({
-              tipo: 'alert-danger',
-              icone: 'calendar-times',
-              mensagem: `Você não estuda há ${diasSemEstudo} dias!`
-            });
-          }
-        }
-        
-        return alertas;
       }
       
       showEditalMenu() {
