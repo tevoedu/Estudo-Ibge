@@ -1543,19 +1543,123 @@
         this.addBotMessage(quickActionsHTML, false);
       }
       
+      getQuestoesRegistradasHoje(dateStr = null) {
+        const hojeStr = dateStr || this.getDynamicDateString();
+        const registradas = [];
+        
+        if (this.partialRegistration.date === hojeStr && 
+            this.partialRegistration.activities.questoes) {
+          this.partialRegistration.activities.questoes.forEach(q => {
+            registradas.push({
+              id: q.assunto,
+              nome: q.assunto,
+              disciplina: this.getDisciplinaPorAssunto(q.assunto) || 'Questões',
+              registeredData: q
+            });
+          });
+        }
+        
+        const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+        if (dailyActivities.activities.questoes) {
+          dailyActivities.activities.questoes.forEach(q => {
+            if (!registradas.some(r => r.id === q.assunto)) {
+              registradas.push({
+                id: q.assunto,
+                nome: q.assunto,
+                disciplina: this.getDisciplinaPorAssunto(q.assunto) || 'Questões',
+                registeredData: q
+              });
+            }
+          });
+        }
+        
+        return registradas;
+      }
+      
+      getAnkiRegistradosHoje(dateStr = null) {
+        const hojeStr = dateStr || this.getDynamicDateString();
+        const registrados = [];
+        
+        if (this.partialRegistration.date === hojeStr && 
+            this.partialRegistration.activities.anki) {
+          this.partialRegistration.activities.anki.forEach(a => {
+            registrados.push({
+              id: a.deck,
+              nome: a.deck,
+              emoji: '🔁',
+              registeredData: a
+            });
+          });
+        }
+        
+        const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+        if (dailyActivities.activities.anki) {
+          dailyActivities.activities.anki.forEach(a => {
+            if (!registrados.some(r => r.id === a.deck)) {
+              registrados.push({
+                id: a.deck,
+                nome: a.deck,
+                emoji: '🔁',
+                registeredData: a
+              });
+            }
+          });
+        }
+        
+        return registrados;
+      }
+      
+      getTeoriaRegistradaHoje(dateStr = null) {
+        const hojeStr = dateStr || this.getDynamicDateString();
+        const registradas = [];
+        
+        if (this.partialRegistration.date === hojeStr && 
+            this.partialRegistration.activities.teoria) {
+          this.partialRegistration.activities.teoria.forEach(t => {
+            registradas.push(t.materia);
+          });
+        }
+        
+        const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+        if (dailyActivities.activities.teoria) {
+          dailyActivities.activities.teoria.forEach(t => {
+            if (!registradas.includes(t.materia)) {
+              registradas.push(t.materia);
+            }
+          });
+        }
+        
+        return registradas;
+      }
+      
+      getDisciplinaPorAssunto(assuntoNome) {
+        const disciplines = this.getModuleData('disciplines') || [];
+        for (const disciplina of disciplines) {
+          if (disciplina.assuntos && Array.isArray(disciplina.assuntos)) {
+            for (const assunto of disciplina.assuntos) {
+              if (assunto.nome === assuntoNome) {
+                return disciplina.name;
+              }
+            }
+          }
+        }
+        return null;
+      }
+      
       isQuestaoRegistered(questaoId, dateStr = null) {
         const hojeStr = dateStr || this.getDynamicDateString();
         
-        const sources = [
-          this.partialRegistration,
-          JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} },
-          JSON.parse(localStorage.getItem('dailyActivities')) || { activities: {} }
-        ];
+        if (this.partialRegistration.date === hojeStr && 
+            this.partialRegistration.activities.questoes) {
+          if (this.partialRegistration.activities.questoes.some(q => q.assunto === questaoId)) {
+            return true;
+          }
+        }
         
-        for (const source of sources) {
-          if (source && source.activities && source.activities.questoes) {
-            const encontrada = source.activities.questoes.some(q => q.assunto === questaoId);
-            if (encontrada) return true;
+        const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+        if (dailyActivities.activities.questoes) {
+          if (dailyActivities.activities.questoes.some(q => q.assunto === questaoId)) {
+            return true;
           }
         }
         
@@ -3053,6 +3157,10 @@
         const hojeStr = this.getDynamicDateString();
         const todayTasks = this.getTodayTasks();
         
+        const questoesRegistradas = this.getQuestoesRegistradasHoje(hojeStr);
+        const ankiRegistrados = this.getAnkiRegistradosHoje(hojeStr);
+        const teoriaRegistrada = this.getTeoriaRegistradaHoje(hojeStr);
+        
         const totalTasks = todayTasks.questoes.length + todayTasks.anki.length + todayTasks.teoria.length;
         
         if (totalTasks === 0) {
@@ -3068,17 +3176,9 @@
         
         let registeredCount = 0;
         
-        todayTasks.questoes.forEach(questao => {
-          if (this.isQuestaoRegistered(questao.id)) registeredCount++;
-        });
-        
-        todayTasks.anki.forEach(deck => {
-          if (this.isAnkiRegistered(deck.id)) registeredCount++;
-        });
-        
-        todayTasks.teoria.forEach(materia => {
-          if (this.isTeoriaRegistered(materia)) registeredCount++;
-        });
+        registeredCount += questoesRegistradas.length;
+        registeredCount += ankiRegistrados.length;
+        registeredCount += teoriaRegistrada.length;
         
         modalBody.innerHTML = `
           <div class="registration-status">
@@ -3097,19 +3197,37 @@
         
         let tasksHTML = '<div class="tasks-grid">';
         
+        questoesRegistradas.forEach(questao => {
+          tasksHTML += this.createQuestaoCard(questao, true, false);
+        });
+        
         todayTasks.questoes.forEach(questao => {
-          const isRegistered = this.isQuestaoRegistered(questao.id);
-          tasksHTML += this.createQuestaoCard(questao, isRegistered, false);
+          const isRegistered = questoesRegistradas.some(q => q.id === questao.id);
+          if (!isRegistered) {
+            tasksHTML += this.createQuestaoCard(questao, false, false);
+          }
+        });
+        
+        ankiRegistrados.forEach(deck => {
+          tasksHTML += this.createAnkiCard(deck, true, false);
         });
         
         todayTasks.anki.forEach(deck => {
-          const isRegistered = this.isAnkiRegistered(deck.id);
-          tasksHTML += this.createAnkiCard(deck, isRegistered, false);
+          const isRegistered = ankiRegistrados.some(a => a.id === deck.id);
+          if (!isRegistered) {
+            tasksHTML += this.createAnkiCard(deck, false, false);
+          }
+        });
+        
+        teoriaRegistrada.forEach(materia => {
+          tasksHTML += this.createTeoriaCard(materia, true, false);
         });
         
         todayTasks.teoria.forEach(materia => {
-          const isRegistered = this.isTeoriaRegistered(materia);
-          tasksHTML += this.createTeoriaCard(materia, isRegistered, false);
+          const isRegistered = teoriaRegistrada.includes(materia);
+          if (!isRegistered) {
+            tasksHTML += this.createTeoriaCard(materia, false, false);
+          }
         });
         
         tasksHTML += '</div>';
@@ -3120,7 +3238,9 @@
         const modalId = isYesterday ? 'yesterdayModal' : 'registerModal';
         
         let registeredData = null;
-        if (isRegistered) {
+        if (isRegistered && questao.registeredData) {
+          registeredData = questao.registeredData;
+        } else if (isRegistered) {
           const hojeStr = this.getDynamicDateString();
           
           if (this.hasPartialRegistration()) {
@@ -3140,7 +3260,7 @@
                data-type="questoes" data-id="${questao.id}">
             <div class="task-header">
               <div class="task-icon-large">🧩</div>
-              <div class="task-title">Questões: ${questao.disciplina}</div>
+              <div class="task-title">Questões: ${questao.disciplina || 'Revisão'}</div>
               ${isRegistered ? 
                 '<span class="task-status"><i class="fas fa-check"></i> Registrado</span>' : 
                 '<button class="activate-btn" onclick="chatBot.activateTask(this, \'' + modalId + '\')">Ativar</button>'}
@@ -3180,7 +3300,9 @@
         const modalId = isYesterday ? 'yesterdayModal' : 'registerModal';
         
         let registeredData = null;
-        if (isRegistered) {
+        if (isRegistered && deck.registeredData) {
+          registeredData = deck.registeredData;
+        } else if (isRegistered) {
           const hojeStr = this.getDynamicDateString();
           
           if (this.hasPartialRegistration()) {
@@ -3827,12 +3949,7 @@
         
         pendingTopics.sort((a, b) => b.priority - a.priority);
         
-        const hojeStr = this.getDynamicDateString();
-        const filteredPendingTopics = pendingTopics.filter(topic => {
-            return !this.isQuestaoRegistered(topic.id, hojeStr);
-        });
-        
-        return filteredPendingTopics.slice(0, dailyReviewGoal);
+        return pendingTopics.slice(0, dailyReviewGoal);
       }
       
       calculateOverdueReviews() {
