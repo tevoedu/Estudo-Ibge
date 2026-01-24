@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>StudyFlow - ChatBot Central</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
@@ -23,7 +24,7 @@
       --border-radius: 18px;
       --shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      --sidebar-width: 320px;
+      --side-panel-width: 350px;
     }
     
     .dark-theme {
@@ -61,13 +62,14 @@
       display: flex;
       height: 100vh;
       width: 100%;
+      overflow: hidden;
     }
     
     .chatbot-container {
+      flex: 1;
       display: flex;
       flex-direction: column;
       height: 100vh;
-      flex: 1;
       background-color: var(--chat-bg);
       background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%239C92AC' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
       overflow: hidden;
@@ -353,251 +355,6 @@
       transform: scale(1.05);
     }
     
-    .message-content {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    
-    .message-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 4px;
-    }
-    
-    .message-icon {
-      width: 20px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      background-color: var(--primary);
-      color: white;
-      font-size: 0.7rem;
-    }
-    
-    .message-title {
-      font-weight: 600;
-      font-size: 1rem;
-      color: var(--dark);
-    }
-    
-    .message-subtitle {
-      font-weight: 500;
-      font-size: 0.9rem;
-      color: var(--dark);
-      margin-bottom: 4px;
-    }
-    
-    .message-text {
-      font-size: 0.9rem;
-      line-height: 1.4;
-      color: var(--dark);
-    }
-    
-    .message-divider {
-      height: 1px;
-      background-color: var(--light-gray);
-      margin: 8px 0;
-    }
-    
-    .message-section {
-      margin: 8px 0;
-    }
-    
-    .message-section-title {
-      font-weight: 600;
-      font-size: 0.85rem;
-      margin-bottom: 6px;
-      color: var(--gray);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    
-    .message-list {
-      list-style-type: none;
-      margin: 8px 0;
-      padding-left: 0;
-    }
-    
-    .message-list-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      padding: 6px 0;
-      border-bottom: 1px solid var(--light-gray);
-    }
-    
-    .message-list-item:last-child {
-      border-bottom: none;
-    }
-    
-    .message-list-icon {
-      width: 16px;
-      text-align: center;
-      color: var(--primary);
-      margin-top: 2px;
-      flex-shrink: 0;
-    }
-    
-    .message-list-content {
-      flex: 1;
-    }
-    
-    .message-list-title {
-      font-weight: 500;
-      font-size: 0.9rem;
-      margin-bottom: 2px;
-    }
-    
-    .message-list-description {
-      font-size: 0.8rem;
-      color: var(--gray);
-    }
-    
-    .message-stats {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin: 12px 0;
-    }
-    
-    .message-stat {
-      background-color: var(--light-gray);
-      padding: 10px;
-      border-radius: 8px;
-      text-align: center;
-    }
-    
-    .message-stat-value {
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin: 3px 0;
-    }
-    
-    .message-stat-label {
-      font-size: 0.75rem;
-      color: var(--gray);
-    }
-    
-    .message-progress {
-      margin: 10px 0;
-    }
-    
-    .message-progress-bar {
-      height: 6px;
-      background-color: var(--light-gray);
-      border-radius: 3px;
-      margin: 8px 0;
-      overflow: hidden;
-    }
-    
-    .message-progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--success), var(--primary));
-      border-radius: 3px;
-      transition: width 0.5s ease;
-    }
-    
-    .message-progress-text {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.8rem;
-      color: var(--gray);
-    }
-    
-    .message-alert {
-      padding: 10px 12px;
-      border-radius: 8px;
-      margin: 8px 0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.9rem;
-      box-shadow: var(--shadow);
-    }
-    
-    .message-alert-warning {
-      background-color: rgba(255, 152, 0, 0.1);
-      border-left: 4px solid var(--warning);
-    }
-    
-    .message-alert-danger {
-      background-color: rgba(244, 67, 54, 0.1);
-      border-left: 4px solid var(--danger);
-    }
-    
-    .message-alert-success {
-      background-color: rgba(76, 175, 80, 0.1);
-      border-left: 4px solid var(--success);
-    }
-    
-    .message-alert-info {
-      background-color: rgba(52, 183, 241, 0.1);
-      border-left: 4px solid var(--secondary);
-    }
-    
-    .message-card {
-      background-color: var(--bot-bubble);
-      border-radius: 12px;
-      padding: 16px;
-      margin: 10px 0;
-      box-shadow: var(--shadow);
-      border-left: 4px solid var(--primary);
-    }
-    
-    .message-card-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--light-gray);
-    }
-    
-    .message-card-title {
-      font-weight: 600;
-      font-size: 1.1rem;
-      color: var(--dark);
-    }
-    
-    .message-card-content {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    
-    .message-muted {
-      font-size: 0.8rem;
-      color: var(--gray);
-      margin-top: 4px;
-    }
-    
-    .message-badge {
-      display: inline-block;
-      padding: 2px 8px;
-      background-color: var(--primary);
-      color: white;
-      border-radius: 12px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      margin-left: 6px;
-    }
-    
-    .message-badge-warning {
-      background-color: var(--warning);
-    }
-    
-    .message-badge-danger {
-      background-color: var(--danger);
-    }
-    
-    .message-badge-success {
-      background-color: var(--success);
-    }
-    
     .quick-actions {
       display: flex;
       flex-wrap: wrap;
@@ -672,29 +429,6 @@
       padding: 0 10px;
       position: relative;
       z-index: 2;
-    }
-    
-    .message-reaction {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 2px;
-    }
-    
-    .reaction-icon {
-      font-size: 0.7rem;
-      color: var(--gray);
-    }
-    
-    @media (max-width: 768px) {
-      .chatbot-container {
-        height: 100vh;
-      }
-      .message-bubble {
-        max-width: 85%;
-      }
-      .message-stats {
-        grid-template-columns: 1fr;
-      }
     }
     
     .typing-text {
@@ -949,23 +683,6 @@
       background-color: var(--light);
     }
     
-    .yesterday-modal .modal-header {
-      background-color: rgba(244, 67, 54, 0.1);
-      border-bottom: 4px solid var(--danger);
-    }
-    
-    .yesterday-modal .modal-header h3 {
-      color: var(--danger);
-    }
-    
-    .yesterday-modal .modal-footer .btn-primary {
-      background-color: var(--danger);
-    }
-    
-    .yesterday-modal .modal-footer .btn-primary:hover {
-      background-color: #d32f2f;
-    }
-    
     .task-card.registered {
       opacity: 0.7;
       background-color: rgba(76, 175, 80, 0.1);
@@ -980,508 +697,329 @@
       opacity: 0.8;
     }
     
-    .registration-status {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-      padding: 10px;
-      background-color: var(--light-gray);
-      border-radius: 8px;
-    }
-    
-    .status-badge {
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-size: 0.8rem;
-      font-weight: 600;
-    }
-    
-    .status-badge.pending {
-      background-color: rgba(255, 152, 0, 0.2);
-      color: var(--warning);
-    }
-    
-    .status-badge.registered {
-      background-color: rgba(76, 175, 80, 0.2);
-      color: var(--success);
-    }
-    
-    .status-badge.completed {
-      background-color: rgba(37, 211, 102, 0.2);
-      color: var(--primary);
-    }
-    
-    .task-header .task-status {
-      margin-left: auto;
-      font-size: 0.8rem;
-      padding: 4px 10px;
-      border-radius: 10px;
-      margin-right: 8px;
-      background-color: var(--success);
-      color: white;
-    }
-    
-    .post-save-modal .modal-content {
-      max-width: 400px;
-    }
-    
-    .post-save-options {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    
-    .post-save-btn {
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      font-size: 1rem;
-    }
-    
-    .post-save-btn.add {
-      background-color: var(--secondary);
-      color: white;
-    }
-    
-    .post-save-btn.add:hover {
-      background-color: #2a9cd8;
-    }
-    
-    .post-save-btn.finish {
-      background-color: var(--success);
-      color: white;
-    }
-    
-    .post-save-btn.finish:hover {
-      background-color: #3d8b40;
-    }
-    
-    .post-save-btn.later {
-      background-color: var(--gray);
-      color: white;
-    }
-    
-    .post-save-btn.later:hover {
-      background-color: #5a6268;
-    }
-    
-    .progress-indicator {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 10px;
-    }
-    
-    .progress-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background-color: var(--light-gray);
-    }
-    
-    .progress-dot.active {
-      background-color: var(--primary);
-    }
-    
-    .progress-dot.completed {
-      background-color: var(--success);
-    }
-    
-    .day-finished-banner {
-      background-color: rgba(76, 175, 80, 0.2);
-      border-left: 4px solid var(--success);
-      padding: 12px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    .day-finished-banner i {
-      color: var(--success);
-    }
-    
-    .progress-visual {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      margin-top: 5px;
-    }
-    
-    .progress-bar-container {
-      flex: 1;
-      height: 8px;
-      background-color: var(--light-gray);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-    
-    .progress-bar-fill {
-      height: 100%;
-      background-color: var(--primary);
-      transition: width 0.5s ease;
-    }
-    
-    .task-card.registered {
-      border: 2px solid var(--success) !important;
-      background-color: rgba(76, 175, 80, 0.05) !important;
-      opacity: 0.8 !important;
-    }
-
-    .task-card.registered .task-header {
-      color: var(--success) !important;
-    }
-
-    .task-card.registered .task-title {
-      color: var(--success) !important;
-      font-weight: 600 !important;
-    }
-
-    .task-card.registered .task-description {
-      color: var(--success) !important;
-      opacity: 0.8 !important;
-    }
-
-    .task-card.registered .task-icon-large {
-      color: var(--success) !important;
-    }
-
-    .task-card.registered .task-status {
-      background-color: var(--success) !important;
-      color: white !important;
-      border-radius: 12px !important;
-      padding: 4px 10px !important;
-      font-size: 0.8rem !important;
-      display: flex !important;
-      align-items: center !important;
-      gap: 4px !important;
-    }
-
-    .task-card.registered input:disabled {
-      background-color: rgba(76, 175, 80, 0.1) !important;
-      border-color: var(--success) !important;
-      color: var(--success) !important;
-      opacity: 0.8 !important;
-    }
-
-    .task-card.registered label {
-      color: var(--success) !important;
-      opacity: 0.8 !important;
-    }
-
-    /* NOVO: Painel Lateral */
-    .sidebar {
-      width: var(--sidebar-width);
+    /* Painel Lateral de Progresso Diário */
+    .side-panel {
+      width: var(--side-panel-width);
       background-color: var(--light);
       border-left: 1px solid var(--light-gray);
-      height: 100vh;
       display: flex;
       flex-direction: column;
-      overflow-y: auto;
+      overflow: hidden;
       transition: var(--transition);
       box-shadow: -2px 0 10px rgba(0, 0, 0, 0.05);
     }
-
-    .sidebar-header {
-      padding: 1.2rem 1.5rem;
+    
+    @media (max-width: 992px) {
+      .main-container {
+        flex-direction: column;
+      }
+      
+      .side-panel {
+        width: 100%;
+        height: 300px;
+        border-left: none;
+        border-top: 1px solid var(--light-gray);
+        order: 2;
+      }
+      
+      .chatbot-container {
+        order: 1;
+        height: calc(100vh - 300px);
+      }
+    }
+    
+    .panel-header {
+      padding: 1.2rem;
       border-bottom: 1px solid var(--light-gray);
     }
-
-    .sidebar-header h3 {
-      font-size: 1.1rem;
-      margin-bottom: 4px;
-      color: var(--dark);
+    
+    .panel-header h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-
-    .sidebar-header p {
-      font-size: 0.85rem;
+    
+    .panel-date {
+      font-size: 0.9rem;
       color: var(--gray);
     }
-
-    .sidebar-content {
+    
+    .panel-content {
       flex: 1;
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
+      padding: 1.2rem;
       overflow-y: auto;
     }
-
-    .sidebar-section {
+    
+    .activity-list {
       display: flex;
       flex-direction: column;
       gap: 0.8rem;
+      margin-bottom: 1.5rem;
     }
-
-    .sidebar-section h4 {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--dark);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .sidebar-activities {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .sidebar-activity {
+    
+    .activity-item {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      padding: 0.6rem 0.8rem;
+      padding: 0.8rem;
       background-color: var(--light-gray);
       border-radius: 8px;
       transition: var(--transition);
+      animation: slideIn 0.3s ease-out;
     }
-
-    .sidebar-activity:hover {
-      background-color: rgba(37, 211, 102, 0.1);
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
-
-    .sidebar-activity.completed {
+    
+    .activity-item:hover {
+      transform: translateX(2px);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .activity-item.completed {
       background-color: rgba(76, 175, 80, 0.1);
-      border-left: 3px solid var(--success);
+      border-left: 4px solid var(--success);
     }
-
-    .sidebar-activity.pending {
-      opacity: 0.7;
-      background-color: var(--light-gray);
+    
+    .activity-item.pending {
+      border-left: 4px solid var(--gray);
     }
-
+    
     .activity-icon {
-      width: 24px;
-      height: 24px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background-color: var(--bot-bubble);
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 6px;
-      background-color: var(--primary);
-      color: white;
-      font-size: 0.8rem;
+      margin-right: 12px;
+      flex-shrink: 0;
+      transition: var(--transition);
     }
-
-    .activity-info {
+    
+    .activity-item.completed .activity-icon {
+      background-color: rgba(76, 175, 80, 0.2);
+      color: var(--success);
+    }
+    
+    .activity-details {
       flex: 1;
     }
-
+    
     .activity-name {
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: var(--dark);
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+      font-size: 0.95rem;
     }
-
+    
     .activity-type {
-      font-size: 0.7rem;
+      font-size: 0.8rem;
       color: var(--gray);
-      margin-top: 2px;
     }
-
+    
     .activity-status {
-      width: 16px;
-      height: 16px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
-      border: 2px solid var(--light-gray);
-    }
-
-    .activity-status.completed {
-      background-color: var(--success);
-      border-color: var(--success);
-    }
-
-    .activity-status.pending {
-      background-color: transparent;
-    }
-
-    .sidebar-progress {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .progress-bar {
-      height: 8px;
-      background-color: var(--light-gray);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background-color: var(--primary);
-      transition: width 0.5s ease;
-    }
-
-    .progress-text {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.8rem;
-      color: var(--gray);
-    }
-
-    .progress-text strong {
-      color: var(--dark);
-      font-weight: 600;
-    }
-
-    .sidebar-time {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--dark);
-      text-align: center;
-      margin: 0.5rem 0;
-    }
-
-    .time-label {
-      font-size: 0.8rem;
-      color: var(--gray);
-      text-align: center;
-    }
-
-    .sidebar-footer {
-      padding: 1.2rem 1.5rem;
-      border-top: 1px solid var(--light-gray);
-      background-color: rgba(76, 175, 80, 0.1);
-      text-align: center;
-    }
-
-    .sidebar-footer.completed {
-      background-color: rgba(76, 175, 80, 0.2);
-    }
-
-    .day-completed-message {
-      font-weight: 600;
-      color: var(--success);
-      font-size: 0.9rem;
-      margin-bottom: 4px;
-    }
-
-    .day-stats {
-      font-size: 0.8rem;
-      color: var(--success);
-    }
-
-    .sidebar-toggle {
-      display: none;
-      position: absolute;
-      top: 50%;
-      right: 0;
-      transform: translateY(-50%);
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 4px 0 0 4px;
-      padding: 0.5rem;
-      cursor: pointer;
-      z-index: 100;
-    }
-
-    @media (max-width: 1200px) {
-      .sidebar {
-        position: fixed;
-        right: -var(--sidebar-width);
-        top: 0;
-        z-index: 1000;
-        box-shadow: -2px 0 20px rgba(0, 0, 0, 0.15);
-      }
-
-      .sidebar.open {
-        right: 0;
-      }
-
-      .sidebar-toggle {
-        display: block;
-        left: -32px;
-        right: auto;
-      }
-
-      .main-container {
-        width: 100%;
-      }
-    }
-
-    /* Toast de confirmação simplificado */
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: var(--success);
-      color: white;
-      padding: 12px 24px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      z-index: 2000;
+      border: 2px solid var(--gray);
       display: flex;
       align-items: center;
-      gap: 10px;
-      animation: toastSlideUp 0.3s ease;
-      max-width: 400px;
-      width: 90%;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: var(--transition);
     }
-
-    @keyframes toastSlideUp {
-      from {
-        opacity: 0;
-        transform: translateX(-50%) translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-      }
+    
+    .activity-status.completed {
+      border-color: var(--success);
+      background-color: var(--success);
+      color: white;
+      animation: checkPulse 0.5s ease-out;
     }
-
-    .toast.hide {
-      animation: toastSlideDown 0.3s ease forwards;
-    }
-
-    @keyframes toastSlideDown {
-      from {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
+    
+    @keyframes checkPulse {
+      0% {
+        transform: scale(0.8);
       }
-      to {
-        opacity: 0;
-        transform: translateX(-50%) translateY(20px);
+      50% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
       }
     }
-
-    .toast i {
-      font-size: 1.2rem;
+    
+    .progress-section {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background-color: var(--light-gray);
+      border-radius: 12px;
     }
-
-    .toast-content {
-      flex: 1;
+    
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.8rem;
     }
-
-    .toast-title {
-      font-weight: 600;
+    
+    .progress-text {
       font-size: 0.9rem;
+      color: var(--gray);
     }
-
-    .toast-message {
+    
+    .progress-count {
+      font-weight: 600;
+      color: var(--dark);
+    }
+    
+    .progress-bar {
+      height: 8px;
+      background-color: rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 0.8rem 0;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--success));
+      border-radius: 4px;
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shimmer 2s infinite;
+    }
+    
+    @keyframes shimmer {
+      0% {
+        transform: translateX(-100%);
+      }
+      100% {
+        transform: translateX(100%);
+      }
+    }
+    
+    .study-time-section {
+      padding: 1rem;
+      background-color: var(--light-gray);
+      border-radius: 12px;
+      text-align: center;
+    }
+    
+    .study-time-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 0.5rem 0;
+      color: var(--primary);
+    }
+    
+    .study-time-label {
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
+    
+    .day-completed {
+      background-color: rgba(76, 175, 80, 0.05) !important;
+      border-left: 4px solid var(--success) !important;
+    }
+    
+    .day-completed-banner {
+      padding: 1rem;
+      background-color: rgba(76, 175, 80, 0.1);
+      border-radius: 12px;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: var(--success);
+      font-weight: 600;
+      animation: fadeInUp 0.5s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .panel-footer {
+      padding: 1rem;
+      border-top: 1px solid var(--light-gray);
+      text-align: center;
       font-size: 0.8rem;
-      opacity: 0.9;
+      color: var(--gray);
     }
-
-    .sidebar-toggle i {
-      transition: transform 0.3s ease;
+    
+    /* Estados visuais para feedback */
+    .success-feedback {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      background-color: var(--success);
+      color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 1001;
+      animation: slideInRight 0.3s ease-out, fadeOut 0.3s ease-out 2.7s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-
-    .sidebar.open .sidebar-toggle i {
-      transform: rotate(180deg);
+    
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+      }
+    }
+    
+    /* Estilo para mensagens curtas no chat após registro */
+    .registration-feedback {
+      background-color: rgba(76, 175, 80, 0.1) !important;
+      border-left: 4px solid var(--success) !important;
+      padding: 10px 16px !important;
+      margin-bottom: 8px !important;
+    }
+    
+    .compact-message {
+      max-width: 60% !important;
+      padding: 10px 14px !important;
+      font-size: 0.9rem !important;
     }
   </style>
 </head>
@@ -1502,7 +1040,7 @@
           <button class="header-btn" id="themeToggle">
             <i class="fas fa-moon"></i>
           </button>
-          <button class="header-btn" id="sidebarToggle">
+          <button class="header-btn" id="togglePanelBtn">
             <i class="fas fa-chart-bar"></i>
           </button>
           <button class="header-btn" id="infoBtn">
@@ -1528,47 +1066,21 @@
       </div>
     </div>
     
-    <!-- Painel Lateral Fixo -->
-    <div class="sidebar" id="sidebar">
-      <button class="sidebar-toggle" id="sidebarToggleBtn">
-        <i class="fas fa-chevron-left"></i>
-      </button>
-      <div class="sidebar-header">
-        <h3>Resumo do Dia</h3>
-        <p id="sidebar-date"></p>
+    <aside class="side-panel" id="sidePanel">
+      <div class="panel-header">
+        <h2><i class="fas fa-calendar-day"></i> Resumo do Dia</h2>
+        <div class="panel-date" id="currentDate"></div>
       </div>
-      <div class="sidebar-content">
-        <div class="sidebar-section">
-          <h4>Atividades do Dia</h4>
-          <div class="sidebar-activities" id="sidebar-activities">
-            <!-- Atividades serão inseridas aqui dinamicamente -->
-          </div>
-        </div>
-        <div class="sidebar-section">
-          <h4>Progresso Diário</h4>
-          <div class="sidebar-progress">
-            <div class="progress-bar">
-              <div class="progress-fill" id="sidebar-progress-fill"></div>
-            </div>
-            <div class="progress-text">
-              <span>Concluído</span>
-              <span><strong id="sidebar-progress-count">0/0</strong> atividades</span>
-            </div>
-          </div>
-        </div>
-        <div class="sidebar-section">
-          <h4>Tempo Estudado</h4>
-          <div class="sidebar-time" id="sidebar-time">0 min</div>
-          <div class="time-label">Total de hoje</div>
-        </div>
+      <div class="panel-content">
+        <!-- Conteúdo será preenchido dinamicamente -->
       </div>
-      <div class="sidebar-footer" id="sidebar-footer">
-        <!-- Conteúdo dinâmico para dia completo -->
+      <div class="panel-footer">
+        Atualizado em tempo real
       </div>
-    </div>
+    </aside>
   </div>
   
-  <!-- Modais (mantidos, mas com comportamento ajustado) -->
+  <!-- Modais (mantidos, mas sem o modal pós-registro) -->
   <div class="modal" id="registerModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -1599,8 +1111,88 @@
     </div>
   </div>
   
-  <!-- Removido o modal postSaveModal -->
+  <div class="modal" id="configModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-cog"></i> Configurar Matérias por Dia</h3>
+        <button class="close-modal" id="closeConfigModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="materiasPorDia">Quantidade de matérias por dia:</label>
+          <input type="number" id="materiasPorDia" min="1" max="5" value="1">
+        </div>
+        <div class="message-muted">
+          Esta configuração define quantas matérias serão mostradas no resumo diário.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancelConfig">Cancelar</button>
+        <button class="btn btn-primary" id="saveConfig">Salvar</button>
+      </div>
+    </div>
+  </div>
   
+  <div class="modal" id="simuladoModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-calendar-alt"></i> Programar Simulado</h3>
+        <button class="close-modal" id="closeSimuladoModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="simuladoInterval">Intervalo entre simulados:</label>
+          <select id="simuladoInterval">
+            <option value="0">Nenhum (não programar)</option>
+            <option value="7">7 dias</option>
+            <option value="10">10 dias</option>
+            <option value="15">15 dias</option>
+            <option value="30">30 dias</option>
+          </select>
+        </div>
+        <div class="message-muted">
+          Quando chegar o dia do simulado, o chatbot irá alertar.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancelSimulado">Cancelar</button>
+        <button class="btn btn-primary" id="saveSimulado">Salvar</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal" id="relatorioModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-chart-bar"></i> Relatório Periódico</h3>
+        <button class="close-modal" id="closeRelatorioModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="relatorioPeriodo">Período do relatório:</label>
+          <select id="relatorioPeriodo">
+            <option value="7">7 dias</option>
+            <option value="15">15 dias</option>
+            <option value="30">30 dias</option>
+          </select>
+        </div>
+        <div class="message-muted">
+          O relatório somará todos os dados do período selecionado e comparará com o período anterior.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancelRelatorio">Cancelar</button>
+        <button class="btn btn-primary" id="generateRelatorio">Gerar Relatório</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback de sucesso flutuante (substitui o modal pós-registro) -->
+  <div class="success-feedback" id="successFeedback" style="display: none;">
+    <i class="fas fa-check-circle"></i>
+    <span>Atividade registrada com sucesso!</span>
+  </div>
+
   <script>
     class StudyFlowChatBot {
       constructor() {
@@ -1635,16 +1227,205 @@
         return `${hours}:${minutes}`;
       }
       
+      formatDate(date) {
+        return date.toLocaleDateString('pt-BR', { 
+          weekday: 'long', 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        });
+      }
+      
       init() {
         this.initTheme();
         this.initChat();
         this.initEventListeners();
-        this.initSidebar();
         this.showWelcomeMessage();
+        this.updateSidePanel();
+        this.updateDate();
         
         this.updateYesterdayMemory();
-        
         this.checkPartialRegistration();
+        
+        // Atualizar painel a cada 30 segundos
+        setInterval(() => this.updateSidePanel(), 30000);
+      }
+      
+      updateDate() {
+        const currentDate = document.getElementById('currentDate');
+        if (currentDate) {
+          currentDate.textContent = this.formatDate(new Date());
+        }
+      }
+      
+      updateSidePanel() {
+        const panelContent = document.querySelector('.panel-content');
+        if (!panelContent) return;
+        
+        const hojeStr = this.getDynamicDateString();
+        const hoje = new Date(hojeStr + 'T00:00:00');
+        
+        // Buscar tarefas do dia
+        const todayTasks = this.getTodayTasks();
+        const totalTasks = todayTasks.questoes.length + todayTasks.anki.length + todayTasks.teoria.length;
+        
+        // Buscar atividades registradas
+        const questoesRegistradas = this.getQuestoesRegistradasHoje(hojeStr);
+        const ankiRegistrados = this.getAnkiRegistradosHoje(hojeStr);
+        const teoriaRegistrada = this.getTeoriaRegistradaHoje(hojeStr);
+        
+        const completedTasks = questoesRegistradas.length + ankiRegistrados.length + teoriaRegistrada.length;
+        const progressPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+        
+        // Calcular tempo estudado
+        let totalTime = 0;
+        const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+        const atividades = dailyActivities.activities;
+        
+        if (atividades.questoes && atividades.questoes.length > 0) {
+          atividades.questoes.forEach(q => totalTime += q.tempo);
+        }
+        if (atividades.anki && atividades.anki.length > 0) {
+          atividades.anki.forEach(a => totalTime += a.tempo);
+        }
+        if (atividades.teoria && atividades.teoria.length > 0) {
+          atividades.teoria.forEach(t => totalTime += t.tempo);
+        }
+        
+        // Se houver registro parcial, adicionar também
+        if (this.hasPartialRegistration()) {
+          const partial = this.partialRegistration.activities;
+          if (partial.questoes) {
+            partial.questoes.forEach(q => totalTime += q.tempo);
+          }
+          if (partial.anki) {
+            partial.anki.forEach(a => totalTime += a.tempo);
+          }
+          if (partial.teoria) {
+            partial.teoria.forEach(t => totalTime += t.tempo);
+          }
+        }
+        
+        const hours = Math.floor(totalTime / 60);
+        const minutes = totalTime % 60;
+        
+        // Verificar se o dia está concluído
+        const isDayCompleted = this.isDayFinished() || completedTasks >= totalTasks;
+        
+        // Construir HTML do painel
+        let panelHTML = '';
+        
+        if (isDayCompleted) {
+          panelHTML += `
+            <div class="day-completed-banner">
+              <i class="fas fa-check-circle"></i>
+              <div>Dia concluído com sucesso!</div>
+            </div>
+          `;
+        }
+        
+        // Lista de atividades
+        panelHTML += `<div class="activity-list">`;
+        
+        // Questões
+        todayTasks.questoes.forEach(questao => {
+          const isCompleted = questoesRegistradas.some(q => q.id === questao.id);
+          panelHTML += `
+            <div class="activity-item ${isCompleted ? 'completed' : 'pending'}">
+              <div class="activity-icon">
+                <i class="fas fa-question-circle"></i>
+              </div>
+              <div class="activity-details">
+                <div class="activity-name">${questao.nome}</div>
+                <div class="activity-type">Questões • ${questao.disciplina}</div>
+              </div>
+              <div class="activity-status ${isCompleted ? 'completed' : ''}">
+                ${isCompleted ? '<i class="fas fa-check"></i>' : ''}
+              </div>
+            </div>
+          `;
+        });
+        
+        // Anki
+        todayTasks.anki.forEach(deck => {
+          const isCompleted = ankiRegistrados.some(a => a.id === deck.id);
+          panelHTML += `
+            <div class="activity-item ${isCompleted ? 'completed' : 'pending'}">
+              <div class="activity-icon">
+                <i class="fas fa-layer-group"></i>
+              </div>
+              <div class="activity-details">
+                <div class="activity-name">${deck.nome}</div>
+                <div class="activity-type">Anki • Revisão</div>
+              </div>
+              <div class="activity-status ${isCompleted ? 'completed' : ''}">
+                ${isCompleted ? '<i class="fas fa-check"></i>' : ''}
+              </div>
+            </div>
+          `;
+        });
+        
+        // Teoria
+        todayTasks.teoria.forEach(materia => {
+          const isCompleted = teoriaRegistrada.includes(materia);
+          panelHTML += `
+            <div class="activity-item ${isCompleted ? 'completed' : 'pending'}">
+              <div class="activity-icon">
+                <i class="fas fa-book"></i>
+              </div>
+              <div class="activity-details">
+                <div class="activity-name">${materia}</div>
+                <div class="activity-type">Estudo Teórico</div>
+              </div>
+              <div class="activity-status ${isCompleted ? 'completed' : ''}">
+                ${isCompleted ? '<i class="fas fa-check"></i>' : ''}
+              </div>
+            </div>
+          `;
+        });
+        
+        panelHTML += `</div>`;
+        
+        // Barra de progresso
+        panelHTML += `
+          <div class="progress-section">
+            <div class="progress-header">
+              <div class="progress-text">Progresso do Dia</div>
+              <div class="progress-count">${completedTasks}/${totalTasks} atividades</div>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: ${progressPercentage}%"></div>
+            </div>
+          </div>
+        `;
+        
+        // Tempo estudado
+        panelHTML += `
+          <div class="study-time-section">
+            <div class="study-time-label">Tempo Estudado Hoje</div>
+            <div class="study-time-value">${hours}h ${minutes}m</div>
+          </div>
+        `;
+        
+        // Aplicar estado de dia concluído ao painel
+        const sidePanel = document.getElementById('sidePanel');
+        if (isDayCompleted) {
+          sidePanel.classList.add('day-completed');
+        } else {
+          sidePanel.classList.remove('day-completed');
+        }
+        
+        panelContent.innerHTML = panelHTML;
+      }
+      
+      showSuccessFeedback(message = "Atividade registrada com sucesso!") {
+        const feedback = document.getElementById('successFeedback');
+        feedback.querySelector('span').textContent = message;
+        feedback.style.display = 'flex';
+        
+        setTimeout(() => {
+          feedback.style.display = 'none';
+        }, 3000);
       }
       
       initTheme() {
@@ -1665,8 +1446,7 @@
       initEventListeners() {
         document.getElementById('themeToggle').addEventListener('click', () => this.toggleTheme());
         
-        document.getElementById('sidebarToggle').addEventListener('click', () => this.toggleSidebar());
-        document.getElementById('sidebarToggleBtn').addEventListener('click', () => this.toggleSidebar());
+        document.getElementById('togglePanelBtn').addEventListener('click', () => this.toggleSidePanel());
         
         document.getElementById('infoBtn').addEventListener('click', () => this.showInfo());
         
@@ -1688,9 +1468,24 @@
         document.getElementById('cancelYesterday').addEventListener('click', () => this.closeYesterdayModal());
         document.getElementById('saveYesterday').addEventListener('click', () => this.saveYesterdayTasks());
         
+        document.getElementById('closeConfigModal').addEventListener('click', () => this.closeConfigModal());
+        document.getElementById('cancelConfig').addEventListener('click', () => this.closeConfigModal());
+        document.getElementById('saveConfig').addEventListener('click', () => this.saveConfig());
+        
+        document.getElementById('closeSimuladoModal').addEventListener('click', () => this.closeSimuladoModal());
+        document.getElementById('cancelSimulado').addEventListener('click', () => this.closeSimuladoModal());
+        document.getElementById('saveSimulado').addEventListener('click', () => this.saveSimuladoConfig());
+        
+        document.getElementById('closeRelatorioModal').addEventListener('click', () => this.closeRelatorioModal());
+        document.getElementById('cancelRelatorio').addEventListener('click', () => this.closeRelatorioModal());
+        document.getElementById('generateRelatorio').addEventListener('click', () => this.generateRelatorio());
+        
         window.addEventListener('click', (e) => {
           const registerModal = document.getElementById('registerModal');
           const yesterdayModal = document.getElementById('yesterdayModal');
+          const configModal = document.getElementById('configModal');
+          const simuladoModal = document.getElementById('simuladoModal');
+          const relatorioModal = document.getElementById('relatorioModal');
           
           if (e.target === registerModal) {
             this.closeRegisterModal();
@@ -1698,156 +1493,37 @@
           if (e.target === yesterdayModal) {
             this.closeYesterdayModal();
           }
-        });
-      }
-      
-      initSidebar() {
-        this.updateSidebar();
-        // Abrir sidebar por padrão em telas grandes
-        if (window.innerWidth > 1200) {
-          document.getElementById('sidebar').classList.add('open');
-        }
-      }
-      
-      updateSidebar() {
-        const hoje = this.getDynamicDateObject();
-        const hojeStr = this.getDynamicDateString();
-        
-        // Atualizar data
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        document.getElementById('sidebar-date').textContent = hoje.toLocaleDateString('pt-BR', options);
-        
-        // Obter atividades do dia
-        const todayTasks = this.getTodayTasks();
-        const atividades = [];
-        
-        // Adicionar revisões por questões
-        todayTasks.questoes.forEach(questao => {
-          atividades.push({
-            id: `questao-${questao.id}`,
-            name: questao.nome,
-            type: 'Revisão por Questões',
-            icon: '🧩',
-            completed: this.isQuestaoRegistered(questao.id),
-            data: questao
-          });
-        });
-        
-        // Adicionar estudo teórico
-        todayTasks.teoria.forEach(materia => {
-          atividades.push({
-            id: `teoria-${materia}`,
-            name: materia,
-            type: 'Estudo Teórico',
-            icon: '📚',
-            completed: this.isTeoriaRegistered(materia),
-            data: { materia }
-          });
-        });
-        
-        // Adicionar Anki
-        todayTasks.anki.forEach(deck => {
-          atividades.push({
-            id: `anki-${deck.id}`,
-            name: deck.nome,
-            type: 'Anki',
-            icon: '🔁',
-            completed: this.isAnkiRegistered(deck.id),
-            data: deck
-          });
-        });
-        
-        // Atualizar lista de atividades
-        const sidebarActivities = document.getElementById('sidebar-activities');
-        sidebarActivities.innerHTML = '';
-        
-        if (atividades.length === 0) {
-          sidebarActivities.innerHTML = `
-            <div style="text-align: center; color: var(--gray); padding: 1rem; font-size: 0.9rem;">
-              <i class="fas fa-check-circle" style="font-size: 1.5rem; margin-bottom: 0.5rem; opacity: 0.5;"></i>
-              <p>Nenhuma atividade programada para hoje</p>
-            </div>
-          `;
-        } else {
-          atividades.forEach(atividade => {
-            const activityElement = document.createElement('div');
-            activityElement.className = `sidebar-activity ${atividade.completed ? 'completed' : 'pending'}`;
-            activityElement.innerHTML = `
-              <div class="activity-icon">${atividade.icon}</div>
-              <div class="activity-info">
-                <div class="activity-name">${atividade.name}</div>
-                <div class="activity-type">${atividade.type}</div>
-              </div>
-              <div class="activity-status ${atividade.completed ? 'completed' : 'pending'}"></div>
-            `;
-            sidebarActivities.appendChild(activityElement);
-          });
-        }
-        
-        // Calcular progresso
-        const totalAtividades = atividades.length;
-        const concluidas = atividades.filter(a => a.completed).length;
-        const porcentagem = totalAtividades > 0 ? (concluidas / totalAtividades) * 100 : 0;
-        
-        // Atualizar barra de progresso
-        document.getElementById('sidebar-progress-fill').style.width = `${porcentagem}%`;
-        document.getElementById('sidebar-progress-count').textContent = `${concluidas}/${totalAtividades}`;
-        
-        // Calcular tempo estudado
-        const totalTime = this.calculateTotalTimeToday();
-        document.getElementById('sidebar-time').textContent = `${totalTime} min`;
-        
-        // Atualizar footer se dia completo
-        const sidebarFooter = document.getElementById('sidebar-footer');
-        if (this.isDayFinished() || (totalAtividades > 0 && concluidas === totalAtividades)) {
-          sidebarFooter.className = 'sidebar-footer completed';
-          sidebarFooter.innerHTML = `
-            <div class="day-completed-message">Dia concluído com sucesso!</div>
-            <div class="day-stats">${concluidas} atividades • ${totalTime} minutos</div>
-          `;
-        } else {
-          sidebarFooter.className = 'sidebar-footer';
-          sidebarFooter.innerHTML = '';
-        }
-      }
-      
-      calculateTotalTimeToday() {
-        const hojeStr = this.getDynamicDateString();
-        let totalTime = 0;
-        
-        // Tempo das atividades registradas
-        if (this.partialRegistration.date === hojeStr) {
-          Object.values(this.partialRegistration.activities).forEach(activities => {
-            activities.forEach(activity => {
-              totalTime += activity.tempo || 0;
-            });
-          });
-        }
-        
-        // Tempo das atividades salvas
-        const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
-        Object.values(dailyActivities.activities).forEach(activities => {
-          if (Array.isArray(activities)) {
-            activities.forEach(activity => {
-              totalTime += activity.tempo || 0;
-            });
+          if (e.target === configModal) {
+            this.closeConfigModal();
+          }
+          if (e.target === simuladoModal) {
+            this.closeSimuladoModal();
+          }
+          if (e.target === relatorioModal) {
+            this.closeRelatorioModal();
           }
         });
-        
-        return totalTime;
       }
       
-      toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        sidebar.classList.toggle('open');
+      toggleSidePanel() {
+        const sidePanel = document.getElementById('sidePanel');
+        const toggleBtn = document.getElementById('togglePanelBtn');
+        
+        if (sidePanel.style.display === 'none' || sidePanel.style.display === '') {
+          sidePanel.style.display = 'flex';
+          toggleBtn.innerHTML = '<i class="fas fa-times"></i>';
+          this.updateSidePanel();
+        } else {
+          sidePanel.style.display = 'none';
+          toggleBtn.innerHTML = '<i class="fas fa-chart-bar"></i>';
+        }
       }
       
       showWelcomeMessage() {
         if (this.chatHistory.length === 0) {
-          this.addDateDivider();
           this.typeMessage("Olá! Sou seu assistente de estudos do StudyFlow. 👋", () => {
             setTimeout(() => {
-              this.typeMessage("Posso te ajudar a gerenciar seu ciclo de estudos, mostrar tarefas diárias, registrar progresso e muito mais!", () => {
+              this.typeMessage("Posso te ajudar a gerenciar seu ciclo de estudos, registrar atividades e muito mais! Seu progresso diário está sempre visível no painel lateral.", () => {
                 setTimeout(() => {
                   this.addQuickActions();
                 }, 500);
@@ -1863,10 +1539,7 @@
             <button class="action-btn primary" onclick="chatBot.openRegisterModal()">
               <i class="fas fa-plus-circle"></i> Registrar Atividade
             </button>
-            <button class="action-btn info" onclick="chatBot.openYesterdayModal()">
-              <i class="fas fa-history"></i> Registrar Atividades de Ontem
-            </button>
-            <button class="action-btn info" onclick="chatBot.showEditalMenu()">
+            <button class="action-btn secondary" onclick="chatBot.showEditalMenu()">
               <i class="fas fa-file-alt"></i> Edital
             </button>
             <button class="action-btn info" onclick="chatBot.showSimuladosMenu()">
@@ -2040,7 +1713,7 @@
         if (this.partialRegistration.date === hojeStr && 
             this.partialRegistration.activities && 
             Object.keys(this.partialRegistration.activities).length > 0) {
-          this.updateSidebar();
+          console.log('Registro parcial encontrado para hoje:', this.partialRegistration);
         }
       }
       
@@ -2248,7 +1921,8 @@
         this.closeYesterdayModal();
         
         if (savedCount > 0) {
-          this.showToast('Atividades de ontem registradas!', 'Seu progresso foi salvo com sucesso.');
+          this.showSuccessFeedback(`${savedCount} atividade(s) de ontem registrada(s) com sucesso!`);
+          this.updateSidePanel();
         }
       }
       
@@ -2282,11 +1956,342 @@
         return tasks;
       }
       
+      saveQuestoes(assuntoId, feitas, erradas, tempo, specificDate = null) {
+        const corretas = parseInt(feitas) - parseInt(erradas);
+        const dificuldade = 2;
+        
+        const revisaoAtualizada = this.updateReviewModule(assuntoId, feitas, corretas, tempo, dificuldade, specificDate);
+        
+        if (revisaoAtualizada) {
+          let dailyCompletedReviews = this.getModuleData('dailyCompletedReviews') || 0;
+          dailyCompletedReviews += 1;
+          this.setModuleData('dailyCompletedReviews', dailyCompletedReviews);
+          
+          const hoje = specificDate ? new Date(specificDate + 'T00:00:00') : new Date();
+          this.setModuleData('lastReviewDate', hoje.toISOString().split('T')[0]);
+          
+          this.registerHomeSession(`Questões - ${assuntoId}`, parseInt(tempo), specificDate);
+          localStorage.setItem('ultimoEstudo', new Date().toISOString());
+        }
+      }
+      
+      saveTeoria(materiaId, conteudo, pagina, tempo, specificDate = null) {
+        const hojeStr = specificDate || this.getDynamicDateString();
+        
+        const cicloAtualizado = this.updateStudyCycle(materiaId, tempo, specificDate);
+        
+        if (cicloAtualizado) {
+          const teoriaProgress = this.getModuleData('teoriaProgress') || {};
+          
+          teoriaProgress[materiaId] = {
+            conteudo: conteudo || '',
+            pagina: pagina || '',
+            ultimaAtualizacao: new Date().toISOString(),
+            tempoEstudado: parseInt(tempo)
+          };
+          
+          this.setModuleData('teoriaProgress', teoriaProgress);
+          
+          localStorage.setItem('ultimoEstudo', new Date().toISOString());
+        }
+        
+        return cicloAtualizado;
+      }
+      
+      saveAnki(deckId, tempo, cards, specificDate = null) {
+        const ankiData = this.getModuleData('ciclos_focus_v1');
+        const deck = ankiData && ankiData.decks ? ankiData.decks.find(d => d.id === deckId) : null;
+        const deckNome = deck ? deck.name : deckId;
+        
+        this.registerHomeSession(`Anki - ${deckNome}`, parseInt(tempo), specificDate);
+        
+        localStorage.setItem('ultimoEstudo', new Date().toISOString());
+      }
+      
+      registerHomeSession(subject, minutes, specificDate = null) {
+        const date = specificDate ? new Date(specificDate + 'T00:00:00') : new Date();
+        const dateKey = `sessions-${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`;
+        
+        let sessions = this.getModuleData(dateKey) || [];
+        
+        const existingSessionIndex = sessions.findIndex(session => 
+          session.subject === subject && 
+          session.date === `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`
+        );
+        
+        if (existingSessionIndex === -1) {
+          sessions.push({
+            subject: subject,
+            minutes: minutes,
+            date: `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`,
+            timestamp: date.toISOString()
+          });
+        } else {
+          sessions[existingSessionIndex].minutes = minutes;
+          sessions[existingSessionIndex].timestamp = date.toISOString();
+        }
+        
+        this.setModuleData(dateKey, sessions);
+      }
+      
+      updateReviewModule(assuntoId, feitas, corretas, tempo, dificuldade, specificDate = null) {
+        const disciplines = this.getModuleData('disciplines') || [];
+        const reviewDate = specificDate ? new Date(specificDate + 'T00:00:00') : new Date();
+        const reviewTimestamp = reviewDate.getTime();
+        
+        let assuntoEncontrado = null;
+        let disciplinaEncontrada = null;
+        
+        for (const disciplina of disciplines) {
+          if (disciplina.assuntos && Array.isArray(disciplina.assuntos)) {
+            for (const assunto of disciplina.assuntos) {
+              if (assunto.nome === assuntoId) {
+                assuntoEncontrado = assunto;
+                disciplinaEncontrada = disciplina;
+                break;
+              }
+            }
+            if (assuntoEncontrado) break;
+          }
+        }
+        
+        if (assuntoEncontrado) {
+          assuntoEncontrado.questions = (assuntoEncontrado.questions || 0) + parseInt(feitas);
+          assuntoEncontrado.correct = (assuntoEncontrado.correct || 0) + parseInt(corretas);
+          assuntoEncontrado.incorrect = (assuntoEncontrado.incorrect || 0) + (parseInt(feitas) - parseInt(corretas));
+          
+          if (!assuntoEncontrado.difficultyHistory) {
+            assuntoEncontrado.difficultyHistory = [];
+          }
+          assuntoEncontrado.difficultyHistory.push(parseInt(dificuldade));
+          
+          const accuracy = (parseInt(corretas) / parseInt(feitas)) * 100;
+          
+          if (assuntoEncontrado.reviewMethod === 'fixed') {
+            const interval = this.getPerformanceBasedInterval(accuracy);
+            assuntoEncontrado.interval = interval;
+            assuntoEncontrado.repetitions = (assuntoEncontrado.repetitions || 0) + 1;
+          } else {
+            const result = this.calculateNextReviewSM2(
+              parseInt(dificuldade),
+              assuntoEncontrado.easeFactor || 2.5,
+              assuntoEncontrado.interval || 1,
+              assuntoEncontrado.repetitions || 0
+            );
+            assuntoEncontrado.easeFactor = result.newEF;
+            assuntoEncontrado.interval = result.newInterval;
+            assuntoEncontrado.repetitions = result.repetitions;
+          }
+          
+          assuntoEncontrado.lastReviewed = reviewTimestamp;
+          
+          const nextReviewDate = new Date(reviewTimestamp);
+          nextReviewDate.setDate(nextReviewDate.getDate() + assuntoEncontrado.interval);
+          assuntoEncontrado.nextReviewDate = nextReviewDate.getTime();
+          
+          assuntoEncontrado.memoryStrength = this.calculateMemoryStrength(assuntoEncontrado);
+          
+          this.setModuleData('disciplines', disciplines);
+          return true;
+        } else {
+          return false;
+        }
+      }
+      
+      updateStudyCycle(materiaId, tempo, specificDate = null) {
+        const activeCycle = this.getActiveCycle();
+        const studyDate = specificDate || new Date().toISOString().split('T')[0];
+        
+        if (activeCycle && activeCycle.generatedCycle) {
+          const todayIndex = activeCycle.currentDay || 0;
+          const cycleLength = activeCycle.generatedCycle.length;
+          
+          let materiaEncontrada = false;
+          
+          for (let i = 0; i < cycleLength; i++) {
+            let cicloDia = activeCycle.generatedCycle[i];
+            
+            if (Array.isArray(cicloDia)) {
+              if (cicloDia.includes(materiaId)) {
+                materiaEncontrada = true;
+                break;
+              }
+            } else {
+              if (cicloDia === materiaId) {
+                materiaEncontrada = true;
+                break;
+              }
+            }
+          }
+          
+          if (materiaEncontrada) {
+            if (!activeCycle.completedSubjects) {
+              activeCycle.completedSubjects = {};
+            }
+            
+            if (!activeCycle.completedSubjects[studyDate]) {
+              activeCycle.completedSubjects[studyDate] = [];
+            }
+            
+            if (!activeCycle.completedSubjects[studyDate].includes(materiaId)) {
+              activeCycle.completedSubjects[studyDate].push(materiaId);
+            }
+            
+            if (!activeCycle.studyTime) {
+              activeCycle.studyTime = {};
+            }
+            
+            activeCycle.studyTime[studyDate] = (activeCycle.studyTime[studyDate] || 0) + parseInt(tempo);
+            
+            this.registerHomeSession(`Teoria - ${materiaId}`, parseInt(tempo), studyDate);
+            
+            const teoriaProgress = this.getModuleData('teoriaProgress') || {};
+            
+            teoriaProgress[materiaId] = {
+              conteudo: '',
+              pagina: '',
+              ultimaAtualizacao: new Date().toISOString(),
+              tempoEstudado: parseInt(tempo)
+            };
+            
+            this.setModuleData('teoriaProgress', teoriaProgress);
+            
+            this.setModuleData('StudyFlow_activeCycle', activeCycle);
+            
+            this.syncWithPlansModule(activeCycle);
+            
+            return true;
+          }
+        }
+        return false;
+      }
+      
+      syncWithPlansModule(activeCycle) {
+        try {
+          const planosData = JSON.parse(localStorage.getItem('StudyFlow_planos')) || {};
+          
+          if (planosData.ciclos && Array.isArray(planosData.ciclos)) {
+            const cicloPlano = planosData.ciclos.find(c => c.id === activeCycle.id);
+            
+            if (cicloPlano) {
+              if (!cicloPlano.completedSubjects) {
+                cicloPlano.completedSubjects = {};
+              }
+              
+              Object.keys(activeCycle.completedSubjects || {}).forEach(date => {
+                if (!cicloPlano.completedSubjects[date]) {
+                  cicloPlano.completedSubjects[date] = [];
+                }
+                
+                activeCycle.completedSubjects[date].forEach(materia => {
+                  if (!cicloPlano.completedSubjects[date].includes(materia)) {
+                    cicloPlano.completedSubjects[date].push(materia);
+                  }
+                });
+              });
+              
+              if (!cicloPlano.studyTime) {
+                cicloPlano.studyTime = {};
+              }
+              
+              Object.keys(activeCycle.studyTime || {}).forEach(date => {
+                cicloPlano.studyTime[date] = (cicloPlano.studyTime[date] || 0) + activeCycle.studyTime[date];
+              });
+              
+              if (activeCycle.currentDay !== undefined) {
+                cicloPlano.currentDay = activeCycle.currentDay;
+              }
+              
+              localStorage.setItem('StudyFlow_planos', JSON.stringify(planosData));
+            }
+          }
+        } catch (e) {
+          console.error('Erro ao sincronizar com módulo Planos:', e);
+        }
+      }
+      
+      showResetConfirmation() { 
+        const confirmationHTML = ` 
+          <div class="message-bubble bot-bubble registration-feedback compact-message"> 
+            <div class="message-content"> 
+              <i class="fas fa-exclamation-triangle" style="color: var(--danger)"></i> 
+              <strong>Atenção!</strong> Esta função executa um reset temporário do módulo do Chatbot, útil para corrigir travamentos ou inconsistências nos dados do dia. Nenhum outro módulo será afetado. Deseja continuar? 
+            </div> 
+            <div class="quick-actions"> 
+              <button class="action-btn reset" onclick="chatBot.resetChatbotData()"> 
+                <i class="fas fa-sync-alt"></i> Confirmar Reset 
+              </button> 
+              <button class="action-btn info" onclick="chatBot.addCompactMessage('Reset cancelado. O sistema permanece inalterado.')"> 
+                <i class="fas fa-times"></i> Cancelar 
+              </button> 
+            </div> 
+          </div> 
+        `; 
+        this.addBotMessage(confirmationHTML, false); 
+      } 
+      
+      resetChatbotData() { 
+        const hoje = new Date(); 
+        const hojeStr = hoje.toLocaleDateString('pt-BR'); 
+        
+        localStorage.removeItem('lastRegisterDate'); 
+        localStorage.removeItem('dailyActivities'); 
+        
+        this.partialRegistration = {
+          date: null,
+          activities: {},
+          completed: false
+        };
+        localStorage.removeItem('studyFlow_partialRegistration');
+        
+        const successHTML = ` 
+          <div class="message-bubble bot-bubble registration-feedback compact-message"> 
+            <div class="message-content"> 
+              <i class="fas fa-check-circle" style="color: var(--success)"></i> 
+              <strong>Reset Concluído</strong> Dados do módulo Chatbot reiniciados em ${hojeStr}. 
+            </div> 
+          </div> 
+        `; 
+        this.addBotMessage(successHTML, false); 
+        this.updateSidePanel();
+      } 
+      
+      getDynamicDateString() { 
+        const hoje = new Date(); 
+        const year = hoje.getFullYear(); 
+        const month = String(hoje.getMonth() + 1).padStart(2, '0'); 
+        const day = String(hoje.getDate()).padStart(2, '0'); 
+        return `${year}-${month}-${day}`; 
+      } 
+      
+      getDynamicDateObject() { 
+        return new Date(); 
+      } 
+      
+      formatDynamicDate(date) { 
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; 
+        return date.toLocaleDateString('pt-BR', options); 
+      } 
+      
+      isToday(dateString) { 
+        const hoje = this.getDynamicDateString(); 
+        return dateString === hoje; 
+      } 
+      
+      hasStudiedToday() { 
+        const hojeStr = this.getDynamicDateString();
+        const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} }; 
+        return dailyActivities.activities && 
+               (dailyActivities.activities.questoes?.length > 0 ||
+                dailyActivities.activities.anki?.length > 0 ||
+                dailyActivities.activities.teoria?.length > 0);
+      } 
+      
       openRegisterModal() {
         const hojeStr = this.getDynamicDateString();
         
         if (this.isDayFinished()) {
-          this.typeMessage("O dia de hoje já foi finalizado! Você não pode mais registrar atividades para hoje.");
+          this.addCompactMessage("O dia de hoje já foi finalizado! Você não pode mais registrar atividades para hoje.");
           return;
         }
         
@@ -2690,51 +2695,20 @@
         this.closeRegisterModal();
         
         if (savedCount > 0) {
+          // Feedback visual silencioso
+          this.showSuccessFeedback(`${savedCount} atividade(s) registrada(s) com sucesso! Seu progresso foi atualizado.`);
+          
+          // Atualizar painel lateral
+          this.updateSidePanel();
+          
           const hojeStr = this.getDynamicDateString();
           const todayTasks = this.getTodayTasks();
           const pendingCount = this.countPendingTasks(todayTasks, this.partialRegistration.activities);
           
           if (pendingCount === 0) {
             this.finalizeDay();
-          } else {
-            // Mostrar toast de confirmação simplificado
-            this.showToast('Atividade registrada!', 'Seu progresso foi salvo e suas revisões foram atualizadas.');
-            
-            // Atualizar sidebar imediatamente
-            this.updateSidebar();
           }
         }
-      }
-      
-      showToast(title, message) {
-        // Remover toast existente
-        const existingToast = document.querySelector('.toast');
-        if (existingToast) {
-          existingToast.remove();
-        }
-        
-        // Criar novo toast
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.innerHTML = `
-          <i class="fas fa-check-circle"></i>
-          <div class="toast-content">
-            <div class="toast-title">${title}</div>
-            <div class="toast-message">${message}</div>
-          </div>
-        `;
-        
-        document.body.appendChild(toast);
-        
-        // Remover toast após 3 segundos
-        setTimeout(() => {
-          toast.classList.add('hide');
-          setTimeout(() => {
-            if (toast.parentNode) {
-              toast.parentNode.removeChild(toast);
-            }
-          }, 300);
-        }, 3000);
       }
       
       saveToPartialRegistration(activity) {
@@ -2814,11 +2788,11 @@
         
         localStorage.setItem('lastRegisterDate', hojeStr);
         
-        // Atualizar sidebar para mostrar dia completo
-        this.updateSidebar();
+        // Atualizar painel lateral (irá mostrar o estado de dia concluído)
+        this.updateSidePanel();
         
-        // Mostrar mensagem curta no chat
-        this.typeMessage(`Dia finalizado com sucesso! Você completou todas as atividades de hoje.`);
+        // Feedback visual discreto
+        this.addCompactMessage(`Dia ${hojeStr} finalizado com sucesso!`);
       }
       
       closeRegisterModal() {
@@ -2858,282 +2832,6 @@
         return count;
       }
       
-      saveQuestoes(assuntoId, feitas, erradas, tempo, specificDate = null) {
-        const corretas = parseInt(feitas) - parseInt(erradas);
-        const dificuldade = 2;
-        
-        const revisaoAtualizada = this.updateReviewModule(assuntoId, feitas, corretas, tempo, dificuldade, specificDate);
-        
-        if (revisaoAtualizada) {
-          let dailyCompletedReviews = this.getModuleData('dailyCompletedReviews') || 0;
-          dailyCompletedReviews += 1;
-          this.setModuleData('dailyCompletedReviews', dailyCompletedReviews);
-          
-          const hoje = specificDate ? new Date(specificDate + 'T00:00:00') : new Date();
-          this.setModuleData('lastReviewDate', hoje.toISOString().split('T')[0]);
-          
-          this.registerHomeSession(`Questões - ${assuntoId}`, parseInt(tempo), specificDate);
-          localStorage.setItem('ultimoEstudo', new Date().toISOString());
-        }
-      }
-      
-      saveTeoria(materiaId, conteudo, pagina, tempo, specificDate = null) {
-        const hojeStr = specificDate || this.getDynamicDateString();
-        
-        const cicloAtualizado = this.updateStudyCycle(materiaId, tempo, specificDate);
-        
-        if (cicloAtualizado) {
-          const teoriaProgress = this.getModuleData('teoriaProgress') || {};
-          
-          teoriaProgress[materiaId] = {
-            conteudo: conteudo || '',
-            pagina: pagina || '',
-            ultimaAtualizacao: new Date().toISOString(),
-            tempoEstudado: parseInt(tempo)
-          };
-          
-          this.setModuleData('teoriaProgress', teoriaProgress);
-          
-          localStorage.setItem('ultimoEstudo', new Date().toISOString());
-        }
-        
-        return cicloAtualizado;
-      }
-      
-      saveAnki(deckId, tempo, cards, specificDate = null) {
-        const ankiData = this.getModuleData('ciclos_focus_v1');
-        const deck = ankiData && ankiData.decks ? ankiData.decks.find(d => d.id === deckId) : null;
-        const deckNome = deck ? deck.name : deckId;
-        
-        this.registerHomeSession(`Anki - ${deckNome}`, parseInt(tempo), specificDate);
-        
-        localStorage.setItem('ultimoEstudo', new Date().toISOString());
-      }
-      
-      registerHomeSession(subject, minutes, specificDate = null) {
-        const date = specificDate ? new Date(specificDate + 'T00:00:00') : new Date();
-        const dateKey = `sessions-${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`;
-        
-        let sessions = this.getModuleData(dateKey) || [];
-        
-        const existingSessionIndex = sessions.findIndex(session => 
-          session.subject === subject && 
-          session.date === `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`
-        );
-        
-        if (existingSessionIndex === -1) {
-          sessions.push({
-            subject: subject,
-            minutes: minutes,
-            date: `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`,
-            timestamp: date.toISOString()
-          });
-        } else {
-          sessions[existingSessionIndex].minutes = minutes;
-          sessions[existingSessionIndex].timestamp = date.toISOString();
-        }
-        
-        this.setModuleData(dateKey, sessions);
-      }
-      
-      updateReviewModule(assuntoId, feitas, corretas, tempo, dificuldade, specificDate = null) {
-        const disciplines = this.getModuleData('disciplines') || [];
-        const reviewDate = specificDate ? new Date(specificDate + 'T00:00:00') : new Date();
-        const reviewTimestamp = reviewDate.getTime();
-        
-        let assuntoEncontrado = null;
-        let disciplinaEncontrada = null;
-        
-        for (const disciplina of disciplines) {
-          if (disciplina.assuntos && Array.isArray(disciplina.assuntos)) {
-            for (const assunto of disciplina.assuntos) {
-              if (assunto.nome === assuntoId) {
-                assuntoEncontrado = assunto;
-                disciplinaEncontrada = disciplina;
-                break;
-              }
-            }
-            if (assuntoEncontrado) break;
-          }
-        }
-        
-        if (assuntoEncontrado) {
-          assuntoEncontrado.questions = (assuntoEncontrado.questions || 0) + parseInt(feitas);
-          assuntoEncontrado.correct = (assuntoEncontrado.correct || 0) + parseInt(corretas);
-          assuntoEncontrado.incorrect = (assuntoEncontrado.incorrect || 0) + (parseInt(feitas) - parseInt(corretas));
-          
-          if (!assuntoEncontrado.difficultyHistory) {
-            assuntoEncontrado.difficultyHistory = [];
-          }
-          assuntoEncontrado.difficultyHistory.push(parseInt(dificuldade));
-          
-          const accuracy = (parseInt(corretas) / parseInt(feitas)) * 100;
-          
-          if (assuntoEncontrado.reviewMethod === 'fixed') {
-            const interval = this.getPerformanceBasedInterval(accuracy);
-            assuntoEncontrado.interval = interval;
-            assuntoEncontrado.repetitions = (assuntoEncontrado.repetitions || 0) + 1;
-          } else {
-            const result = this.calculateNextReviewSM2(
-              parseInt(dificuldade),
-              assuntoEncontrado.easeFactor || 2.5,
-              assuntoEncontrado.interval || 1,
-              assuntoEncontrado.repetitions || 0
-            );
-            assuntoEncontrado.easeFactor = result.newEF;
-            assuntoEncontrado.interval = result.newInterval;
-            assuntoEncontrado.repetitions = result.repetitions;
-          }
-          
-          assuntoEncontrado.lastReviewed = reviewTimestamp;
-          
-          const nextReviewDate = new Date(reviewTimestamp);
-          nextReviewDate.setDate(nextReviewDate.getDate() + assuntoEncontrado.interval);
-          assuntoEncontrado.nextReviewDate = nextReviewDate.getTime();
-          
-          assuntoEncontrado.memoryStrength = this.calculateMemoryStrength(assuntoEncontrado);
-          
-          this.setModuleData('disciplines', disciplines);
-          return true;
-        } else {
-          return false;
-        }
-      }
-      
-      updateStudyCycle(materiaId, tempo, specificDate = null) {
-        const activeCycle = this.getActiveCycle();
-        const studyDate = specificDate || new Date().toISOString().split('T')[0];
-        
-        if (activeCycle && activeCycle.generatedCycle) {
-          const todayIndex = activeCycle.currentDay || 0;
-          const cycleLength = activeCycle.generatedCycle.length;
-          
-          let materiaEncontrada = false;
-          
-          for (let i = 0; i < cycleLength; i++) {
-            let cicloDia = activeCycle.generatedCycle[i];
-            
-            if (Array.isArray(cicloDia)) {
-              if (cicloDia.includes(materiaId)) {
-                materiaEncontrada = true;
-                break;
-              }
-            } else {
-              if (cicloDia === materiaId) {
-                materiaEncontrada = true;
-                break;
-              }
-            }
-          }
-          
-          if (materiaEncontrada) {
-            if (!activeCycle.completedSubjects) {
-              activeCycle.completedSubjects = {};
-            }
-            
-            if (!activeCycle.completedSubjects[studyDate]) {
-              activeCycle.completedSubjects[studyDate] = [];
-            }
-            
-            if (!activeCycle.completedSubjects[studyDate].includes(materiaId)) {
-              activeCycle.completedSubjects[studyDate].push(materiaId);
-            }
-            
-            if (!activeCycle.studyTime) {
-              activeCycle.studyTime = {};
-            }
-            
-            activeCycle.studyTime[studyDate] = (activeCycle.studyTime[studyDate] || 0) + parseInt(tempo);
-            
-            this.registerHomeSession(`Teoria - ${materiaId}`, parseInt(tempo), studyDate);
-            
-            const teoriaProgress = this.getModuleData('teoriaProgress') || {};
-            
-            teoriaProgress[materiaId] = {
-              conteudo: '',
-              pagina: '',
-              ultimaAtualizacao: new Date().toISOString(),
-              tempoEstudado: parseInt(tempo)
-            };
-            
-            this.setModuleData('teoriaProgress', teoriaProgress);
-            
-            this.setModuleData('StudyFlow_activeCycle', activeCycle);
-            
-            this.syncWithPlansModule(activeCycle);
-            
-            return true;
-          }
-        }
-        return false;
-      }
-      
-      syncWithPlansModule(activeCycle) {
-        try {
-          const planosData = JSON.parse(localStorage.getItem('StudyFlow_planos')) || {};
-          
-          if (planosData.ciclos && Array.isArray(planosData.ciclos)) {
-            const cicloPlano = planosData.ciclos.find(c => c.id === activeCycle.id);
-            
-            if (cicloPlano) {
-              if (!cicloPlano.completedSubjects) {
-                cicloPlano.completedSubjects = {};
-              }
-              
-              Object.keys(activeCycle.completedSubjects || {}).forEach(date => {
-                if (!cicloPlano.completedSubjects[date]) {
-                  cicloPlano.completedSubjects[date] = [];
-                }
-                
-                activeCycle.completedSubjects[date].forEach(materia => {
-                  if (!cicloPlano.completedSubjects[date].includes(materia)) {
-                    cicloPlano.completedSubjects[date].push(materia);
-                  }
-                });
-              });
-              
-              if (!cicloPlano.studyTime) {
-                cicloPlano.studyTime = {};
-              }
-              
-              Object.keys(activeCycle.studyTime || {}).forEach(date => {
-                cicloPlano.studyTime[date] = (cicloPlano.studyTime[date] || 0) + activeCycle.studyTime[date];
-              });
-              
-              if (activeCycle.currentDay !== undefined) {
-                cicloPlano.currentDay = activeCycle.currentDay;
-              }
-              
-              localStorage.setItem('StudyFlow_planos', JSON.stringify(planosData));
-            }
-          }
-        } catch (e) {
-          console.error('Erro ao sincronizar com módulo Planos:', e);
-        }
-      }
-      
-      getDynamicDateString() { 
-        const hoje = new Date(); 
-        const year = hoje.getFullYear(); 
-        const month = String(hoje.getMonth() + 1).padStart(2, '0'); 
-        const day = String(hoje.getDate()).padStart(2, '0'); 
-        return `${year}-${month}-${day}`; 
-      } 
-      
-      getDynamicDateObject() { 
-        return new Date(); 
-      } 
-      
-      formatDynamicDate(date) { 
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; 
-        return date.toLocaleDateString('pt-BR', options); 
-      } 
-      
-      isToday(dateString) { 
-        const hoje = this.getDynamicDateString(); 
-        return dateString === hoje; 
-      } 
-      
       toggleTheme() {
         if (this.currentTheme === 'light') {
           document.body.classList.add('dark-theme');
@@ -3145,10 +2843,42 @@
           this.currentTheme = 'light';
         }
         localStorage.setItem('theme', this.currentTheme);
+        this.updateSidePanel();
       }
       
       addUserMessage(content) {
         this.addMessageToChat(content, true);
+      }
+      
+      addCompactMessage(content) {
+        const chatMessages = document.getElementById('chatMessages');
+        const messageContainer = document.createElement('div');
+        messageContainer.className = 'message-container bot-container';
+        
+        const avatar = document.createElement('div');
+        avatar.className = 'avatar bot-avatar-small';
+        avatar.innerHTML = '<i class="fas fa-robot"></i>';
+        messageContainer.appendChild(avatar);
+        
+        const messageBubble = document.createElement('div');
+        messageBubble.className = 'message-bubble bot-bubble compact-message';
+        messageBubble.style.maxWidth = '60%';
+        
+        const messageContent = document.createElement('div');
+        messageContent.className = 'message-content';
+        messageContent.innerHTML = content;
+        
+        const messageTime = document.createElement('div');
+        messageTime.className = 'bubble-time';
+        messageTime.textContent = this.formatTime(new Date());
+        
+        messageBubble.appendChild(messageContent);
+        messageBubble.appendChild(messageTime);
+        
+        messageContainer.appendChild(messageBubble);
+        chatMessages.appendChild(messageContainer);
+        
+        chatMessages.scrollTop = chatMessages.scrollHeight;
       }
       
       getActiveCycle() {
@@ -3287,6 +3017,36 @@
         return pendingTopics.slice(0, dailyReviewGoal);
       }
       
+      countQuestoesPendentesHoje(dateStr = null) {
+        const hojeStr = dateStr || this.getDynamicDateString();
+        const dailyReviewGoal = this.getModuleData('dailyReviewGoal') || 5;
+        const questoesRegistradasHoje = this.getQuestoesRegistradasHoje(hojeStr);
+        
+        return Math.max(0, dailyReviewGoal - questoesRegistradasHoje.length);
+      }
+      
+      calculateOverdueReviews() {
+        const disciplines = this.getModuleData('disciplines');
+        if (!disciplines || !Array.isArray(disciplines)) return 0;
+        
+        const hoje = new Date();
+        const todayTimestamp = hoje.getTime();
+        
+        let atrasadas = 0;
+        
+        disciplines.forEach(disciplina => {
+          if (disciplina.assuntos && Array.isArray(disciplina.assuntos)) {
+            disciplina.assuntos.forEach(assunto => {
+              if (assunto.nextReviewDate && assunto.nextReviewDate < todayTimestamp && !assunto.suspended) {
+                atrasadas++;
+              }
+            });
+          }
+        });
+        
+        return atrasadas;
+      }
+      
       getTodaySubjects(date = null) {
         const activeCycle = this.getActiveCycle();
         if (!activeCycle || !activeCycle.generatedCycle) {
@@ -3382,17 +3142,24 @@
         return today.getTime();
       }
       
-      getTodayDecks() {
+      trocarBaralhos() {
         const ankiData = this.getModuleData('ciclos_focus_v1');
-        if (!ankiData || !ankiData.decks || !ankiData.perDay) return [];
-        
+        if (!ankiData) {
+          this.typeMessage("Não foi possível encontrar os dados dos baralhos Anki.");
+          return;
+        }
+
+        const totalDecks = ankiData.decks.length;
         const perDay = ankiData.perDay;
-        const blockIndex = ankiData.blockIndex || 0;
-        
-        const startIndex = blockIndex * perDay;
-        const todayDecks = ankiData.decks.slice(startIndex, startIndex + perDay);
-        
-        return todayDecks.map(deck => deck.name);
+        const totalBlocks = Math.ceil(totalDecks / perDay);
+
+        ankiData.blockIndex = (ankiData.blockIndex + 1) % totalBlocks;
+        ankiData.lastUpdated = new Date().toDateString();
+
+        this.setModuleData('ciclos_focus_v1', ankiData);
+
+        this.addCompactMessage(`Baralhos trocados! Agora são os baralhos do bloco ${ankiData.blockIndex + 1} de ${totalBlocks}.`);
+        this.updateSidePanel();
       }
       
       addMessageToChat(content, isUser = false, timestamp = null, messageId = null) {
@@ -3430,13 +3197,6 @@
         
         messageBubble.appendChild(messageContent);
         messageBubble.appendChild(messageTime);
-        
-        if (isUser) {
-          const reaction = document.createElement('div');
-          reaction.className = 'message-reaction';
-          reaction.innerHTML = '<span class="reaction-icon"><i class="fas fa-check-double"></i></span>';
-          messageBubble.appendChild(reaction);
-        }
         
         messageContainer.appendChild(messageBubble);
         
@@ -3604,9 +3364,12 @@
         const lowerMessage = message.toLowerCase();
         
         if (lowerMessage.includes('resumo') || lowerMessage.includes('como estou') || lowerMessage.includes('tarefas')) {
-          this.typeMessage("Seu progresso está visível no painel lateral à direita. Lá você pode ver todas as atividades do dia, seu progresso e tempo estudado.");
+          this.addCompactMessage("Seu progresso diário está sempre visível no painel lateral à direita. 😊");
+          this.updateSidePanel();
         } else if (lowerMessage.includes('registrar') || lowerMessage.includes('adicionar')) {
           this.openRegisterModal();
+        } else if (lowerMessage.includes('configurar') || lowerMessage.includes('config')) {
+          this.showConfigModal();
         } else if (lowerMessage.includes('ajuda') || lowerMessage.includes('comandos')) {
           this.showHelp();
         } else if (lowerMessage.includes('info') || lowerMessage.includes('sobre')) {
@@ -3615,63 +3378,30 @@
           this.showEditalMenu();
         } else if (lowerMessage.includes('simulado')) {
           this.showSimuladosMenu();
+        } else if (lowerMessage.includes('reset')) {
+          this.showResetConfirmation();
         } else {
-          this.typeMessage("Posso te ajudar com:\n\n• <strong>Registrar atividades</strong>\n• <strong>Visualizar edital</strong>\n• <strong>Ver simulados</strong>\n• <strong>Outras dúvidas</strong>\n\nSeu progresso diário está sempre visível no painel lateral!");
+          this.typeMessage("Entendi sua mensagem! Posso te ajudar com:\n\n• <strong>Registrar atividades</strong>\n• <strong>Edital</strong>\n• <strong>Simulados</strong>\n• <strong>Configurações</strong>\n• <strong>Ajuda e informações</strong>\n\nO que você gostaria de fazer?");
         }
       }
       
       showHelp() {
         const helpCard = `
-          <div class="message-card">
-            <div class="message-card-header">
-              <i class="fas fa-question-circle"></i>
-              <div class="message-card-title">Como posso ajudá-lo?</div>
-            </div>
-            <div class="message-card-content">
-              <div class="message-text">
-                <strong>Seu progresso está sempre visível no painel lateral à direita!</strong>
-                <br><br>
-                Lá você encontra:
-              </div>
-              <div class="message-list">
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-tasks"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Atividades do dia</div>
-                    <div class="message-list-description">Status atual de cada tarefa</div>
-                  </div>
-                </div>
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-chart-line"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Progresso diário</div>
-                    <div class="message-list-description">Barra visual de conclusão</div>
-                  </div>
-                </div>
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-clock"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Tempo estudado</div>
-                    <div class="message-list-description">Total de minutos hoje</div>
-                  </div>
-                </div>
-              </div>
-              <div class="message-divider"></div>
-              <div class="message-text">
-                <strong>Comandos disponíveis:</strong>
-              </div>
-              <div class="quick-actions">
+          <div class="message-bubble bot-bubble compact-message">
+            <div class="message-content">
+              <strong>Como posso ajudá-lo?</strong>
+              <div class="quick-actions" style="margin-top: 10px">
                 <button class="action-btn primary" onclick="chatBot.openRegisterModal()">
-                  <i class="fas fa-plus-circle"></i> Registrar Atividade
+                  <i class="fas fa-plus-circle"></i> Registrar Atividades
                 </button>
-                <button class="action-btn info" onclick="chatBot.openYesterdayModal()">
-                  <i class="fas fa-history"></i> Registrar Atividades de Ontem
-                </button>
-                <button class="action-btn info" onclick="chatBot.showEditalMenu()">
+                <button class="action-btn secondary" onclick="chatBot.showEditalMenu()">
                   <i class="fas fa-file-alt"></i> Edital
                 </button>
                 <button class="action-btn info" onclick="chatBot.showSimuladosMenu()">
                   <i class="fas fa-chart-line"></i> Simulados
+                </button>
+                <button class="action-btn info" onclick="chatBot.showConfigModal()">
+                  <i class="fas fa-cog"></i> Configurar
                 </button>
               </div>
             </div>
@@ -3682,44 +3412,19 @@
       
       showInfo() {
         const infoCard = `
-          <div class="message-card">
-            <div class="message-card-header">
-              <i class="fas fa-info-circle"></i>
-              <div class="message-card-title">Sobre o StudyFlow</div>
-            </div>
-            <div class="message-card-content">
-              <div class="message-text">
-                O StudyFlow é seu assistente pessoal de estudos, integrando todas as suas ferramentas de aprendizado em um só lugar.
+          <div class="message-bubble bot-bubble compact-message">
+            <div class="message-content">
+              <strong>Sobre o StudyFlow</strong>
+              <div style="margin-top: 8px; font-size: 0.9rem">
+                Seu assistente pessoal de estudos, integrando todas as suas ferramentas de aprendizado em um só lugar.
               </div>
-              <div class="message-muted" style="margin-top: 10px">
-                <strong>Novo: Painel de Progresso</strong><br>
-                Agora seu progresso está sempre visível no painel lateral, sem precisar perguntar ao chat!
-              </div>
-              <div class="message-list" style="margin-top: 8px">
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-check"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Progresso visual contínuo</div>
-                  </div>
-                </div>
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-check"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Registro silencioso de atividades</div>
-                  </div>
-                </div>
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-check"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Chat limpo e focado em conversas</div>
-                  </div>
-                </div>
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-check"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Feedback visual instantâneo</div>
-                  </div>
-                </div>
+              <div class="quick-actions" style="margin-top: 10px">
+                <button class="action-btn info" onclick="chatBot.updateSidePanel()">
+                  <i class="fas fa-sync-alt"></i> Atualizar Painel
+                </button>
+                <button class="action-btn info" onclick="chatBot.toggleSidePanel()">
+                  <i class="fas fa-eye"></i> Mostrar/Ocultar Painel
+                </button>
               </div>
             </div>
           </div>
@@ -3733,10 +3438,7 @@
             <button class="action-btn primary" onclick="chatBot.openRegisterModal()">
               <i class="fas fa-plus-circle"></i> Registrar Atividade
             </button>
-            <button class="action-btn info" onclick="chatBot.openYesterdayModal()">
-              <i class="fas fa-history"></i> Registrar Atividades de Ontem
-            </button>
-            <button class="action-btn info" onclick="chatBot.showEditalMenu()">
+            <button class="action-btn secondary" onclick="chatBot.showEditalMenu()">
               <i class="fas fa-file-alt"></i> Edital
             </button>
             <button class="action-btn info" onclick="chatBot.showSimuladosMenu()">
@@ -3767,34 +3469,194 @@
         input.focus();
       }
       
-      showEditalMenu() {
-        const editalData = this.getEditalData();
-        if (!editalData) {
-          this.typeMessage("Não encontrei dados do edital verticalizado. Verifique se você já importou um edital no módulo correspondente.");
-          return;
+      showConfigModal() {
+        document.getElementById('configModal').style.display = 'flex';
+        document.getElementById('materiasPorDia').value = this.materiasPorDia;
+      }
+      
+      closeConfigModal() {
+        document.getElementById('configModal').style.display = 'none';
+      }
+      
+      saveConfig() {
+        const materiasPorDia = parseInt(document.getElementById('materiasPorDia').value);
+        if (materiasPorDia >= 1 && materiasPorDia <= 5) {
+          this.materiasPorDia = materiasPorDia;
+          localStorage.setItem('studyFlow_materiasPorDia', materiasPorDia.toString());
+          this.closeConfigModal();
+          this.addCompactMessage(`Configuração salva! Agora você verá ${materiasPorDia} matéria(s) por dia.`);
+          this.updateSidePanel();
+        } else {
+          alert('Por favor, informe um número entre 1 e 5.');
+        }
+      }
+      
+      showSimuladoModal() {
+        document.getElementById('simuladoModal').style.display = 'flex';
+        const simuladoConfig = JSON.parse(localStorage.getItem('studyFlow_simuladoConfig')) || {};
+        document.getElementById('simuladoInterval').value = simuladoConfig.interval || '0';
+      }
+      
+      closeSimuladoModal() {
+        document.getElementById('simuladoModal').style.display = 'none';
+      }
+      
+      saveSimuladoConfig() {
+        const interval = parseInt(document.getElementById('simuladoInterval').value);
+        const simuladoConfig = {
+          interval: interval
+        };
+        
+        if (interval > 0) {
+          const hoje = new Date();
+          const nextSimulado = new Date();
+          nextSimulado.setDate(hoje.getDate() + interval);
+          simuladoConfig.nextSimulado = nextSimulado.toISOString();
         }
         
-        this.addBotMessage(`
-          <div class="message-card">
-            <div class="message-card-header">
-              <i class="fas fa-file-alt"></i>
-              <div class="message-card-title">Progresso no Edital</div>
-            </div>
-            <div class="message-card-content">
-              <div class="message-text">
-                Você quer ver seu progresso no edital completo ou em uma matéria específica?
-              </div>
-              <div class="quick-actions" style="margin-top: 12px">
-                <button class="action-btn primary" onclick="chatBot.showEditalCompleto()">
-                  <i class="fas fa-chart-pie"></i> Todo o Edital
-                </button>
-                <button class="action-btn secondary" onclick="chatBot.showMateriasEdital()">
-                  <i class="fas fa-book"></i> Matéria Específica
-                </button>
+        localStorage.setItem('studyFlow_simuladoConfig', JSON.stringify(simuladoConfig));
+        this.closeSimuladoModal();
+        this.addCompactMessage('Configuração de simulado salva!');
+      }
+      
+      showRelatorioModal() {
+        document.getElementById('relatorioModal').style.display = 'flex';
+      }
+      
+      closeRelatorioModal() {
+        document.getElementById('relatorioModal').style.display = 'none';
+      }
+      
+      generateRelatorio() {
+        const periodo = parseInt(document.getElementById('relatorioPeriodo').value);
+        this.closeRelatorioModal();
+        
+        const hoje = new Date();
+        const periodData = this.getPeriodData(periodo);
+        const previousPeriodData = this.getPeriodData(periodo, periodo);
+        
+        const atualTotais = this.calculatePeriodTotals(periodData);
+        const anteriorTotais = this.calculatePeriodTotals(previousPeriodData);
+        
+        const relatorioHTML = this.generateRelatorioHTML(periodo, atualTotais, anteriorTotais);
+        this.addBotMessage(relatorioHTML, true, 'relatorio-periodico');
+      }
+      
+      getPeriodData(dias, offset = 0) {
+        const data = [];
+        const hoje = new Date();
+        
+        for (let i = offset + dias - 1; i >= offset; i--) {
+          const dataItem = new Date();
+          dataItem.setDate(hoje.getDate() - i);
+          const dataStr = dataItem.toISOString().split('T')[0];
+          const atividades = JSON.parse(localStorage.getItem(`dailyActivities_${dataStr}`)) || { activities: {} };
+          
+          if (Object.keys(atividades.activities).length > 0) {
+            data.push({
+              date: dataStr,
+              atividades: atividades.activities
+            });
+          }
+        }
+        
+        return data;
+      }
+      
+      calculatePeriodTotals(periodData) {
+        const totais = {
+          totalTime: 0,
+          totalQuestoes: 0,
+          totalAcertos: 0,
+          totalAnkiDecks: 0,
+          totalFlashcards: 0
+        };
+        
+        periodData.forEach(dia => {
+          if (dia.atividades.questoes && dia.atividades.questoes.length > 0) {
+            dia.atividades.questoes.forEach(q => {
+              totais.totalTime += q.tempo;
+              totais.totalQuestoes += q.feitas;
+              totais.totalAcertos += (q.feitas - q.erradas);
+            });
+          }
+          
+          if (dia.atividades.anki && dia.atividades.anki.length > 0) {
+            totais.totalAnkiDecks += dia.atividades.anki.length;
+            dia.atividades.anki.forEach(a => {
+              totais.totalTime += a.tempo;
+              totais.totalFlashcards += a.cards;
+            });
+          }
+          
+          if (dia.atividades.teoria && dia.atividades.teoria.length > 0) {
+            dia.atividades.teoria.forEach(t => {
+              totais.totalTime += t.tempo;
+            });
+          }
+        });
+        
+        return totais;
+      }
+      
+      generateRelatorioHTML(periodo, atualTotais, anteriorTotais) {
+        const diffTime = atualTotais.totalTime - anteriorTotais.totalTime;
+        const diffQuestoes = atualTotais.totalQuestoes - anteriorTotais.totalQuestoes;
+        const diffAnkiDecks = atualTotais.totalAnkiDecks - anteriorTotais.totalAnkiDecks;
+        const diffFlashcards = atualTotais.totalFlashcards - anteriorTotais.totalFlashcards;
+        
+        const atualAcertosPercent = atualTotais.totalQuestoes > 0 ? (atualTotais.totalAcertos / atualTotais.totalQuestoes) * 100 : 0;
+        const anteriorAcertosPercent = anteriorTotais.totalQuestoes > 0 ? (anteriorTotais.totalAcertos / anteriorTotais.totalQuestoes) * 100 : 0;
+        const diffAcertosPercent = atualAcertosPercent - anteriorAcertosPercent;
+        
+        const atualHours = Math.floor(atualTotais.totalTime / 60);
+        const atualMinutes = atualTotais.totalTime % 60;
+        
+        return `
+          <div class="message-bubble bot-bubble">
+            <div class="message-content">
+              <strong>Relatório Periódico (${periodo} dias)</strong>
+              <div style="margin-top: 10px; font-size: 0.9rem">
+                <div>⏱️ <strong>Tempo Total:</strong> ${atualHours}h ${atualMinutes}m</div>
+                <div>🧩 <strong>Questões:</strong> ${atualTotais.totalQuestoes} (${atualAcertosPercent.toFixed(1)}% acertos)</div>
+                <div>🔁 <strong>Flashcards:</strong> ${atualTotais.totalFlashcards}</div>
               </div>
             </div>
           </div>
-        `, true, 'edital-menu');
+        `;
+      }
+      
+      getTodayDecks() {
+        const ankiData = this.getModuleData('ciclos_focus_v1');
+        if (!ankiData || !ankiData.decks || !ankiData.perDay) return [];
+        
+        const perDay = ankiData.perDay;
+        const blockIndex = ankiData.blockIndex || 0;
+        
+        const startIndex = blockIndex * perDay;
+        const todayDecks = ankiData.decks.slice(startIndex, startIndex + perDay);
+        
+        return todayDecks.map(deck => deck.name);
+      }
+      
+      showEditalMenu() {
+        const editalData = this.getEditalData();
+        if (!editalData) {
+          this.addCompactMessage("Não encontrei dados do edital verticalizado. Verifique se você já importou um edital no módulo correspondente.");
+          return;
+        }
+        
+        this.addCompactMessage(`
+          <strong>Progresso no Edital</strong><br>
+          <div class="quick-actions" style="margin-top: 8px">
+            <button class="action-btn primary" onclick="chatBot.showEditalCompleto()">
+              <i class="fas fa-chart-pie"></i> Todo o Edital
+            </button>
+            <button class="action-btn secondary" onclick="chatBot.showMateriasEdital()">
+              <i class="fas fa-book"></i> Matéria Específica
+            </button>
+          </div>
+        `);
       }
       
       getEditalData() {
@@ -3827,7 +3689,7 @@
       showEditalCompleto() {
         const editalData = this.getEditalData();
         if (!editalData) {
-          this.typeMessage("Não foi possível carregar os dados do edital.");
+          this.addCompactMessage("Não foi possível carregar os dados do edital.");
           return;
         }
         
@@ -3848,106 +3710,29 @@
         
         const porcentagemTotal = totalTopicos > 0 ? Math.round((topicosConcluidos / totalTopicos) * 100) : 0;
         
-        const progressoDisciplinas = edital.disciplinas.map(disciplina => {
-          let topicosDisciplina = 0;
-          let concluidosDisciplina = 0;
-          
-          disciplina.topicos.forEach(topico => {
-            topicosDisciplina++;
-            const chaveTopico = `${disciplina.nome}-${topico}`;
-            if (progresso[chaveTopico]) {
-              concluidosDisciplina++;
-            }
-          });
-          
-          const porcentagem = topicosDisciplina > 0 ? Math.round((concluidosDisciplina / topicosDisciplina) * 100) : 0;
-          
-          return {
-            nome: disciplina.nome,
-            concluidos: concluidosDisciplina,
-            total: topicosDisciplina,
-            porcentagem: porcentagem
-          };
-        });
-        
-        progressoDisciplinas.sort((a, b) => a.porcentagem - b.porcentagem);
-        
-        let relatorioHTML = `
-          <div class="message-card">
-            <div class="message-card-header">
-              <i class="fas fa-chart-pie"></i>
-              <div class="message-card-title">Progresso Geral do Edital</div>
-            </div>
-            <div class="message-card-content">
-              <div class="message-stats">
-                <div class="message-stat">
-                  <div class="message-stat-value">${porcentagemTotal}%</div>
-                  <div class="message-stat-label">Concluído</div>
-                </div>
-                <div class="message-stat">
-                  <div class="message-stat-value">${topicosConcluidos}/${totalTopicos}</div>
-                  <div class="message-stat-label">Tópicos</div>
-                </div>
-              </div>
-              <div class="message-progress">
-                <div class="message-progress-bar">
-                  <div class="message-progress-fill" style="width: ${porcentagemTotal}%"></div>
-                </div>
-                <div class="message-progress-text">
-                  <span>0%</span>
-                  <span>${porcentagemTotal}%</span>
-                  <span>100%</span>
-                </div>
-              </div>
-              <div class="message-section">
-                <div class="message-section-title">Progresso por Disciplina</div>
-                <div class="message-list">
-        `;
-        
-        progressoDisciplinas.forEach(disciplina => {
-          const statusClass = disciplina.porcentagem >= 80 ? 'success' : disciplina.porcentagem >= 50 ? 'warning' : 'danger';
-          
-          relatorioHTML += `
-            <div class="message-list-item">
-              <div class="message-list-icon"><i class="fas fa-book"></i></div>
-              <div class="message-list-content">
-                <div class="message-list-title">${disciplina.nome}</div>
-                <div class="message-list-description">
-                  ${disciplina.concluidos}/${disciplina.total} tópicos
-                  <span class="message-badge message-badge-${statusClass}">${disciplina.porcentagem}%</span>
-                </div>
-              </div>
-            </div>
-          `;
-        });
-        
-        relatorioHTML += `
-                </div>
-              </div>
-            </div>
+        this.addCompactMessage(`
+          <strong>Progresso Geral do Edital</strong><br>
+          <div style="margin-top: 8px">
+            📊 <strong>${porcentagemTotal}% concluído</strong><br>
+            ✅ ${topicosConcluidos}/${totalTopicos} tópicos
           </div>
-        `;
-        
-        this.addBotMessage(relatorioHTML, true, 'edital-completo');
+        `);
       }
       
       showMateriasEdital() {
         const editalData = this.getEditalData();
         if (!editalData) {
-          this.typeMessage("Não foi possível carregar os dados do edital.");
+          this.addCompactMessage("Não foi possível carregar os dados do edital.");
           return;
         }
         
         const { edital } = editalData;
         
         let materiasHTML = `
-          <div class="message-card">
-            <div class="message-card-header">
-              <i class="fas fa-book"></i>
-              <div class="message-card-title">Selecione uma Matéria</div>
-            </div>
-            <div class="message-card-content">
-              <div class="quick-actions">
+          <div class="message-bubble bot-bubble">
+            <div class="message-content">
+              <strong>Selecione uma Matéria</strong>
+              <div class="quick-actions" style="margin-top: 10px">
         `;
         
         edital.disciplinas.forEach(disciplina => {
@@ -3970,7 +3755,7 @@
       showEditalMateria(materiaNome) {
         const editalData = this.getEditalData();
         if (!editalData) {
-          this.typeMessage("Não foi possível carregar os dados do edital.");
+          this.addCompactMessage("Não foi possível carregar os dados do edital.");
           return;
         }
         
@@ -3978,13 +3763,12 @@
         const disciplina = edital.disciplinas.find(d => d.nome === materiaNome);
         
         if (!disciplina) {
-          this.typeMessage("Matéria não encontrada no edital.");
+          this.addCompactMessage("Matéria não encontrada no edital.");
           return;
         }
         
         let totalTopicos = 0;
         let topicosConcluidos = 0;
-        const topicosDetalhados = [];
         
         disciplina.topicos.forEach(topico => {
           totalTopicos++;
@@ -3994,107 +3778,37 @@
           if (concluido) {
             topicosConcluidos++;
           }
-          
-          topicosDetalhados.push({
-            nome: topico,
-            concluido: concluido
-          });
         });
         
         const porcentagem = totalTopicos > 0 ? Math.round((topicosConcluidos / totalTopicos) * 100) : 0;
         
-        let materiaHTML = `
-          <div class="message-card">
-            <div class="message-card-header">
-              <i class="fas fa-book-open"></i>
-              <div class="message-card-title">${disciplina.nome}</div>
-            </div>
-            <div class="message-card-content">
-              <div class="message-stats">
-                <div class="message-stat">
-                  <div class="message-stat-value">${porcentagem}%</div>
-                  <div class="message-stat-label">Concluído</div>
-                </div>
-                <div class="message-stat">
-                  <div class="message-stat-value">${topicosConcluidos}/${totalTopicos}</div>
-                  <div class="message-stat-label">Tópicos</div>
-                </div>
-              </div>
-              <div class="message-progress">
-                <div class="message-progress-bar">
-                  <div class="message-progress-fill" style="width: ${porcentagem}%"></div>
-                </div>
-                <div class="message-progress-text">
-                  <span>0%</span>
-                  <span>${porcentagem}%</span>
-                  <span>100%</span>
-                </div>
-              </div>
-              <div class="message-section">
-                <div class="message-section-title">Tópicos</div>
-                <div class="message-list">
-        `;
-        
-        topicosDetalhados.forEach(topico => {
-          const statusIcon = topico.concluido ? 'check-circle' : 'circle';
-          const statusColor = topico.concluido ? 'success' : 'gray';
-          
-          materiaHTML += `
-            <div class="message-list-item">
-              <div class="message-list-icon" style="color: var(--${statusColor})">
-                <i class="fas fa-${statusIcon}"></i>
-              </div>
-              <div class="message-list-content">
-                <div class="message-list-title">${topico.nome}</div>
-                <div class="message-list-description">
-                  ${topico.concluido ? 'Concluído' : 'Pendente'}
-                </div>
-              </div>
-            </div>
-          `;
-        });
-        
-        materiaHTML += `
-                </div>
-              </div>
-            </div>
+        this.addCompactMessage(`
+          <strong>${disciplina.nome}</strong><br>
+          <div style="margin-top: 8px">
+            📊 <strong>${porcentagem}% concluído</strong><br>
+            ✅ ${topicosConcluidos}/${totalTopicos} tópicos
           </div>
-        `;
-        
-        this.addBotMessage(materiaHTML, true, `edital-${materiaNome}`);
+        `);
       }
       
       showSimuladosMenu() {
         const simuladosData = this.getSimuladosData();
         if (!simuladosData || simuladosData.simulados.length === 0) {
-          this.typeMessage("Não encontrei dados de simulados. Verifique se você já realizou algum simulado no módulo correspondente.");
+          this.addCompactMessage("Não encontrei dados de simulados. Verifique se você já realizou algum simulado no módulo correspondente.");
           return;
         }
         
-        this.addBotMessage(`
-          <div class="message-card">
-            <div class="message-card-header">
-              <i class="fas fa-chart-line"></i>
-              <div class="message-card-title">Análise de Simulados</div>
-            </div>
-            <div class="message-card-content">
-              <div class="message-text">
-                O que você gostaria de ver?
-              </div>
-              <div class="quick-actions" style="margin-top: 12px">
-                <button class="action-btn primary" onclick="chatBot.showUltimoSimuladoNota()">
-                  <i class="fas fa-star"></i> Nota do Último Simulado
-                </button>
-                <button class="action-btn secondary" onclick="chatBot.showUltimoSimuladoRelatorio()">
-                  <i class="fas fa-chart-bar"></i> Relatório Completo
-                </button>
-                <button class="action-btn info" onclick="chatBot.showUltimoSimuladoData()">
-                  <i class="fas fa-calendar"></i> Data do Último Simulado
-                </button>
-              </div>
-            </div>
+        this.addCompactMessage(`
+          <strong>Análise de Simulados</strong><br>
+          <div class="quick-actions" style="margin-top: 8px">
+            <button class="action-btn primary" onclick="chatBot.showUltimoSimuladoNota()">
+              <i class="fas fa-star"></i> Nota do Último
+            </button>
+            <button class="action-btn secondary" onclick="chatBot.showUltimoSimuladoData()">
+              <i class="fas fa-calendar"></i> Data do Último
+            </button>
           </div>
-        `, true, 'simulados-menu');
+        `);
       }
       
       getSimuladosData() {
@@ -4127,190 +3841,29 @@
       showUltimoSimuladoNota() {
         const simuladosData = this.getSimuladosData();
         if (!simuladosData) {
-          this.typeMessage("Não foi possível carregar os dados dos simulados.");
+          this.addCompactMessage("Não foi possível carregar os dados dos simulados.");
           return;
         }
         
         const { ultimoSimulado, prova } = simuladosData;
         const dataFormatada = new Date(ultimoSimulado.date).toLocaleDateString('pt-BR');
-        
         const porcentagem = parseFloat(ultimoSimulado.totalPercentage);
-        let classificacao = '';
-        let corClassificacao = '';
         
-        if (porcentagem >= 90) {
-          classificacao = 'EXCELENTE';
-          corClassificacao = 'success';
-        } else if (porcentagem >= 80) {
-          classificacao = 'ÓTIMO';
-          corClassificacao = 'primary';
-        } else if (porcentagem >= 66) {
-          classificacao = 'BOM';
-          corClassificacao = 'secondary';
-        } else if (porcentagem >= 51) {
-          classificacao = 'MÉDIO';
-          corClassificacao = 'warning';
-        } else if (porcentagem >= 31) {
-          classificacao = 'FRACO';
-          corClassificacao = 'warning';
-        } else {
-          classificacao = 'CRÍTICO';
-          corClassificacao = 'danger';
-        }
-        
-        const notaHTML = `
-          <div class="message-card">
-            <div class="message-card-header">
-              <i class="fas fa-star"></i>
-              <div class="message-card-title">Nota do Último Simulado</div>
-            </div>
-            <div class="message-card-content">
-              <div class="message-stats">
-                <div class="message-stat">
-                  <div class="message-stat-value">${ultimoSimulado.totalScore}</div>
-                  <div class="message-stat-label">Pontuação</div>
-                </div>
-                <div class="message-stat">
-                  <div class="message-stat-value">${ultimoSimulado.totalPercentage}%</div>
-                  <div class="message-stat-label">Acertos</div>
-                </div>
-              </div>
-              <div class="message-alert message-alert-${corClassificacao}">
-                <i class="fas fa-${porcentagem >= 66 ? 'check' : 'exclamation'}-circle"></i>
-                <div><strong>Classificação: ${classificacao}</strong></div>
-              </div>
-              <div class="message-list">
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-calendar"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Data</div>
-                    <div class="message-list-description">${dataFormatada}</div>
-                  </div>
-                </div>
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-clock"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Tempo Total</div>
-                    <div class="message-list-description">${ultimoSimulado.totalTime} minutos</div>
-                  </div>
-                </div>
-                ${prova ? `
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-file-alt"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Prova</div>
-                    <div class="message-list-description">${prova.nomeConcurso} - ${prova.nomeBanca}</div>
-                  </div>
-                </div>
-                ` : ''}
-              </div>
-            </div>
+        this.addCompactMessage(`
+          <strong>Nota do Último Simulado</strong><br>
+          <div style="margin-top: 8px">
+            ⭐ <strong>${ultimoSimulado.totalScore} pontos</strong><br>
+            📊 ${ultimoSimulado.totalPercentage}% de acertos<br>
+            📅 ${dataFormatada}<br>
+            ⏱️ ${ultimoSimulado.totalTime} minutos
           </div>
-        `;
-        
-        this.addBotMessage(notaHTML, true, 'ultimo-simulado-nota');
-      }
-      
-      showUltimoSimuladoRelatorio() {
-        const simuladosData = this.getSimuladosData();
-        if (!simuladosData) {
-          this.typeMessage("Não foi possível carregar os dados dos simulados.");
-          return;
-        }
-        
-        const { ultimoSimulado, prova } = simuladosData;
-        const dataFormatada = new Date(ultimoSimulado.date).toLocaleDateString('pt-BR');
-        
-        const disciplinas = [];
-        
-        if (prova && prova.disciplinas) {
-          Object.keys(prova.disciplinas).forEach(categoria => {
-            Object.keys(prova.disciplinas[categoria]).forEach(disciplina => {
-              if (ultimoSimulado.details[disciplina]) {
-                disciplinas.push({
-                  nome: disciplina,
-                  categoria: categoria,
-                  detalhes: ultimoSimulado.details[disciplina],
-                  tempo: ultimoSimulado.time[disciplina] || 0
-                });
-              }
-            });
-          });
-        } else {
-          Object.keys(ultimoSimulado.details).forEach(disciplina => {
-            disciplinas.push({
-              nome: disciplina,
-              categoria: 'GERAL',
-              detalhes: ultimoSimulado.details[disciplina],
-              tempo: ultimoSimulado.time[disciplina] || 0
-            });
-          });
-        }
-        
-        let relatorioHTML = `
-          <div class="message-card">
-            <div class="message-card-header">
-              <i class="fas fa-chart-bar"></i>
-              <div class="message-card-title">Relatório Completo - ${dataFormatada}</div>
-            </div>
-            <div class="message-card-content">
-              <div class="message-stats">
-                <div class="message-stat">
-                  <div class="message-stat-value">${ultimoSimulado.totalScore}</div>
-                  <div class="message-stat-label">Pontuação</div>
-                </div>
-                <div class="message-stat">
-                  <div class="message-stat-value">${ultimoSimulado.totalPercentage}%</div>
-                  <div class="message-stat-label">Acertos</div>
-                </div>
-                <div class="message-stat">
-                  <div class="message-stat-value">${ultimoSimulado.totalTime}</div>
-                  <div class="message-stat-label">Minutos</div>
-                </div>
-              </div>
-              <div class="message-section">
-                <div class="message-section-title">Desempenho por Disciplina</div>
-                <div class="message-list">
-        `;
-        
-        disciplinas.forEach(disciplina => {
-          const porcentagem = parseFloat(disciplina.detalhes.percentage);
-          let statusClass = '';
-          if (porcentagem >= 80) statusClass = 'success';
-          else if (porcentagem >= 60) statusClass = 'warning';
-          else statusClass = 'danger';
-          
-          relatorioHTML += `
-            <div class="message-list-item">
-              <div class="message-list-icon"><i class="fas fa-book"></i></div>
-              <div class="message-list-content">
-                <div class="message-list-title">${disciplina.nome}</div>
-                <div class="message-list-description">
-                  ${disciplina.detalhes.correct} acertos de ${disciplina.detalhes.correct + disciplina.detalhes.errors}
-                  <span class="message-badge message-badge-${statusClass}">${disciplina.detalhes.percentage}%</span>
-                </div>
-                <div class="message-list-description">
-                  Pontuação: ${disciplina.detalhes.score} • Tempo: ${disciplina.tempo} min
-                </div>
-              </div>
-            </div>
-          `;
-        });
-        
-        relatorioHTML += `
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-        
-        this.addBotMessage(relatorioHTML, true, 'ultimo-simulado-relatorio');
+        `);
       }
       
       showUltimoSimuladoData() {
         const simuladosData = this.getSimuladosData();
         if (!simuladosData) {
-          this.typeMessage("Não foi possível carregar os dados dos simulados.");
+          this.addCompactMessage("Não foi possível carregar os dados dos simulados.");
           return;
         }
         
@@ -4322,62 +3875,14 @@
         const diffTime = Math.abs(hoje - dataSimulado);
         const diffDias = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         
-        const dataHTML = `
-          <div class="message-card">
-            <div class="message-card-header">
-              <i class="fas fa-calendar"></i>
-              <div class="message-card-title">Data do Último Simulado</div>
-            </div>
-            <div class="message-card-content">
-              <div class="message-alert message-alert-info">
-                <i class="fas fa-info-circle"></i>
-                <div>Seu último simulado foi realizado há <strong>${diffDias} dia(s)</strong></div>
-              </div>
-              <div class="message-list">
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-calendar-day"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Data</div>
-                    <div class="message-list-description">${dataFormatada}</div>
-                  </div>
-                </div>
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-history"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Tempo Decorrido</div>
-                    <div class="message-list-description">${diffDias} dia(s)</div>
-                  </div>
-                </div>
-                <div class="message-list-item">
-                  <div class="message-list-icon"><i class="fas fa-chart-line"></i></div>
-                  <div class="message-list-content">
-                    <div class="message-list-title">Total de Simulados</div>
-                    <div class="message-list-description">${simulados.length} realizados</div>
-                  </div>
-                </div>
-              </div>
-              ${diffDias > 30 ? `
-              <div class="message-alert message-alert-warning">
-                <i class="fas fa-exclamation-triangle"></i>
-                <div>Faz mais de 30 dias desde seu último simulado. Considere realizar um novo para avaliar seu progresso.</div>
-              </div>
-              ` : ''}
-            </div>
+        this.addCompactMessage(`
+          <strong>Data do Último Simulado</strong><br>
+          <div style="margin-top: 8px">
+            📅 ${dataFormatada}<br>
+            ⏳ Há ${diffDias} dia(s)<br>
+            📊 Total: ${simulados.length} simulados
           </div>
-        `;
-        
-        this.addBotMessage(dataHTML, true, 'ultimo-simulado-data');
-      }
-      
-      addDateDivider() {
-        const hoje = this.getDynamicDateObject();
-        const dataFormatada = this.formatDynamicDate(hoje);
-        
-        const chatMessages = document.getElementById('chatMessages');
-        const dateDiv = document.createElement('div');
-        dateDiv.className = 'chat-date';
-        dateDiv.innerHTML = `<span>${dataFormatada}</span>`;
-        chatMessages.appendChild(dateDiv);
+        `);
       }
     }
     
