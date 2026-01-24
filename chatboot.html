@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>StudyFlow - ChatBot Central</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
@@ -24,7 +23,6 @@
       --border-radius: 18px;
       --shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      --side-panel-width: 350px;
     }
     
     .dark-theme {
@@ -58,18 +56,11 @@
       overflow: hidden;
     }
     
-    .main-container {
-      display: flex;
-      height: 100vh;
-      width: 100%;
-      overflow: hidden;
-    }
-    
     .chatbot-container {
-      flex: 1;
       display: flex;
       flex-direction: column;
       height: 100vh;
+      width: 100%;
       background-color: var(--chat-bg);
       background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%239C92AC' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
       overflow: hidden;
@@ -355,6 +346,251 @@
       transform: scale(1.05);
     }
     
+    .message-content {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .message-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    
+    .message-icon {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background-color: var(--primary);
+      color: white;
+      font-size: 0.7rem;
+    }
+    
+    .message-title {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--dark);
+    }
+    
+    .message-subtitle {
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+    
+    .message-text {
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: var(--dark);
+    }
+    
+    .message-divider {
+      height: 1px;
+      background-color: var(--light-gray);
+      margin: 8px 0;
+    }
+    
+    .message-section {
+      margin: 8px 0;
+    }
+    
+    .message-section-title {
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .message-list {
+      list-style-type: none;
+      margin: 8px 0;
+      padding-left: 0;
+    }
+    
+    .message-list-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--light-gray);
+    }
+    
+    .message-list-item:last-child {
+      border-bottom: none;
+    }
+    
+    .message-list-icon {
+      width: 16px;
+      text-align: center;
+      color: var(--primary);
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+    
+    .message-list-content {
+      flex: 1;
+    }
+    
+    .message-list-title {
+      font-weight: 500;
+      font-size: 0.9rem;
+      margin-bottom: 2px;
+    }
+    
+    .message-list-description {
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+    
+    .message-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin: 12px 0;
+    }
+    
+    .message-stat {
+      background-color: var(--light-gray);
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .message-stat-value {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 3px 0;
+    }
+    
+    .message-stat-label {
+      font-size: 0.75rem;
+      color: var(--gray);
+    }
+    
+    .message-progress {
+      margin: 10px 0;
+    }
+    
+    .message-progress-bar {
+      height: 6px;
+      background-color: var(--light-gray);
+      border-radius: 3px;
+      margin: 8px 0;
+      overflow: hidden;
+    }
+    
+    .message-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--success), var(--primary));
+      border-radius: 3px;
+      transition: width 0.5s ease;
+    }
+    
+    .message-progress-text {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+    
+    .message-alert {
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin: 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      box-shadow: var(--shadow);
+    }
+    
+    .message-alert-warning {
+      background-color: rgba(255, 152, 0, 0.1);
+      border-left: 4px solid var(--warning);
+    }
+    
+    .message-alert-danger {
+      background-color: rgba(244, 67, 54, 0.1);
+      border-left: 4px solid var(--danger);
+    }
+    
+    .message-alert-success {
+      background-color: rgba(76, 175, 80, 0.1);
+      border-left: 4px solid var(--success);
+    }
+    
+    .message-alert-info {
+      background-color: rgba(52, 183, 241, 0.1);
+      border-left: 4px solid var(--secondary);
+    }
+    
+    .message-card {
+      background-color: var(--bot-bubble);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 10px 0;
+      box-shadow: var(--shadow);
+      border-left: 4px solid var(--primary);
+    }
+    
+    .message-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--light-gray);
+    }
+    
+    .message-card-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--dark);
+    }
+    
+    .message-card-content {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .message-muted {
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-top: 4px;
+    }
+    
+    .message-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      background-color: var(--primary);
+      color: white;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-left: 6px;
+    }
+    
+    .message-badge-warning {
+      background-color: var(--warning);
+    }
+    
+    .message-badge-danger {
+      background-color: var(--danger);
+    }
+    
+    .message-badge-success {
+      background-color: var(--success);
+    }
+    
     .quick-actions {
       display: flex;
       flex-wrap: wrap;
@@ -429,6 +665,29 @@
       padding: 0 10px;
       position: relative;
       z-index: 2;
+    }
+    
+    .message-reaction {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 2px;
+    }
+    
+    .reaction-icon {
+      font-size: 0.7rem;
+      color: var(--gray);
+    }
+    
+    @media (max-width: 768px) {
+      .chatbot-container {
+        height: 100vh;
+      }
+      .message-bubble {
+        max-width: 85%;
+      }
+      .message-stats {
+        grid-template-columns: 1fr;
+      }
     }
     
     .typing-text {
@@ -683,6 +942,23 @@
       background-color: var(--light);
     }
     
+    .yesterday-modal .modal-header {
+      background-color: rgba(244, 67, 54, 0.1);
+      border-bottom: 4px solid var(--danger);
+    }
+    
+    .yesterday-modal .modal-header h3 {
+      color: var(--danger);
+    }
+    
+    .yesterday-modal .modal-footer .btn-primary {
+      background-color: var(--danger);
+    }
+    
+    .yesterday-modal .modal-footer .btn-primary:hover {
+      background-color: #d32f2f;
+    }
+    
     .task-card.registered {
       opacity: 0.7;
       background-color: rgba(76, 175, 80, 0.1);
@@ -697,205 +973,316 @@
       opacity: 0.8;
     }
     
-    /* Painel Lateral de Progresso Diário */
-    .side-panel {
-      width: var(--side-panel-width);
-      background-color: var(--light);
-      border-left: 1px solid var(--light-gray);
+    .registration-status {
       display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      transition: var(--transition);
-      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.05);
-    }
-    
-    @media (max-width: 992px) {
-      .main-container {
-        flex-direction: column;
-      }
-      
-      .side-panel {
-        width: 100%;
-        height: 300px;
-        border-left: none;
-        border-top: 1px solid var(--light-gray);
-        order: 2;
-      }
-      
-      .chatbot-container {
-        order: 1;
-        height: calc(100vh - 300px);
-      }
-    }
-    
-    .panel-header {
-      padding: 1.2rem;
-      border-bottom: 1px solid var(--light-gray);
-    }
-    
-    .panel-header h2 {
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 0.3rem;
-      display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 8px;
-    }
-    
-    .panel-date {
-      font-size: 0.9rem;
-      color: var(--gray);
-    }
-    
-    .panel-content {
-      flex: 1;
-      padding: 1.2rem;
-      overflow-y: auto;
-    }
-    
-    .activity-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-      margin-bottom: 1.5rem;
-    }
-    
-    .activity-item {
-      display: flex;
-      align-items: center;
-      padding: 0.8rem;
+      margin-bottom: 1rem;
+      padding: 10px;
       background-color: var(--light-gray);
       border-radius: 8px;
-      transition: var(--transition);
-      animation: slideIn 0.3s ease-out;
     }
     
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateX(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
     }
     
-    .activity-item:hover {
-      transform: translateX(2px);
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    .status-badge.pending {
+      background-color: rgba(255, 152, 0, 0.2);
+      color: var(--warning);
     }
     
-    .activity-item.completed {
-      background-color: rgba(76, 175, 80, 0.1);
-      border-left: 4px solid var(--success);
-    }
-    
-    .activity-item.pending {
-      border-left: 4px solid var(--gray);
-    }
-    
-    .activity-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background-color: var(--bot-bubble);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 12px;
-      flex-shrink: 0;
-      transition: var(--transition);
-    }
-    
-    .activity-item.completed .activity-icon {
+    .status-badge.registered {
       background-color: rgba(76, 175, 80, 0.2);
       color: var(--success);
     }
     
-    .activity-details {
-      flex: 1;
+    .status-badge.completed {
+      background-color: rgba(37, 211, 102, 0.2);
+      color: var(--primary);
     }
     
-    .activity-name {
-      font-weight: 600;
-      margin-bottom: 0.2rem;
-      font-size: 0.95rem;
-    }
-    
-    .activity-type {
+    .task-header .task-status {
+      margin-left: auto;
       font-size: 0.8rem;
-      color: var(--gray);
+      padding: 4px 10px;
+      border-radius: 10px;
+      margin-right: 8px;
+      background-color: var(--success);
+      color: white;
     }
     
-    .activity-status {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      border: 2px solid var(--gray);
+    .post-save-modal .modal-content {
+      max-width: 400px;
+    }
+    
+    .post-save-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    .post-save-btn {
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
-      transition: var(--transition);
+      gap: 10px;
+      font-size: 1rem;
     }
     
-    .activity-status.completed {
-      border-color: var(--success);
+    .post-save-btn.add {
+      background-color: var(--secondary);
+      color: white;
+    }
+    
+    .post-save-btn.add:hover {
+      background-color: #2a9cd8;
+    }
+    
+    .post-save-btn.finish {
       background-color: var(--success);
       color: white;
-      animation: checkPulse 0.5s ease-out;
     }
     
-    @keyframes checkPulse {
-      0% {
-        transform: scale(0.8);
-      }
-      50% {
-        transform: scale(1.1);
-      }
-      100% {
-        transform: scale(1);
-      }
+    .post-save-btn.finish:hover {
+      background-color: #3d8b40;
     }
     
-    .progress-section {
-      margin: 1.5rem 0;
-      padding: 1rem;
+    .post-save-btn.later {
+      background-color: var(--gray);
+      color: white;
+    }
+    
+    .post-save-btn.later:hover {
+      background-color: #5a6268;
+    }
+    
+    .progress-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    
+    .progress-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
       background-color: var(--light-gray);
-      border-radius: 12px;
     }
     
-    .progress-header {
+    .progress-dot.active {
+      background-color: var(--primary);
+    }
+    
+    .progress-dot.completed {
+      background-color: var(--success);
+    }
+    
+    .day-finished-banner {
+      background-color: rgba(76, 175, 80, 0.2);
+      border-left: 4px solid var(--success);
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .day-finished-banner i {
+      color: var(--success);
+    }
+    
+    .progress-visual {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 5px;
+    }
+    
+    .progress-bar-container {
+      flex: 1;
+      height: 8px;
+      background-color: var(--light-gray);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .progress-bar-fill {
+      height: 100%;
+      background-color: var(--primary);
+      transition: width 0.5s ease;
+    }
+    
+    .task-card.registered {
+      border: 2px solid var(--success) !important;
+      background-color: rgba(76, 175, 80, 0.05) !important;
+      opacity: 0.8 !important;
+    }
+
+    .task-card.registered .task-header {
+      color: var(--success) !important;
+    }
+
+    .task-card.registered .task-title {
+      color: var(--success) !important;
+      font-weight: 600 !important;
+    }
+
+    .task-card.registered .task-description {
+      color: var(--success) !important;
+      opacity: 0.8 !important;
+    }
+
+    .task-card.registered .task-icon-large {
+      color: var(--success) !important;
+    }
+
+    .task-card.registered .task-status {
+      background-color: var(--success) !important;
+      color: white !important;
+      border-radius: 12px !important;
+      padding: 4px 10px !important;
+      font-size: 0.8rem !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+    }
+
+    .task-card.registered input:disabled {
+      background-color: rgba(76, 175, 80, 0.1) !important;
+      border-color: var(--success) !important;
+      color: var(--success) !important;
+      opacity: 0.8 !important;
+    }
+
+    .task-card.registered label {
+      color: var(--success) !important;
+      opacity: 0.8 !important;
+    }
+
+    /* UI ENHANCEMENTS START */
+    
+    /* Painel Lateral - Resumo do Dia */
+    .side-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 320px;
+      height: 100vh;
+      background-color: var(--light);
+      color: var(--dark);
+      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+      transform: translateX(0);
+    }
+    
+    .side-panel.collapsed {
+      transform: translateX(100%);
+    }
+    
+    .side-panel-header {
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid var(--light-gray);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.8rem;
+      background-color: var(--primary);
+      color: white;
     }
     
-    .progress-text {
-      font-size: 0.9rem;
-      color: var(--gray);
-    }
-    
-    .progress-count {
+    .side-panel-header h3 {
+      font-size: 1.1rem;
       font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+    }
+    
+    .side-panel-toggle {
+      background: transparent;
+      border: none;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .side-panel-toggle:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .side-panel-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .side-panel-date {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--primary);
+      text-align: center;
+      padding: 0.5rem;
+      background-color: rgba(37, 211, 102, 0.1);
+      border-radius: 8px;
+      border-left: 4px solid var(--primary);
+    }
+    
+    .side-panel-progress {
+      background-color: var(--bot-bubble);
+      border-radius: 12px;
+      padding: 1.2rem;
+      box-shadow: var(--shadow);
+    }
+    
+    .side-panel-progress h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
       color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
     
     .progress-bar {
-      height: 8px;
-      background-color: rgba(0, 0, 0, 0.1);
-      border-radius: 4px;
+      height: 10px;
+      background-color: var(--light-gray);
+      border-radius: 5px;
       overflow: hidden;
       margin: 0.8rem 0;
+      position: relative;
     }
     
     .progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, var(--primary), var(--success));
-      border-radius: 4px;
-      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 5px;
+      transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
       position: relative;
       overflow: hidden;
     }
@@ -905,182 +1292,376 @@
       position: absolute;
       top: 0;
       left: 0;
-      right: 0;
       bottom: 0;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-      animation: shimmer 2s infinite;
+      right: 0;
+      background-image: linear-gradient(
+        -45deg,
+        rgba(255, 255, 255, 0.2) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0.2) 75%,
+        transparent 75%,
+        transparent
+      );
+      background-size: 20px 20px;
+      animation: progressStripes 1s linear infinite;
     }
     
-    @keyframes shimmer {
-      0% {
-        transform: translateX(-100%);
-      }
-      100% {
-        transform: translateX(100%);
-      }
+    @keyframes progressStripes {
+      0% { background-position: 0 0; }
+      100% { background-position: 20px 0; }
     }
     
-    .study-time-section {
-      padding: 1rem;
-      background-color: var(--light-gray);
-      border-radius: 12px;
-      text-align: center;
-    }
-    
-    .study-time-value {
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin: 0.5rem 0;
-      color: var(--primary);
-    }
-    
-    .study-time-label {
-      font-size: 0.9rem;
-      color: var(--gray);
-    }
-    
-    .day-completed {
-      background-color: rgba(76, 175, 80, 0.05) !important;
-      border-left: 4px solid var(--success) !important;
-    }
-    
-    .day-completed-banner {
-      padding: 1rem;
-      background-color: rgba(76, 175, 80, 0.1);
-      border-radius: 12px;
-      text-align: center;
-      margin-bottom: 1.5rem;
-      color: var(--success);
-      font-weight: 600;
-      animation: fadeInUp 0.5s ease-out;
-    }
-    
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    .panel-footer {
-      padding: 1rem;
-      border-top: 1px solid var(--light-gray);
-      text-align: center;
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
       font-size: 0.8rem;
       color: var(--gray);
     }
     
-    /* Estados visuais para feedback */
-    .success-feedback {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 12px 20px;
+    .side-panel-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.8rem;
+    }
+    
+    .stat-card {
+      background-color: var(--bot-bubble);
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      border: 1px solid transparent;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary);
+    }
+    
+    .stat-value {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 0.3rem 0;
+    }
+    
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--gray);
+    }
+    
+    .side-panel-activities {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    
+    .side-panel-activities h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .activity-card {
+      background-color: var(--bot-bubble);
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      border-left: 3px solid var(--primary);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .activity-card:hover {
+      transform: translateX(4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .activity-card.completed {
+      border-left-color: var(--success);
+      background-color: rgba(76, 175, 80, 0.05);
+    }
+    
+    .activity-card.pending {
+      border-left-color: var(--warning);
+    }
+    
+    .activity-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    
+    .activity-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .activity-status {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+    
+    .status-completed {
+      background-color: rgba(76, 175, 80, 0.2);
+      color: var(--success);
+    }
+    
+    .status-pending {
+      background-color: rgba(255, 152, 0, 0.2);
+      color: var(--warning);
+    }
+    
+    .activity-details {
+      font-size: 0.8rem;
+      color: var(--gray);
+      line-height: 1.4;
+    }
+    
+    .check-animation {
+      position: absolute;
+      right: -20px;
+      top: -20px;
+      width: 40px;
+      height: 40px;
       background-color: var(--success);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: white;
+      opacity: 0;
+      transform: scale(0);
+      transition: all 0.3s ease;
+    }
+    
+    .activity-card.completed .check-animation {
+      animation: checkPop 0.5s ease forwards;
+    }
+    
+    @keyframes checkPop {
+      0% { opacity: 0; transform: scale(0); }
+      50% { opacity: 1; transform: scale(1.2); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    
+    .side-panel-status {
+      margin-top: auto;
+      padding-top: 1rem;
+      border-top: 1px solid var(--light-gray);
+    }
+    
+    .day-status {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.8rem;
       border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      z-index: 1001;
-      animation: slideInRight 0.3s ease-out, fadeOut 0.3s ease-out 2.7s;
+      background-color: var(--bot-bubble);
+      box-shadow: var(--shadow);
+    }
+    
+    .day-status.completed {
+      background-color: rgba(76, 175, 80, 0.1);
+      border-left: 4px solid var(--success);
+    }
+    
+    .day-status.pending {
+      background-color: rgba(255, 152, 0, 0.1);
+      border-left: 4px solid var(--warning);
+    }
+    
+    .day-status-text {
+      font-weight: 600;
+      font-size: 0.9rem;
       display: flex;
       align-items: center;
       gap: 8px;
     }
     
-    @keyframes slideInRight {
-      from {
-        opacity: 0;
+    .mobile-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 99;
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+      transition: var(--transition);
+    }
+    
+    .mobile-toggle:hover {
+      transform: scale(1.1);
+      background-color: var(--primary-dark);
+    }
+    
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .tooltip .tooltip-text {
+      visibility: hidden;
+      width: 120px;
+      background-color: var(--dark);
+      color: var(--light);
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.75rem;
+    }
+    
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+    
+    @media (max-width: 900px) {
+      .side-panel {
+        width: 280px;
         transform: translateX(100%);
       }
-      to {
-        opacity: 1;
+      
+      .side-panel.collapsed {
+        transform: translateX(100%);
+      }
+      
+      .side-panel:not(.collapsed) {
         transform: translateX(0);
       }
-    }
-    
-    @keyframes fadeOut {
-      to {
-        opacity: 0;
+      
+      .mobile-toggle {
+        display: flex;
+      }
+      
+      .chatbot-container {
+        width: 100%;
       }
     }
     
-    /* Estilo para mensagens curtas no chat após registro */
-    .registration-feedback {
-      background-color: rgba(76, 175, 80, 0.1) !important;
-      border-left: 4px solid var(--success) !important;
-      padding: 10px 16px !important;
-      margin-bottom: 8px !important;
-    }
-    
-    .compact-message {
-      max-width: 60% !important;
-      padding: 10px 14px !important;
-      font-size: 0.9rem !important;
-    }
+    /* UI ENHANCEMENTS END */
   </style>
 </head>
 <body>
-  <div class="main-container">
-    <div class="chatbot-container">
-      <div class="chatbot-header">
-        <div class="header-left">
-          <div class="bot-avatar">
-            <i class="fas fa-robot"></i>
-          </div>
-          <div class="header-info">
-            <h1>StudyFlow Assistant</h1>
-            <p><span class="status-dot"></span> Online • Seu assistente de estudos</p>
-          </div>
+  <button class="mobile-toggle" id="mobilePanelToggle" aria-label="Abrir painel de resumo">
+    <i class="fas fa-chart-bar"></i>
+  </button>
+  
+  <aside id="sidePanel" class="side-panel" aria-label="Resumo do dia" role="complementary">
+    <header class="side-panel-header">
+      <h3><i class="fas fa-calendar-day"></i> Resumo do Dia</h3>
+      <button class="side-panel-toggle" id="sidePanelToggle" aria-label="Fechar painel">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </header>
+    <div class="side-panel-content">
+      <div class="side-panel-date" id="sidePanelDate">Carregando...</div>
+      
+      <div class="side-panel-progress">
+        <h4><i class="fas fa-chart-line"></i> Progresso Diário</h4>
+        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+          <div class="progress-fill" id="progressFill" style="width: 0%"></div>
         </div>
-        <div class="header-actions">
-          <button class="header-btn" id="themeToggle">
-            <i class="fas fa-moon"></i>
-          </button>
-          <button class="header-btn" id="togglePanelBtn">
-            <i class="fas fa-chart-bar"></i>
-          </button>
-          <button class="header-btn" id="infoBtn">
-            <i class="fas fa-info"></i>
-          </button>
+        <div class="progress-text">
+          <span id="progressCompleted">0 atividades</span>
+          <span id="progressTotal">0 de 0</span>
         </div>
       </div>
-      <div class="chat-messages" id="chatMessages">
+      
+      <div class="side-panel-stats" id="sidePanelStats">
+        <!-- Dinamicamente preenchido -->
       </div>
-      <div class="chatbot-input">
-        <div class="input-actions">
-          <button class="input-btn" id="attachBtn">
-            <i class="fas fa-paperclip"></i>
-          </button>
-          <button class="input-btn" id="emojiBtn">
-            <i class="far fa-smile"></i>
-          </button>
+      
+      <div class="side-panel-activities">
+        <h4><i class="fas fa-tasks"></i> Atividades de Hoje</h4>
+        <div id="sidePanelActivities">
+          <!-- Dinamicamente preenchido -->
         </div>
-        <input type="text" id="messageInput" placeholder="Digite uma mensagem...">
-        <button class="send-btn" id="sendMessage">
-          <i class="fas fa-paper-plane"></i>
+      </div>
+      
+      <div class="side-panel-status">
+        <div class="day-status pending" id="dayStatus">
+          <div class="day-status-text">
+            <i class="fas fa-clock"></i>
+            <span>Dia em andamento</span>
+          </div>
+          <div class="tooltip">
+            <i class="fas fa-info-circle" style="color: var(--gray)"></i>
+            <span class="tooltip-text">Clique em "Finalizar Dia" para concluir</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  
+  <div class="chatbot-container">
+    <div class="chatbot-header">
+      <div class="header-left">
+        <div class="bot-avatar">
+          <i class="fas fa-robot"></i>
+        </div>
+        <div class="header-info">
+          <h1>StudyFlow Assistant</h1>
+          <p><span class="status-dot"></span> Online • Seu assistente de estudos</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="header-btn" id="themeToggle">
+          <i class="fas fa-moon"></i>
+        </button>
+        <button class="header-btn" id="infoBtn">
+          <i class="fas fa-info"></i>
         </button>
       </div>
     </div>
-    
-    <aside class="side-panel" id="sidePanel">
-      <div class="panel-header">
-        <h2><i class="fas fa-calendar-day"></i> Resumo do Dia</h2>
-        <div class="panel-date" id="currentDate"></div>
+    <div class="chat-messages" id="chatMessages">
+    </div>
+    <div class="chatbot-input">
+      <div class="input-actions">
+        <button class="input-btn" id="attachBtn">
+          <i class="fas fa-paperclip"></i>
+        </button>
+        <button class="input-btn" id="emojiBtn">
+          <i class="far fa-smile"></i>
+        </button>
       </div>
-      <div class="panel-content">
-        <!-- Conteúdo será preenchido dinamicamente -->
-      </div>
-      <div class="panel-footer">
-        Atualizado em tempo real
-      </div>
-    </aside>
+      <input type="text" id="messageInput" placeholder="Digite uma mensagem...">
+      <button class="send-btn" id="sendMessage">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
   </div>
   
-  <!-- Modais (mantidos, mas sem o modal pós-registro) -->
   <div class="modal" id="registerModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -1187,10 +1768,26 @@
     </div>
   </div>
 
-  <!-- Feedback de sucesso flutuante (substitui o modal pós-registro) -->
-  <div class="success-feedback" id="successFeedback" style="display: none;">
-    <i class="fas fa-check-circle"></i>
-    <span>Atividade registrada com sucesso!</span>
+  <div class="modal post-save-modal" id="postSaveModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-check-circle"></i> Atividade Registrada!</h3>
+      </div>
+      <div class="modal-body">
+        <p>Sua atividade foi registrada com sucesso!</p>
+        <div class="post-save-options">
+          <button class="post-save-btn add" id="addAnotherActivity">
+            <i class="fas fa-plus"></i> Adicionar nova atividade
+          </button>
+          <button class="post-save-btn finish" id="finishDay">
+            <i class="fas fa-check"></i> Finalizar o dia de hoje
+          </button>
+          <button class="post-save-btn later" id="closeWithoutAction">
+            <i class="fas fa-clock"></i> Vou adicionar depois
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -1227,205 +1824,20 @@
         return `${hours}:${minutes}`;
       }
       
-      formatDate(date) {
-        return date.toLocaleDateString('pt-BR', { 
-          weekday: 'long', 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        });
-      }
-      
       init() {
         this.initTheme();
         this.initChat();
         this.initEventListeners();
         this.showWelcomeMessage();
-        this.updateSidePanel();
-        this.updateDate();
         
         this.updateYesterdayMemory();
+        
         this.checkPartialRegistration();
         
-        // Atualizar painel a cada 30 segundos
-        setInterval(() => this.updateSidePanel(), 30000);
-      }
-      
-      updateDate() {
-        const currentDate = document.getElementById('currentDate');
-        if (currentDate) {
-          currentDate.textContent = this.formatDate(new Date());
+        // Inicializar painel lateral
+        if (window.UI_ENHANCER && window.UI_ENHANCER.init) {
+          window.UI_ENHANCER.init();
         }
-      }
-      
-      updateSidePanel() {
-        const panelContent = document.querySelector('.panel-content');
-        if (!panelContent) return;
-        
-        const hojeStr = this.getDynamicDateString();
-        const hoje = new Date(hojeStr + 'T00:00:00');
-        
-        // Buscar tarefas do dia
-        const todayTasks = this.getTodayTasks();
-        const totalTasks = todayTasks.questoes.length + todayTasks.anki.length + todayTasks.teoria.length;
-        
-        // Buscar atividades registradas
-        const questoesRegistradas = this.getQuestoesRegistradasHoje(hojeStr);
-        const ankiRegistrados = this.getAnkiRegistradosHoje(hojeStr);
-        const teoriaRegistrada = this.getTeoriaRegistradaHoje(hojeStr);
-        
-        const completedTasks = questoesRegistradas.length + ankiRegistrados.length + teoriaRegistrada.length;
-        const progressPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
-        
-        // Calcular tempo estudado
-        let totalTime = 0;
-        const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
-        const atividades = dailyActivities.activities;
-        
-        if (atividades.questoes && atividades.questoes.length > 0) {
-          atividades.questoes.forEach(q => totalTime += q.tempo);
-        }
-        if (atividades.anki && atividades.anki.length > 0) {
-          atividades.anki.forEach(a => totalTime += a.tempo);
-        }
-        if (atividades.teoria && atividades.teoria.length > 0) {
-          atividades.teoria.forEach(t => totalTime += t.tempo);
-        }
-        
-        // Se houver registro parcial, adicionar também
-        if (this.hasPartialRegistration()) {
-          const partial = this.partialRegistration.activities;
-          if (partial.questoes) {
-            partial.questoes.forEach(q => totalTime += q.tempo);
-          }
-          if (partial.anki) {
-            partial.anki.forEach(a => totalTime += a.tempo);
-          }
-          if (partial.teoria) {
-            partial.teoria.forEach(t => totalTime += t.tempo);
-          }
-        }
-        
-        const hours = Math.floor(totalTime / 60);
-        const minutes = totalTime % 60;
-        
-        // Verificar se o dia está concluído
-        const isDayCompleted = this.isDayFinished() || completedTasks >= totalTasks;
-        
-        // Construir HTML do painel
-        let panelHTML = '';
-        
-        if (isDayCompleted) {
-          panelHTML += `
-            <div class="day-completed-banner">
-              <i class="fas fa-check-circle"></i>
-              <div>Dia concluído com sucesso!</div>
-            </div>
-          `;
-        }
-        
-        // Lista de atividades
-        panelHTML += `<div class="activity-list">`;
-        
-        // Questões
-        todayTasks.questoes.forEach(questao => {
-          const isCompleted = questoesRegistradas.some(q => q.id === questao.id);
-          panelHTML += `
-            <div class="activity-item ${isCompleted ? 'completed' : 'pending'}">
-              <div class="activity-icon">
-                <i class="fas fa-question-circle"></i>
-              </div>
-              <div class="activity-details">
-                <div class="activity-name">${questao.nome}</div>
-                <div class="activity-type">Questões • ${questao.disciplina}</div>
-              </div>
-              <div class="activity-status ${isCompleted ? 'completed' : ''}">
-                ${isCompleted ? '<i class="fas fa-check"></i>' : ''}
-              </div>
-            </div>
-          `;
-        });
-        
-        // Anki
-        todayTasks.anki.forEach(deck => {
-          const isCompleted = ankiRegistrados.some(a => a.id === deck.id);
-          panelHTML += `
-            <div class="activity-item ${isCompleted ? 'completed' : 'pending'}">
-              <div class="activity-icon">
-                <i class="fas fa-layer-group"></i>
-              </div>
-              <div class="activity-details">
-                <div class="activity-name">${deck.nome}</div>
-                <div class="activity-type">Anki • Revisão</div>
-              </div>
-              <div class="activity-status ${isCompleted ? 'completed' : ''}">
-                ${isCompleted ? '<i class="fas fa-check"></i>' : ''}
-              </div>
-            </div>
-          `;
-        });
-        
-        // Teoria
-        todayTasks.teoria.forEach(materia => {
-          const isCompleted = teoriaRegistrada.includes(materia);
-          panelHTML += `
-            <div class="activity-item ${isCompleted ? 'completed' : 'pending'}">
-              <div class="activity-icon">
-                <i class="fas fa-book"></i>
-              </div>
-              <div class="activity-details">
-                <div class="activity-name">${materia}</div>
-                <div class="activity-type">Estudo Teórico</div>
-              </div>
-              <div class="activity-status ${isCompleted ? 'completed' : ''}">
-                ${isCompleted ? '<i class="fas fa-check"></i>' : ''}
-              </div>
-            </div>
-          `;
-        });
-        
-        panelHTML += `</div>`;
-        
-        // Barra de progresso
-        panelHTML += `
-          <div class="progress-section">
-            <div class="progress-header">
-              <div class="progress-text">Progresso do Dia</div>
-              <div class="progress-count">${completedTasks}/${totalTasks} atividades</div>
-            </div>
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: ${progressPercentage}%"></div>
-            </div>
-          </div>
-        `;
-        
-        // Tempo estudado
-        panelHTML += `
-          <div class="study-time-section">
-            <div class="study-time-label">Tempo Estudado Hoje</div>
-            <div class="study-time-value">${hours}h ${minutes}m</div>
-          </div>
-        `;
-        
-        // Aplicar estado de dia concluído ao painel
-        const sidePanel = document.getElementById('sidePanel');
-        if (isDayCompleted) {
-          sidePanel.classList.add('day-completed');
-        } else {
-          sidePanel.classList.remove('day-completed');
-        }
-        
-        panelContent.innerHTML = panelHTML;
-      }
-      
-      showSuccessFeedback(message = "Atividade registrada com sucesso!") {
-        const feedback = document.getElementById('successFeedback');
-        feedback.querySelector('span').textContent = message;
-        feedback.style.display = 'flex';
-        
-        setTimeout(() => {
-          feedback.style.display = 'none';
-        }, 3000);
       }
       
       initTheme() {
@@ -1445,8 +1857,6 @@
       
       initEventListeners() {
         document.getElementById('themeToggle').addEventListener('click', () => this.toggleTheme());
-        
-        document.getElementById('togglePanelBtn').addEventListener('click', () => this.toggleSidePanel());
         
         document.getElementById('infoBtn').addEventListener('click', () => this.showInfo());
         
@@ -1480,12 +1890,27 @@
         document.getElementById('cancelRelatorio').addEventListener('click', () => this.closeRelatorioModal());
         document.getElementById('generateRelatorio').addEventListener('click', () => this.generateRelatorio());
         
+        document.getElementById('addAnotherActivity').addEventListener('click', () => {
+          document.getElementById('postSaveModal').style.display = 'none';
+          this.openRegisterModal();
+        });
+        
+        document.getElementById('finishDay').addEventListener('click', () => {
+          document.getElementById('postSaveModal').style.display = 'none';
+          this.finalizeDay();
+        });
+        
+        document.getElementById('closeWithoutAction').addEventListener('click', () => {
+          document.getElementById('postSaveModal').style.display = 'none';
+        });
+        
         window.addEventListener('click', (e) => {
           const registerModal = document.getElementById('registerModal');
           const yesterdayModal = document.getElementById('yesterdayModal');
           const configModal = document.getElementById('configModal');
           const simuladoModal = document.getElementById('simuladoModal');
           const relatorioModal = document.getElementById('relatorioModal');
+          const postSaveModal = document.getElementById('postSaveModal');
           
           if (e.target === registerModal) {
             this.closeRegisterModal();
@@ -1502,28 +1927,18 @@
           if (e.target === relatorioModal) {
             this.closeRelatorioModal();
           }
+          if (e.target === postSaveModal) {
+            document.getElementById('postSaveModal').style.display = 'none';
+          }
         });
-      }
-      
-      toggleSidePanel() {
-        const sidePanel = document.getElementById('sidePanel');
-        const toggleBtn = document.getElementById('togglePanelBtn');
-        
-        if (sidePanel.style.display === 'none' || sidePanel.style.display === '') {
-          sidePanel.style.display = 'flex';
-          toggleBtn.innerHTML = '<i class="fas fa-times"></i>';
-          this.updateSidePanel();
-        } else {
-          sidePanel.style.display = 'none';
-          toggleBtn.innerHTML = '<i class="fas fa-chart-bar"></i>';
-        }
       }
       
       showWelcomeMessage() {
         if (this.chatHistory.length === 0) {
+          this.addDateDivider();
           this.typeMessage("Olá! Sou seu assistente de estudos do StudyFlow. 👋", () => {
             setTimeout(() => {
-              this.typeMessage("Posso te ajudar a gerenciar seu ciclo de estudos, registrar atividades e muito mais! Seu progresso diário está sempre visível no painel lateral.", () => {
+              this.typeMessage("Posso te ajudar a gerenciar seu ciclo de estudos, mostrar tarefas diárias, registrar progresso e muito mais!", () => {
                 setTimeout(() => {
                   this.addQuickActions();
                 }, 500);
@@ -1536,17 +1951,38 @@
       addQuickActions() {
         const quickActionsHTML = `
           <div class="quick-actions">
-            <button class="action-btn primary" onclick="chatBot.openRegisterModal()">
+            <button class="action-btn primary" onclick="chatBot.showDailySummary()">
+              <i class="fas fa-calendar-day"></i> Resumo do Dia
+            </button>
+            <button class="action-btn secondary" onclick="chatBot.openRegisterModal()">
               <i class="fas fa-plus-circle"></i> Registrar Atividade
             </button>
-            <button class="action-btn secondary" onclick="chatBot.showEditalMenu()">
+            <button class="action-btn info" onclick="chatBot.openYesterdayModal()">
+              <i class="fas fa-history"></i> Registrar Atividades de Ontem
+            </button>
+            <button class="action-btn info" onclick="chatBot.showEditalMenu()">
               <i class="fas fa-file-alt"></i> Edital
             </button>
             <button class="action-btn info" onclick="chatBot.showSimuladosMenu()">
               <i class="fas fa-chart-line"></i> Simulados
             </button>
+            <button class="action-btn info" onclick="chatBot.showSimuladoModal()">
+              <i class="fas fa-calendar-alt"></i> Programar Simulado
+            </button>
+            <button class="action-btn info" onclick="chatBot.showRelatorioModal()">
+              <i class="fas fa-chart-bar"></i> Relatório
+            </button>
+            <button class="action-btn info" onclick="chatBot.trocarBaralhos()">
+              <i class="fas fa-sync-alt"></i> Trocar Baralhos
+            </button>
+            <button class="action-btn info" onclick="chatBot.showConfigModal()">
+              <i class="fas fa-cog"></i> Configurar
+            </button>
             <button class="action-btn info" onclick="chatBot.showHelp()">
               <i class="fas fa-question-circle"></i> Ajuda
+            </button>
+            <button class="action-btn reset" onclick="chatBot.showResetConfirmation()">
+              <i class="fas fa-exclamation-triangle"></i> Reset
             </button>
           </div>
         `;
@@ -1713,7 +2149,6 @@
         if (this.partialRegistration.date === hojeStr && 
             this.partialRegistration.activities && 
             Object.keys(this.partialRegistration.activities).length > 0) {
-          console.log('Registro parcial encontrado para hoje:', this.partialRegistration);
         }
       }
       
@@ -1921,8 +2356,7 @@
         this.closeYesterdayModal();
         
         if (savedCount > 0) {
-          this.showSuccessFeedback(`${savedCount} atividade(s) de ontem registrada(s) com sucesso!`);
-          this.updateSidePanel();
+          this.showRegistrationSummary(savedCount, totalTime, activities, true);
         }
       }
       
@@ -1956,6 +2390,70 @@
         return tasks;
       }
       
+      showDailySummary() {
+        const hoje = this.getDynamicDateObject();
+        const hojeStr = this.getDynamicDateString();
+        
+        this.checkSimuladoDay();
+        
+        this.updateAnkiProgress();
+        
+        if (this.isDayFinished()) {
+          this.showTodaySummary(hojeStr);
+        } else if (this.hasPartialRegistration()) {
+          this.showPartialSummary(hojeStr, true);
+        } else {
+          const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+          const hasRegistered = dailyActivities.activities && 
+                               (dailyActivities.activities.questoes?.length > 0 ||
+                                dailyActivities.activities.anki?.length > 0 ||
+                                dailyActivities.activities.teoria?.length > 0);
+          
+          if (hasRegistered) {
+            this.showPartialSummary(hojeStr, false);
+          } else {
+            this.showPendingTasks(hojeStr);
+          }
+        }
+        
+        this.addYesterdayButtonIfNeeded();
+        
+        // Atualizar painel lateral
+        if (window.UI_ENHANCER && window.UI_ENHANCER.updateSidePanel) {
+          window.UI_ENHANCER.updateSidePanel();
+        }
+      }
+      
+      addYesterdayButtonIfNeeded() {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = yesterday.toISOString().split('T')[0];
+        
+        const yesterdayActivities = JSON.parse(localStorage.getItem(`dailyActivities_${yesterdayStr}`)) || { activities: {} };
+        
+        if (!yesterdayActivities.activities || Object.keys(yesterdayActivities.activities).length === 0) {
+          if (this.yesterdayMemory.activities && 
+              (this.yesterdayMemory.activities.questoes.length > 0 || 
+               this.yesterdayMemory.activities.anki.length > 0 || 
+               this.yesterdayMemory.activities.teoria.length > 0)) {
+            
+            setTimeout(() => {
+              this.addBotMessage(`
+                <div class="message-alert message-alert-warning">
+                  <i class="fas fa-history"></i>
+                  <div><strong>Você tem atividades não registradas de ontem!</strong></div>
+                </div>
+                <div class="quick-actions">
+                  <button class="action-btn info" onclick="chatBot.openYesterdayModal()">
+                    <i class="fas fa-history"></i> Registrar Atividades de Ontem
+                  </button>
+                </div>
+              `, false);
+            }, 1000);
+          }
+        }
+      }
+      
       saveQuestoes(assuntoId, feitas, erradas, tempo, specificDate = null) {
         const corretas = parseInt(feitas) - parseInt(erradas);
         const dificuldade = 2;
@@ -1972,6 +2470,11 @@
           
           this.registerHomeSession(`Questões - ${assuntoId}`, parseInt(tempo), specificDate);
           localStorage.setItem('ultimoEstudo', new Date().toISOString());
+          
+          // Atualizar painel lateral
+          if (window.UI_ENHANCER && window.UI_ENHANCER.updateSidePanel) {
+            window.UI_ENHANCER.updateSidePanel();
+          }
         }
       }
       
@@ -1993,6 +2496,11 @@
           this.setModuleData('teoriaProgress', teoriaProgress);
           
           localStorage.setItem('ultimoEstudo', new Date().toISOString());
+          
+          // Atualizar painel lateral
+          if (window.UI_ENHANCER && window.UI_ENHANCER.updateSidePanel) {
+            window.UI_ENHANCER.updateSidePanel();
+          }
         }
         
         return cicloAtualizado;
@@ -2006,6 +2514,11 @@
         this.registerHomeSession(`Anki - ${deckNome}`, parseInt(tempo), specificDate);
         
         localStorage.setItem('ultimoEstudo', new Date().toISOString());
+        
+        // Atualizar painel lateral
+        if (window.UI_ENHANCER && window.UI_ENHANCER.updateSidePanel) {
+          window.UI_ENHANCER.updateSidePanel();
+        }
       }
       
       registerHomeSession(subject, minutes, specificDate = null) {
@@ -2206,24 +2719,29 @@
             }
           }
         } catch (e) {
-          console.error('Erro ao sincronizar com módulo Planos:', e);
         }
       }
       
       showResetConfirmation() { 
         const confirmationHTML = ` 
-          <div class="message-bubble bot-bubble registration-feedback compact-message"> 
-            <div class="message-content"> 
+          <div class="message-card"> 
+            <div class="message-card-header"> 
               <i class="fas fa-exclamation-triangle" style="color: var(--danger)"></i> 
-              <strong>Atenção!</strong> Esta função executa um reset temporário do módulo do Chatbot, útil para corrigir travamentos ou inconsistências nos dados do dia. Nenhum outro módulo será afetado. Deseja continuar? 
+              <div class="message-card-title">Reset Temporário</div> 
             </div> 
-            <div class="quick-actions"> 
-              <button class="action-btn reset" onclick="chatBot.resetChatbotData()"> 
-                <i class="fas fa-sync-alt"></i> Confirmar Reset 
-              </button> 
-              <button class="action-btn info" onclick="chatBot.addCompactMessage('Reset cancelado. O sistema permanece inalterado.')"> 
-                <i class="fas fa-times"></i> Cancelar 
-              </button> 
+            <div class="message-card-content"> 
+              <div class="message-alert message-alert-danger"> 
+                <i class="fas fa-exclamation-circle"></i> 
+                <div><strong>Atenção!</strong> Esta função executa um reset temporário do módulo do Chatbot, útil para corrigir travamentos ou inconsistências nos dados do dia. Nenhum outro módulo será afetado. Deseja continuar?</div> 
+              </div> 
+              <div class="quick-actions"> 
+                <button class="action-btn reset" onclick="chatBot.resetChatbotData()"> 
+                  <i class="fas fa-sync-alt"></i> Confirmar Reset 
+                </button> 
+                <button class="action-btn info" onclick="chatBot.addBotMessage('Reset cancelado. O sistema permanece inalterado.', false)"> 
+                  <i class="fas fa-times"></i> Cancelar 
+                </button> 
+              </div> 
             </div> 
           </div> 
         `; 
@@ -2245,15 +2763,31 @@
         localStorage.removeItem('studyFlow_partialRegistration');
         
         const successHTML = ` 
-          <div class="message-bubble bot-bubble registration-feedback compact-message"> 
-            <div class="message-content"> 
+          <div class="message-card"> 
+            <div class="message-card-header"> 
               <i class="fas fa-check-circle" style="color: var(--success)"></i> 
-              <strong>Reset Concluído</strong> Dados do módulo Chatbot reiniciados em ${hojeStr}. 
+              <div class="message-card-title">Reset Concluído</div> 
+            </div> 
+            <div class="message-card-content"> 
+              <div class="message-alert message-alert-success"> 
+                <i class="fas fa-check-circle"></i> 
+                <div><strong>Reset realizado com sucesso!</strong> Dados do módulo Chatbot reiniciados em ${hojeStr}.</div> 
+              </div> 
+              <div class="message-text"> 
+                Agora você pode visualizar e registrar as atividades reais do dia. O sistema voltará a funcionar normalmente a partir de amanhã. 
+              </div> 
+              <div class="quick-actions"> 
+                <button class="action-btn primary" onclick="chatBot.showDailySummary()"> 
+                  <i class="fas fa-calendar-day"></i> Ver Resumo do Dia 
+                </button> 
+                <button class="action-btn secondary" onclick="chatBot.openRegisterModal()"> 
+                  <i class="fas fa-plus-circle"></i> Registrar Atividades 
+                </button> 
+              </div> 
             </div> 
           </div> 
         `; 
         this.addBotMessage(successHTML, false); 
-        this.updateSidePanel();
       } 
       
       getDynamicDateString() { 
@@ -2287,11 +2821,806 @@
                 dailyActivities.activities.teoria?.length > 0);
       } 
       
+      showDailySummary() { 
+        const hoje = this.getDynamicDateObject();
+        const hojeStr = this.getDynamicDateString();
+        
+        this.checkSimuladoDay();
+        
+        this.updateAnkiProgress(); 
+        
+        if (this.isDayFinished()) {
+          this.showTodaySummary(hojeStr);
+          return;
+        }
+        
+        if (this.hasPartialRegistration()) {
+          this.showPartialSummary(hojeStr, true);
+          return;
+        }
+        
+        if (this.hasStudiedToday()) { 
+          this.showTodaySummary(hojeStr); 
+        } else { 
+          this.showPendingTasks(hojeStr); 
+        } 
+        
+        // Atualizar painel lateral
+        if (window.UI_ENHANCER && window.UI_ENHANCER.updateSidePanel) {
+          window.UI_ENHANCER.updateSidePanel();
+        }
+      } 
+      
+      checkSimuladoDay() {
+        const simuladoConfig = JSON.parse(localStorage.getItem('studyFlow_simuladoConfig')) || {};
+        
+        if (simuladoConfig.interval && simuladoConfig.nextSimulado) {
+          const hoje = new Date();
+          const nextSimulado = new Date(simuladoConfig.nextSimulado);
+          
+          if (hoje.toDateString() === nextSimulado.toDateString()) {
+            this.addBotMessage(`
+              <div class="message-alert message-alert-warning">
+                <i class="fas fa-bullhorn"></i>
+                <div><strong>Hoje é dia de simulado!</strong> Faça o simulado como se fosse o dia da prova real.</div>
+              </div>
+            `, false);
+          }
+        }
+      }
+      
+      updateAnkiProgress() { 
+        const ankiData = this.getModuleData('ciclos_focus_v1'); 
+        if (!ankiData) return; 
+        
+        const today = new Date().toDateString(); 
+        if (ankiData.lastUpdated !== today) { 
+          const totalDecks = ankiData.decks.length; 
+          const perDay = ankiData.perDay; 
+          const totalBlocks = Math.ceil(totalDecks / perDay); 
+          
+          const startDate = new Date(ankiData.startDate || new Date()); 
+          const diffTime = new Date() - startDate; 
+          const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); 
+          
+          ankiData.blockIndex = diffDays % totalBlocks; 
+          ankiData.lastUpdated = today; 
+          this.setModuleData('ciclos_focus_v1', ankiData); 
+        } 
+      } 
+      
+      showPendingTasks(hojeStr) { 
+        const hoje = new Date(hojeStr + 'T00:00:00');
+        const dataFormatada = this.formatDynamicDate(hoje);
+        
+        const dailyReviewGoal = this.getModuleData('dailyReviewGoal') || 5; 
+        const dailyCompletedReviews = this.getModuleData('dailyCompletedReviews') || 0; 
+        
+        const revisoesHoje = this.calculateTodayReviews(); 
+        
+        const progressoMeta = Math.min((dailyCompletedReviews / dailyReviewGoal) * 100, 100); 
+        
+        const alertas = this.checkAlerts(); 
+        
+        const materiasCiclo = this.getTodaySubjects(); 
+        
+        const baralhosAnki = this.getTodayDecks(); 
+        
+        const todayTasks = this.getTodayTasks();
+        const totalTasks = this.countPendingTasks(todayTasks, {}, true);
+        
+        let summaryHTML = ` 
+          <div class="message-card"> 
+            <div class="message-card-header"> 
+              <i class="fas fa-calendar-day"></i> 
+              <div class="message-card-title">Resumo do Dia - ${dataFormatada}</div> 
+            </div> 
+            <div class="message-card-content"> 
+              <div class="message-text"> 
+                <strong>Olá! Aqui estão suas tarefas para hoje:</strong> 
+              </div> 
+        `; 
+        
+        if (revisoesHoje.length > 0) { 
+          summaryHTML += ` 
+            <div class="message-section"> 
+              <div class="message-section-title">Revisões Pendentes</div> 
+              <div class="message-list"> 
+          `; 
+          revisoesHoje.forEach(revisao => { 
+            summaryHTML += ` 
+                <div class="message-list-item"> 
+                  <div class="message-list-icon"><i class="fas fa-book"></i></div> 
+                  <div class="message-list-content"> 
+                    <div class="message-list-title">${revisao.nome}</div> 
+                    <div class="message-list-description">${revisao.disciplina}</div> 
+                  </div> 
+                </div> 
+            `; 
+          }); 
+          summaryHTML += ` 
+              </div> 
+            </div> 
+          `; 
+        } else { 
+          const questoesRegistradasHoje = this.getQuestoesRegistradasHoje(hojeStr);
+          if (questoesRegistradasHoje.length > 0) {
+            summaryHTML += ` 
+              <div class="message-alert message-alert-success">
+                <i class="fas fa-check-circle"></i>
+                <div><strong>Carga diária de questões completa!</strong> Você já registrou ${questoesRegistradasHoje.length} bloco(s) de questões hoje.</div>
+              </div>
+            `;
+          } else {
+            summaryHTML += ` 
+              <div class="message-section"> 
+                <div class="message-section-title">Revisões Pendentes</div> 
+                <div class="message-alert message-alert-info"> 
+                  <i class="fas fa-info-circle"></i> 
+                  <div>Nenhuma revisão pendente para hoje</div> 
+                </div> 
+              </div> 
+            `; 
+          }
+        } 
+        
+        summaryHTML += ` 
+          <div class="message-section"> 
+            <div class="message-section-title">Matérias de Hoje</div> 
+        `; 
+        
+        if (materiasCiclo.length > 0) { 
+          summaryHTML += `<div class="message-list">`; 
+          materiasCiclo.forEach(materia => { 
+            const teoriaProgress = this.getModuleData('teoriaProgress'); 
+            const ultimoEstudo = teoriaProgress && teoriaProgress[materia]; 
+            
+            summaryHTML += ` 
+              <div class="message-list-item"> 
+                <div class="message-list-icon"><i class="fas fa-book"></i></div> 
+                <div class="message-list-content"> 
+                  <div class="message-list-title">${materia}</div> 
+                  ${ultimoEstudo ? ` 
+                    <div class="message-list-description"> 
+                      Último estudo: ${ultimoEstudo.conteudo} ${ultimoEstudo.pagina ? `(${ultimoEstudo.pagina})` : ''} 
+                    </div>` : ` 
+                    <div class="message-list-description">Nenhum registro anterior</div>` 
+                  } 
+                </div> 
+              </div> 
+            `; 
+          }); 
+          summaryHTML += `</div>`; 
+        } else { 
+          summaryHTML += ` 
+            <div class="message-alert message-alert-warning"> 
+              <i class="fas fa-exclamation-triangle"></i> 
+              <div>Nenhuma matéria encontrada no ciclo de estudos ativo</div> 
+            </div> 
+          `; 
+        } 
+        
+        summaryHTML += `</div>`; 
+        
+        summaryHTML += ` 
+          <div class="message-section"> 
+            <div class="message-section-title">Baralhos Anki</div> 
+            <div class="message-list"> 
+        `; 
+        
+        if (baralhosAnki.length > 0) { 
+          baralhosAnki.forEach(deck => { 
+            summaryHTML += ` 
+              <div class="message-list-item"> 
+                <div class="message-list-icon"><i class="fas fa-layer-group"></i></div> 
+                <div class="message-list-content"> 
+                  <div class="message-list-title">${deck}</div> 
+                </div> 
+              </div> 
+            `; 
+          }); 
+        } else { 
+          summaryHTML += ` 
+            <div class="message-alert message-alert-info"> 
+              <i class="fas fa-info-circle"></i> 
+              <div>Nenhum baralho programado para hoje</div> 
+            </div> 
+          `; 
+        } 
+        
+        summaryHTML += ` 
+            </div> 
+          </div> 
+        `; 
+        
+        if (alertas.length > 0) { 
+          summaryHTML += ` 
+            <div class="message-section"> 
+              <div class="message-section-title">Alertas</div> 
+          `; 
+          alertas.forEach(alerta => { 
+            const alertClass = `message-alert-${alerta.tipo === 'alert-danger' ? 'danger' : alerta.tipo === 'alert-warning' ? 'warning' : 'info'}`; 
+            summaryHTML += ` 
+              <div class="message-alert ${alertClass}"> 
+                <i class="fas fa-${alerta.icone}"></i> 
+                <div>${alerta.mensagem}</div> 
+              </div> 
+            `; 
+          }); 
+          summaryHTML += `</div>`; 
+        } 
+        
+        summaryHTML += ` 
+            </div> 
+          </div> 
+        `; 
+        
+        this.addBotMessage(summaryHTML, true, 'pending-summary'); 
+        
+        setTimeout(() => { 
+          this.addBotMessage(` 
+            <div class="quick-actions"> 
+              <button class="action-btn primary" onclick="chatBot.openRegisterModal()"> 
+                <i class="fas fa-plus-circle"></i> Registrar Atividades 
+              </button> 
+              <button class="action-btn info" onclick="chatBot.trocarBaralhos()"> 
+                <i class="fas fa-sync-alt"></i> Trocar Baralhos 
+              </button> 
+              <button class="action-btn info" onclick="chatBot.showHelp()"> 
+                <i class="fas fa-question-circle"></i> Preciso de Ajuda 
+              </button> 
+            </div> 
+          `, false); 
+        }, 500); 
+      } 
+      
+      showTodaySummary(hojeStr) { 
+        const hoje = new Date(hojeStr + 'T00:00:00');
+        const dataFormatada = this.formatDynamicDate(hoje);
+        
+        const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+        const atividades = dailyActivities.activities; 
+        
+        let totalTime = 0; 
+        let totalAnkiDecks = 0; 
+        let totalQuestoes = 0;
+        let totalTeoria = 0;
+        
+        if (atividades.questoes && atividades.questoes.length > 0) { 
+          atividades.questoes.forEach(q => {
+            totalTime += q.tempo;
+            totalQuestoes++;
+          }); 
+        } 
+        
+        if (atividades.anki && atividades.anki.length > 0) { 
+          atividades.anki.forEach(a => { 
+            totalTime += a.tempo; 
+            totalAnkiDecks++; 
+          }); 
+        } 
+        
+        if (atividades.teoria && atividades.teoria.length > 0) { 
+          atividades.teoria.forEach(t => {
+            totalTime += t.tempo;
+            totalTeoria++;
+          }); 
+        } 
+        
+        const hours = Math.floor(totalTime / 60); 
+        const minutes = totalTime % 60; 
+        
+        let summaryHTML = ` 
+          <div class="message-card"> 
+            <div class="message-card-header"> 
+              <i class="fas fa-calendar-day"></i> 
+              <div class="message-card-title">Resumo do Dia - ${dataFormatada}</div> 
+            </div> 
+            <div class="message-card-content"> 
+        `;
+        
+        if (dailyActivities.completed === true || this.isDayFinished()) {
+          summaryHTML += `
+            <div class="day-finished-banner">
+              <i class="fas fa-check-circle"></i>
+              <div><strong>Dia finalizado!</strong> Você não pode mais registrar atividades para hoje.</div>
+            </div>
+          `;
+        } else {
+          summaryHTML += `
+            <div class="message-alert message-alert-success">
+              <i class="fas fa-check-circle"></i>
+              <div><strong>Parabéns! Você já estudou hoje.</strong></div>
+            </div>
+          `;
+        }
+        
+        if (atividades.questoes && atividades.questoes.length > 0) { 
+          summaryHTML += ` 
+            <div class="message-section"> 
+              <div class="message-section-title">Questões Realizadas</div> 
+              <div class="message-list"> 
+          `; 
+          atividades.questoes.forEach(q => { 
+            const acertos = q.feitas - q.erradas; 
+            const taxaAcerto = q.feitas > 0 ? Math.round((acertos / q.feitas) * 100) : 0; 
+            
+            summaryHTML += ` 
+                <div class="message-list-item"> 
+                  <div class="message-list-icon"><i class="fas fa-check"></i></div> 
+                  <div class="message-list-content"> 
+                    <div class="message-list-title">${q.assunto}</div> 
+                    <div class="message-list-description">${q.feitas} questões • ${taxaAcerto}% de acerto • ${q.tempo} min</div> 
+                  </div> 
+                </div> 
+            `; 
+          }); 
+          summaryHTML += ` 
+              </div> 
+            </div> 
+          `; 
+        } 
+        
+        if (atividades.anki && atividades.anki.length > 0) { 
+          summaryHTML += ` 
+            <div class="message-section"> 
+              <div class="message-section-title">Revisões Anki</div> 
+              <div class="message-list"> 
+          `; 
+          atividades.anki.forEach(a => { 
+            summaryHTML += ` 
+                <div class="message-list-item"> 
+                  <div class="message-list-icon"><i class="fas fa-check"></i></div> 
+                  <div class="message-list-content"> 
+                    <div class="message-list-title">${a.deck}</div> 
+                    <div class="message-list-description">${a.cards} cards revisados • ${a.tempo} min</div> 
+                  </div> 
+                </div> 
+            `; 
+          }); 
+          summaryHTML += ` 
+              </div> 
+            </div> 
+          `; 
+        } 
+        
+        if (atividades.teoria && atividades.teoria.length > 0) { 
+          summaryHTML += ` 
+            <div class="message-section"> 
+              <div class="message-section-title">Estudo Teórico</div> 
+              <div class="message-list"> 
+          `; 
+          atividades.teoria.forEach(t => { 
+            summaryHTML += ` 
+                <div class="message-list-item"> 
+                  <div class="message-list-icon"><i class="fas fa-check"></i></div> 
+                  <div class="message-list-content"> 
+                    <div class="message-list-title">${t.materia}</div> 
+                    <div class="message-list-description">${t.conteudo || t.pagina || 'Estudo concluído'} • ${t.tempo} min</div> 
+                  </div> 
+                </div> 
+            `; 
+          }); 
+          summaryHTML += ` 
+              </div> 
+            </div> 
+          `; 
+        } 
+        
+        summaryHTML += ` 
+              <div class="message-divider"></div> 
+              <div class="message-stats"> 
+                <div class="message-stat"> 
+                  <div class="message-stat-value">${hours}h ${minutes}m</div> 
+                  <div class="message-stat-label">Tempo Total</div> 
+                </div> 
+                <div class="message-stat"> 
+                  <div class="message-stat-value">${totalAnkiDecks}</div> 
+                  <div class="message-stat-label">Baralhos Revisados</div> 
+                </div> 
+                <div class="message-stat"> 
+                  <div class="message-stat-value">${totalQuestoes}</div> 
+                  <div class="message-stat-label">Blocos de Questões</div> 
+                </div> 
+                <div class="message-stat"> 
+                  <div class="message-stat-value">${totalTeoria}</div> 
+                  <div class="message-stat-label">Estudos Teóricos</div> 
+                </div> 
+              </div> 
+        `;
+        
+        const comparacaoHTML = this.generateComparacaoComOntem(hojeStr, atividades, totalTime);
+        summaryHTML += comparacaoHTML;
+        
+        summaryHTML += ` 
+              <div class="message-alert message-alert-info"> 
+                <i class="fas fa-info-circle"></i> 
+                <div><strong>Volte amanhã para novas atividades!</strong></div> 
+              </div> 
+        `; 
+        
+        summaryHTML += ` 
+            </div> 
+          </div> 
+        `; 
+        
+        this.addBotMessage(summaryHTML, true, 'today-summary'); 
+        
+        setTimeout(() => { 
+          this.addBotMessage(` 
+            <div class="quick-actions"> 
+              <button class="action-btn info" onclick="chatBot.showHelp()"> 
+                <i class="fas fa-question-circle"></i> Preciso de Ajuda 
+              </button> 
+            </div> 
+          `, false); 
+        }, 500); 
+      } 
+      
+      showPartialSummary(hojeStr, fromPartial = false) {
+        const hoje = new Date(hojeStr + 'T00:00:00');
+        const dataFormatada = this.formatDynamicDate(hoje);
+        
+        let atividades;
+        let isPartial = fromPartial;
+        
+        if (fromPartial) {
+          atividades = this.partialRegistration.activities;
+        } else {
+          const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+          atividades = dailyActivities.activities;
+          isPartial = false;
+        }
+        
+        let totalTime = 0;
+        let totalActivities = 0;
+        
+        if (atividades.questoes && atividades.questoes.length > 0) {
+          totalActivities += atividades.questoes.length;
+          atividades.questoes.forEach(q => totalTime += q.tempo);
+        }
+        
+        if (atividades.anki && atividades.anki.length > 0) {
+          totalActivities += atividades.anki.length;
+          atividades.anki.forEach(a => totalTime += a.tempo);
+        }
+        
+        if (atividades.teoria && atividades.teoria.length > 0) {
+          totalActivities += atividades.teoria.length;
+          atividades.teoria.forEach(t => totalTime += t.tempo);
+        }
+        
+        const todayTasks = this.getTodayTasks();
+        const pendingCount = this.countPendingTasks(todayTasks, atividades, true);
+        
+        let summaryHTML = `
+          <div class="message-card">
+            <div class="message-card-header">
+              <i class="fas fa-calendar-day"></i>
+              <div class="message-card-title">Resumo do Dia - ${dataFormatada}</div>
+            </div>
+            <div class="message-card-content">
+              <div class="message-alert ${isPartial ? 'message-alert-warning' : 'message-alert-info'}">
+                <i class="fas fa-info-circle"></i>
+                <div><strong>Você já registrou ${totalActivities} atividade(s) hoje${isPartial ? ' (registro parcial)' : ''}</strong></div>
+              </div>
+              
+              <div class="message-stats">
+                <div class="message-stat">
+                  <div class="message-stat-value">${totalTime}m</div>
+                  <div class="message-stat-label">Tempo Total</div>
+                </div>
+                <div class="message-stat">
+                  <div class="message-stat-value">${totalActivities}</div>
+                  <div class="message-stat-label">Atividades</div>
+                </div>
+                <div class="message-stat">
+                  <div class="message-stat-value">${pendingCount}</div>
+                  <div class="message-stat-label">Pendentes</div>
+                </div>
+                <div class="message-stat">
+                  <div class="message-stat-value">${isPartial ? '⏳' : '✅'}</div>
+                  <div class="message-stat-label">${isPartial ? 'Parcial' : 'Salvo'}</div>
+                </div>
+              </div>
+              
+              <div class="progress-visual">
+                <div class="progress-bar-container">
+                  <div class="progress-bar-fill" style="width: ${(totalActivities / (totalActivities + pendingCount)) * 100}%"></div>
+                </div>
+                <span>${totalActivities}/${totalActivities + pendingCount}</span>
+              </div>
+        `;
+        
+        if (atividades.questoes && atividades.questoes.length > 0) {
+          summaryHTML += `
+            <div class="message-section">
+              <div class="message-section-title">Questões Realizadas</div>
+              <div class="message-list">
+          `;
+          atividades.questoes.forEach(q => {
+            const acertos = q.feitas - q.erradas;
+            const taxaAcerto = q.feitas > 0 ? Math.round((acertos / q.feitas) * 100) : 0;
+            summaryHTML += `
+              <div class="message-list-item">
+                <div class="message-list-icon"><i class="fas fa-check"></i></div>
+                <div class="message-list-content">
+                  <div class="message-list-title">${q.assunto}</div>
+                  <div class="message-list-description">${q.feitas} questões • ${taxaAcerto}% acerto • ${q.tempo} min</div>
+                </div>
+              </div>
+            `;
+          });
+          summaryHTML += `</div></div>`;
+        }
+        
+        if (atividades.anki && atividades.anki.length > 0) {
+          summaryHTML += `
+            <div class="message-section">
+              <div class="message-section-title">Revisões Anki</div>
+              <div class="message-list">
+          `;
+          atividades.anki.forEach(a => {
+            summaryHTML += `
+              <div class="message-list-item">
+                <div class="message-list-icon"><i class="fas fa-check"></i></div>
+                <div class="message-list-content">
+                  <div class="message-list-title">${a.deck}</div>
+                  <div class="message-list-description">${a.cards} cards • ${a.tempo} min</div>
+                </div>
+              </div>
+            `;
+          });
+          summaryHTML += `</div></div>`;
+        }
+        
+        if (atividades.teoria && atividades.teoria.length > 0) {
+          summaryHTML += `
+            <div class="message-section">
+              <div class="message-section-title">Estudo Teórico</div>
+              <div class="message-list">
+          `;
+          atividades.teoria.forEach(t => {
+            summaryHTML += `
+              <div class="message-list-item">
+                <div class="message-list-icon"><i class="fas fa-check"></i></div>
+                <div class="message-list-content">
+                  <div class="message-list-title">${t.materia}</div>
+                  <div class="message-list-description">${t.conteudo || t.pagina || 'Estudo'} • ${t.tempo} min</div>
+                </div>
+              </div>
+            `;
+          });
+          summaryHTML += `</div></div>`;
+        }
+        
+        if (pendingCount > 0) {
+          summaryHTML += `
+              <div class="message-alert message-alert-warning">
+                <i class="fas fa-clock"></i>
+                <div><strong>${pendingCount} atividade(s) pendente(s)</strong> - continue registrando ou finalize o dia.</div>
+              </div>
+            </div>
+          </div>
+          `;
+        } else {
+          summaryHTML += `
+              <div class="message-alert message-alert-success">
+                <i class="fas fa-check-circle"></i>
+                <div><strong>Todas as atividades registradas!</strong> O dia será finalizado automaticamente.</div>
+              </div>
+            </div>
+          </div>
+          `;
+          
+          setTimeout(() => {
+            this.finalizeDay();
+          }, 1000);
+        }
+        
+        this.addBotMessage(summaryHTML, true, 'partial-summary');
+        
+        if (pendingCount > 0) {
+          setTimeout(() => {
+            this.addBotMessage(`
+              <div class="quick-actions">
+                <button class="action-btn primary" onclick="chatBot.openRegisterModal()">
+                  <i class="fas fa-plus-circle"></i> Registrar Mais Atividades
+                </button>
+                <button class="action-btn secondary" onclick="chatBot.finalizeDay()">
+                  <i class="fas fa-check"></i> Finalizar Dia
+                </button>
+                <button class="action-btn info" onclick="chatBot.showHelp()">
+                  <i class="fas fa-question-circle"></i> Ajuda
+                </button>
+              </div>
+            `, false);
+          }, 500);
+        }
+      }
+      
+      countPendingTasks(todayTasks, registeredActivities, checkAllSources = false) {
+        let count = 0;
+        
+        todayTasks.questoes.forEach(questao => {
+          if (checkAllSources) {
+            if (!this.isQuestaoRegistered(questao.id)) count++;
+          } else {
+            const registeredQuestoes = registeredActivities.questoes?.map(q => q.assunto) || [];
+            if (!registeredQuestoes.includes(questao.id)) count++;
+          }
+        });
+        
+        todayTasks.anki.forEach(deck => {
+          if (checkAllSources) {
+            if (!this.isAnkiRegistered(deck.id)) count++;
+          } else {
+            const registeredAnki = registeredActivities.anki?.map(a => a.deck) || [];
+            if (!registeredAnki.includes(deck.id)) count++;
+          }
+        });
+        
+        todayTasks.teoria.forEach(materia => {
+          if (checkAllSources) {
+            if (!this.isTeoriaRegistered(materia)) count++;
+          } else {
+            const registeredTeoria = registeredActivities.teoria?.map(t => t.materia) || [];
+            if (!registeredTeoria.includes(materia)) count++;
+          }
+        });
+        
+        return count;
+      }
+      
+      generateComparacaoComOntem(hojeStr, atividades, totalTime) {
+        const ontem = new Date();
+        ontem.setDate(ontem.getDate() - 1);
+        const ontemStr = ontem.toISOString().split('T')[0];
+        const ontemActivities = JSON.parse(localStorage.getItem(`dailyActivities_${ontemStr}`)) || { activities: {} };
+        
+        if (!ontemActivities.activities || Object.keys(ontemActivities.activities).length === 0) {
+          return '';
+        }
+        
+        let ontemTotalTime = 0;
+        let ontemTotalQuestoes = 0;
+        let ontemTotalAcertos = 0;
+        let ontemTotalAnkiDecks = 0;
+        
+        if (ontemActivities.activities.questoes && ontemActivities.activities.questoes.length > 0) {
+          ontemActivities.activities.questoes.forEach(q => {
+            ontemTotalTime += q.tempo;
+            ontemTotalQuestoes += q.feitas;
+            ontemTotalAcertos += (q.feitas - q.erradas);
+          });
+        }
+        
+        if (ontemActivities.activities.anki && ontemActivities.activities.anki.length > 0) {
+          ontemTotalAnkiDecks += ontemActivities.activities.anki.length;
+          ontemActivities.activities.anki.forEach(a => {
+            ontemTotalTime += a.tempo;
+          });
+        }
+        
+        if (ontemActivities.activities.teoria && ontemActivities.activities.teoria.length > 0) {
+          ontemActivities.activities.teoria.forEach(t => {
+            ontemTotalTime += t.tempo;
+          });
+        }
+        
+        let hojeTotalQuestoes = 0;
+        let hojeTotalAcertos = 0;
+        
+        if (atividades.questoes && atividades.questoes.length > 0) {
+          atividades.questoes.forEach(q => {
+            hojeTotalQuestoes += q.feitas;
+            hojeTotalAcertos += (q.feitas - q.erradas);
+          });
+        }
+        
+        const diffTime = totalTime - ontemTotalTime;
+        const diffQuestoes = hojeTotalQuestoes - ontemTotalQuestoes;
+        const diffAnkiDecks = (atividades.anki ? atividades.anki.length : 0) - ontemTotalAnkiDecks;
+        
+        const hojeAcertosPercent = hojeTotalQuestoes > 0 ? (hojeTotalAcertos / hojeTotalQuestoes) * 100 : 0;
+        const ontemAcertosPercent = ontemTotalQuestoes > 0 ? (ontemTotalAcertos / ontemTotalQuestoes) * 100 : 0;
+        const diffAcertosPercent = hojeAcertosPercent - ontemAcertosPercent;
+        
+        let comparacaoHTML = `
+          <div class="message-section">
+            <div class="message-section-title">Comparação com Ontem</div>
+            <div class="message-list">
+        `;
+        
+        let timeIcon = '⏱️';
+        let timeText = '';
+        if (diffTime > 0) {
+          timeText = `<span style="color: var(--success)">+${diffTime} min</span> em relação a ontem`;
+        } else if (diffTime < 0) {
+          timeText = `<span style="color: var(--danger)">${diffTime} min</span> em relação a ontem`;
+        } else {
+          timeText = `Mesmo tempo de estudo que ontem`;
+        }
+        comparacaoHTML += `
+          <div class="message-list-item">
+            <div class="message-list-icon">${timeIcon}</div>
+            <div class="message-list-content">
+              <div class="message-list-title">Horas estudadas</div>
+              <div class="message-list-description">${timeText}</div>
+            </div>
+          </div>
+        `;
+        
+        let questoesIcon = '🧩';
+        let questoesText = '';
+        if (diffQuestoes > 0) {
+          questoesText = `<span style="color: var(--success)">+${diffQuestoes} questões</span> em relação a ontem`;
+        } else if (diffQuestoes < 0) {
+          questoesText = `<span style="color: var(--danger)">${diffQuestoes} questões</span> em relação a ontem`;
+        } else {
+          questoesText = `Mesma quantidade de questões que ontem`;
+        }
+        comparacaoHTML += `
+          <div class="message-list-item">
+            <div class="message-list-icon">${questoesIcon}</div>
+            <div class="message-list-content">
+              <div class="message-list-title">Questões resolvidas</div>
+              <div class="message-list-description">${questoesText}</div>
+            </div>
+          </div>
+        `;
+        
+        let acertosIcon = '📊';
+        let acertosText = '';
+        if (diffAcertosPercent > 0) {
+          acertosText = `<span style="color: var(--success)">+${diffAcertosPercent.toFixed(1)}%</span> em relação a ontem`;
+        } else if (diffAcertosPercent < 0) {
+          acertosText = `<span style="color: var(--danger)">${diffAcertosPercent.toFixed(1)}%</span> em relação a ontem`;
+        } else {
+          acertosText = `Mesma porcentagem de acertos que ontem`;
+        }
+        comparacaoHTML += `
+          <div class="message-list-item">
+            <div class="message-list-icon">${acertosIcon}</div>
+            <div class="message-list-content">
+              <div class="message-list-title">Porcentagem de acertos</div>
+              <div class="message-list-description">${acertosText}</div>
+            </div>
+          </div>
+        `;
+        
+        let flashcardsIcon = '🔁';
+        let flashcardsText = '';
+        if (diffAnkiDecks > 0) {
+          flashcardsText = `<span style="color: var(--success)">+${diffAnkiDecks} baralhos</span> em relação a ontem`;
+        } else if (diffAnkiDecks < 0) {
+          flashcardsText = `<span style="color: var(--danger)">${diffAnkiDecks} baralhos</span> em relação a ontem`;
+        } else {
+          flashcardsText = `Mesma quantidade de baralhos que ontem`;
+        }
+        comparacaoHTML += `
+          <div class="message-list-item">
+            <div class="message-list-icon">${flashcardsIcon}</div>
+            <div class="message-list-content">
+              <div class="message-list-title">Flashcards revisados</div>
+              <div class="message-list-description">${flashcardsText}</div>
+            </div>
+          </div>
+        `;
+        
+        comparacaoHTML += `
+            </div>
+          </div>
+        `;
+        
+        return comparacaoHTML;
+      }
+      
       openRegisterModal() {
         const hojeStr = this.getDynamicDateString();
         
         if (this.isDayFinished()) {
-          this.addCompactMessage("O dia de hoje já foi finalizado! Você não pode mais registrar atividades para hoje.");
+          this.typeMessage("O dia de hoje já foi finalizado! Você não pode mais registrar atividades para hoje.");
           return;
         }
         
@@ -2695,18 +4024,14 @@
         this.closeRegisterModal();
         
         if (savedCount > 0) {
-          // Feedback visual silencioso
-          this.showSuccessFeedback(`${savedCount} atividade(s) registrada(s) com sucesso! Seu progresso foi atualizado.`);
-          
-          // Atualizar painel lateral
-          this.updateSidePanel();
-          
           const hojeStr = this.getDynamicDateString();
           const todayTasks = this.getTodayTasks();
           const pendingCount = this.countPendingTasks(todayTasks, this.partialRegistration.activities);
           
           if (pendingCount === 0) {
             this.finalizeDay();
+          } else {
+            this.showRegistrationSummary(savedCount, totalTime, activities, false);
           }
         }
       }
@@ -2758,6 +4083,17 @@
         }
       }
       
+      showPostSaveModal() {
+        const modal = document.getElementById('postSaveModal');
+        modal.style.display = 'flex';
+        
+        modal.onclick = (e) => {
+          if (e.target === modal) {
+            modal.style.display = 'none';
+          }
+        };
+      }
+      
       finalizeDay() {
         const hojeStr = this.getDynamicDateString();
         
@@ -2788,48 +4124,116 @@
         
         localStorage.setItem('lastRegisterDate', hojeStr);
         
-        // Atualizar painel lateral (irá mostrar o estado de dia concluído)
-        this.updateSidePanel();
+        this.typeMessage(`Dia ${hojeStr} finalizado com sucesso!`);
         
-        // Feedback visual discreto
-        this.addCompactMessage(`Dia ${hojeStr} finalizado com sucesso!`);
+        // Atualizar painel lateral
+        if (window.UI_ENHANCER && window.UI_ENHANCER.updateSidePanel) {
+          window.UI_ENHANCER.updateSidePanel();
+        }
+        
+        setTimeout(() => {
+          this.showDailySummary();
+        }, 1000);
       }
       
       closeRegisterModal() {
         document.getElementById('registerModal').style.display = 'none';
       }
       
-      countPendingTasks(todayTasks, registeredActivities, checkAllSources = false) {
-        let count = 0;
+      showRegistrationSummary(savedCount, totalTime, activities, isYesterday = false) {
+        // Mensagem curta no chat
+        const chatMessages = document.getElementById('chatMessages');
+        const messageContainer = document.createElement('div');
+        messageContainer.className = 'message-container bot-container';
+        const avatar = document.createElement('div');
+        avatar.className = 'avatar bot-avatar-small';
+        avatar.innerHTML = '<i class="fas fa-robot"></i>';
+        messageContainer.appendChild(avatar);
         
-        todayTasks.questoes.forEach(questao => {
-          if (checkAllSources) {
-            if (!this.isQuestaoRegistered(questao.id)) count++;
-          } else {
-            const registeredQuestoes = registeredActivities.questoes?.map(q => q.assunto) || [];
-            if (!registeredQuestoes.includes(questao.id)) count++;
+        const successMessage = `
+          <div class="message-bubble bot-bubble">
+            <div class="message-content">
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px">
+                <i class="fas fa-check-circle" style="color: var(--success)"></i>
+                <strong>Atividade registrada com sucesso. Progresso atualizado.</strong>
+              </div>
+            </div>
+            <div class="bubble-time">${this.formatTime(new Date())}</div>
+          </div>
+        `;
+        
+        messageContainer.innerHTML += successMessage;
+        chatMessages.appendChild(messageContainer);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        // Atualizar painel lateral apenas se não for de ontem
+        if (!isYesterday) {
+          if (window.UI_ENHANCER && window.UI_ENHANCER.updateSidePanel) {
+            window.UI_ENHANCER.updateSidePanel();
+            
+            // Animar cards correspondentes
+            setTimeout(() => {
+              activities.questoes.forEach(q => {
+                const card = document.querySelector(`[data-id="${q.assunto}"]`);
+                if (card) {
+                  card.classList.add('completed');
+                  setTimeout(() => {
+                    card.classList.remove('completed');
+                  }, 1500);
+                }
+              });
+              
+              activities.anki.forEach(a => {
+                const card = document.querySelector(`[data-id="${a.deck}"]`);
+                if (card) {
+                  card.classList.add('completed');
+                  setTimeout(() => {
+                    card.classList.remove('completed');
+                  }, 1500);
+                }
+              });
+              
+              activities.teoria.forEach(t => {
+                const card = document.querySelector(`[data-id="${t.materia}"]`);
+                if (card) {
+                  card.classList.add('completed');
+                  setTimeout(() => {
+                    card.classList.remove('completed');
+                  }, 1500);
+                }
+              });
+            }, 300);
           }
-        });
+        }
+      }
+      
+      getNextReviewDates() {
+        const disciplines = this.getModuleData('disciplines');
+        const nextReviews = [];
+        const hoje = new Date();
         
-        todayTasks.anki.forEach(deck => {
-          if (checkAllSources) {
-            if (!this.isAnkiRegistered(deck.id)) count++;
-          } else {
-            const registeredAnki = registeredActivities.anki?.map(a => a.deck) || [];
-            if (!registeredAnki.includes(deck.id)) count++;
-          }
-        });
+        if (disciplines && Array.isArray(disciplines)) {
+          disciplines.forEach(disciplina => {
+            if (disciplina.assuntos && Array.isArray(disciplina.assuntos)) {
+              disciplina.assuntos.forEach(assunto => {
+                if (assunto.nextReviewDate) {
+                  const nextDate = new Date(assunto.nextReviewDate);
+                  if (nextDate > hoje) {
+                    nextReviews.push({
+                      assunto: assunto.nome,
+                      disciplina: disciplina.name,
+                      data: nextDate.toLocaleDateString('pt-BR')
+                    });
+                  }
+                }
+              });
+            }
+          });
+        }
         
-        todayTasks.teoria.forEach(materia => {
-          if (checkAllSources) {
-            if (!this.isTeoriaRegistered(materia)) count++;
-          } else {
-            const registeredTeoria = registeredActivities.teoria?.map(t => t.materia) || [];
-            if (!registeredTeoria.includes(materia)) count++;
-          }
-        });
-        
-        return count;
+        return nextReviews
+          .sort((a, b) => new Date(a.data) - new Date(b.data))
+          .slice(0, 3);
       }
       
       toggleTheme() {
@@ -2843,42 +4247,15 @@
           this.currentTheme = 'light';
         }
         localStorage.setItem('theme', this.currentTheme);
-        this.updateSidePanel();
+        
+        // Atualizar tema do painel lateral
+        if (window.UI_ENHANCER && window.UI_ENHANCER.updateSidePanel) {
+          window.UI_ENHANCER.updateSidePanel();
+        }
       }
       
       addUserMessage(content) {
         this.addMessageToChat(content, true);
-      }
-      
-      addCompactMessage(content) {
-        const chatMessages = document.getElementById('chatMessages');
-        const messageContainer = document.createElement('div');
-        messageContainer.className = 'message-container bot-container';
-        
-        const avatar = document.createElement('div');
-        avatar.className = 'avatar bot-avatar-small';
-        avatar.innerHTML = '<i class="fas fa-robot"></i>';
-        messageContainer.appendChild(avatar);
-        
-        const messageBubble = document.createElement('div');
-        messageBubble.className = 'message-bubble bot-bubble compact-message';
-        messageBubble.style.maxWidth = '60%';
-        
-        const messageContent = document.createElement('div');
-        messageContent.className = 'message-content';
-        messageContent.innerHTML = content;
-        
-        const messageTime = document.createElement('div');
-        messageTime.className = 'bubble-time';
-        messageTime.textContent = this.formatTime(new Date());
-        
-        messageBubble.appendChild(messageContent);
-        messageBubble.appendChild(messageTime);
-        
-        messageContainer.appendChild(messageBubble);
-        chatMessages.appendChild(messageContainer);
-        
-        chatMessages.scrollTop = chatMessages.scrollHeight;
       }
       
       getActiveCycle() {
@@ -2934,7 +4311,6 @@
           const data = localStorage.getItem(key);
           return data ? JSON.parse(data) : null;
         } catch (e) {
-          console.error(`Erro ao carregar dados do módulo: ${key}`, e);
           return null;
         }
       }
@@ -2944,7 +4320,6 @@
           localStorage.setItem(key, JSON.stringify(data));
           return true;
         } catch (e) {
-          console.error(`Erro ao salvar dados no módulo: ${key}`, e);
           return false;
         }
       }
@@ -3158,8 +4533,12 @@
 
         this.setModuleData('ciclos_focus_v1', ankiData);
 
-        this.addCompactMessage(`Baralhos trocados! Agora são os baralhos do bloco ${ankiData.blockIndex + 1} de ${totalBlocks}.`);
-        this.updateSidePanel();
+        this.typeMessage(`Baralhos trocados! Agora são os baralhos do bloco ${ankiData.blockIndex + 1} de ${totalBlocks}.`);
+        
+        // Atualizar painel lateral
+        if (window.UI_ENHANCER && window.UI_ENHANCER.updateSidePanel) {
+          window.UI_ENHANCER.updateSidePanel();
+        }
       }
       
       addMessageToChat(content, isUser = false, timestamp = null, messageId = null) {
@@ -3197,6 +4576,13 @@
         
         messageBubble.appendChild(messageContent);
         messageBubble.appendChild(messageTime);
+        
+        if (isUser) {
+          const reaction = document.createElement('div');
+          reaction.className = 'message-reaction';
+          reaction.innerHTML = '<span class="reaction-icon"><i class="fas fa-check-double"></i></span>';
+          messageBubble.appendChild(reaction);
+        }
         
         messageContainer.appendChild(messageBubble);
         
@@ -3364,8 +4750,7 @@
         const lowerMessage = message.toLowerCase();
         
         if (lowerMessage.includes('resumo') || lowerMessage.includes('como estou') || lowerMessage.includes('tarefas')) {
-          this.addCompactMessage("Seu progresso diário está sempre visível no painel lateral à direita. 😊");
-          this.updateSidePanel();
+          this.showDailySummary();
         } else if (lowerMessage.includes('registrar') || lowerMessage.includes('adicionar')) {
           this.openRegisterModal();
         } else if (lowerMessage.includes('configurar') || lowerMessage.includes('config')) {
@@ -3381,28 +4766,103 @@
         } else if (lowerMessage.includes('reset')) {
           this.showResetConfirmation();
         } else {
-          this.typeMessage("Entendi sua mensagem! Posso te ajudar com:\n\n• <strong>Registrar atividades</strong>\n• <strong>Edital</strong>\n• <strong>Simulados</strong>\n• <strong>Configurações</strong>\n• <strong>Ajuda e informações</strong>\n\nO que você gostaria de fazer?");
+          this.typeMessage("Entendi sua mensagem! Posso te ajudar com:\n\n• <strong>Resumo do dia</strong>\n• <strong>Registrar atividades</strong>\n• <strong>Edital</strong>\n• <strong>Simulados</strong>\n• <strong>Configurações</strong>\n• <strong>Ajuda e informações</strong>\n\nO que você gostaria de fazer?");
         }
       }
       
       showHelp() {
         const helpCard = `
-          <div class="message-bubble bot-bubble compact-message">
-            <div class="message-content">
-              <strong>Como posso ajudá-lo?</strong>
-              <div class="quick-actions" style="margin-top: 10px">
-                <button class="action-btn primary" onclick="chatBot.openRegisterModal()">
-                  <i class="fas fa-plus-circle"></i> Registrar Atividades
-                </button>
-                <button class="action-btn secondary" onclick="chatBot.showEditalMenu()">
-                  <i class="fas fa-file-alt"></i> Edital
-                </button>
-                <button class="action-btn info" onclick="chatBot.showSimuladosMenu()">
-                  <i class="fas fa-chart-line"></i> Simulados
-                </button>
-                <button class="action-btn info" onclick="chatBot.showConfigModal()">
-                  <i class="fas fa-cog"></i> Configurar
-                </button>
+          <div class="message-card">
+            <div class="message-card-header">
+              <i class="fas fa-question-circle"></i>
+              <div class="message-card-title">Como posso ajudá-lo?</div>
+            </div>
+            <div class="message-card-content">
+              <div class="message-list">
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-calendar-day"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Resumo do dia</div>
+                    <div class="message-list-description">Mostrar tarefas e progresso atual</div>
+                  </div>
+                </div>
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-plus-circle"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Registrar atividades</div>
+                    <div class="message-list-description">Questões, Anki ou teoria</div>
+                  </div>
+                </div>
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-history"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Registrar atividades de ontem</div>
+                    <div class="message-list-description">Para quando esqueceu de registrar no dia anterior</div>
+                  </div>
+                </div>
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-file-alt"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Edital</div>
+                    <div class="message-list-description">Ver progresso no edital completo ou por matéria</div>
+                  </div>
+                </div>
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-chart-line"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Simulados</div>
+                    <div class="message-list-description">Ver notas e relatórios de simulados</div>
+                  </div>
+                </div>
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-calendar-alt"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Programar Simulado</div>
+                    <div class="message-list-description">Definir intervalos para simulados</div>
+                  </div>
+                </div>
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-chart-bar"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Relatório Periódico</div>
+                    <div class="message-list-description">Gerar relatórios de desempenho</div>
+                  </div>
+                </div>
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-sync-alt"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Trocar Baralhos</div>
+                    <div class="message-list-description">Corrigir manualmente a ordem dos baralhos do dia</div>
+                  </div>
+                </div>
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-cog"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Configurar</div>
+                    <div class="message-list-description">Ajustar quantidade de matérias por dia</div>
+                  </div>
+                </div>
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-question-circle"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Ajuda</div>
+                    <div class="message-list-description">Mostrar esta mensagem de ajuda</div>
+                  </div>
+                </div>
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-info"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Informações</div>
+                    <div class="message-list-description">Sobre o StudyFlow</div>
+                  </div>
+                </div>
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Reset</div>
+                    <div class="message-list-description">Função temporária para corrigir travamentos</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -3412,19 +4872,73 @@
       
       showInfo() {
         const infoCard = `
-          <div class="message-bubble bot-bubble compact-message">
-            <div class="message-content">
-              <strong>Sobre o StudyFlow</strong>
-              <div style="margin-top: 8px; font-size: 0.9rem">
-                Seu assistente pessoal de estudos, integrando todas as suas ferramentas de aprendizado em um só lugar.
+          <div class="message-card">
+            <div class="message-card-header">
+              <i class="fas fa-info-circle"></i>
+              <div class="message-card-title">Sobre o StudyFlow</div>
+            </div>
+            <div class="message-card-content">
+              <div class="message-text">
+                O StudyFlow é seu assistente pessoal de estudos, integrando todas as suas ferramentas de aprendizado em um só lugar.
               </div>
-              <div class="quick-actions" style="margin-top: 10px">
-                <button class="action-btn info" onclick="chatBot.updateSidePanel()">
-                  <i class="fas fa-sync-alt"></i> Atualizar Painel
-                </button>
-                <button class="action-btn info" onclick="chatBot.toggleSidePanel()">
-                  <i class="fas fa-eye"></i> Mostrar/Ocultar Painel
-                </button>
+              <div class="message-muted" style="margin-top: 10px">
+                Comigo você pode:
+              </div>
+              <div class="message-list" style="margin-top: 8px">
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-check"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Gerenciar seu ciclo de estudos</div>
+                  </div>
+                </div>
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-check"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Registrar questões e revisões</div>
+                  </div>
+                </div>
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-check"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Acompanhar seu progresso no edital</div>
+                  </div>
+                </div>
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-check"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Analisar desempenho em simulados</div>
+                  </div>
+                </div>
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-check"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Receber alertas e lembretes</div>
+                  </div>
+                </div>
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-check"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Programar simulados</div>
+                  </div>
+                </div>
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-check"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Gerar relatórios periódicos</div>
+                  </div>
+                </div>
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-check"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Corrigir manualmente a ordem dos baralhos</div>
+                  </div>
+                </div>
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-check"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Registrar atividades do dia anterior</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -3435,17 +4949,41 @@
       showQuickActions() {
         this.addBotMessage(`
           <div class="quick-actions">
-            <button class="action-btn primary" onclick="chatBot.openRegisterModal()">
-              <i class="fas fa-plus-circle"></i> Registrar Atividade
+            <button class="action-btn primary" onclick="chatBot.showDailySummary()">
+              <i class="fas fa-calendar-day"></i> Resumo do Dia
             </button>
-            <button class="action-btn secondary" onclick="chatBot.showEditalMenu()">
+            <button class="action-btn secondary" onclick="chatBot.openRegisterModal()">
+              <i class="fas fa-plus-circle"></i> Registrar
+            </button>
+            <button class="action-btn info" onclick="chatBot.openYesterdayModal()">
+              <i class="fas fa-history"></i> Registrar Atividades de Ontem
+            </button>
+            <button class="action-btn info" onclick="chatBot.showEditalMenu()">
               <i class="fas fa-file-alt"></i> Edital
             </button>
             <button class="action-btn info" onclick="chatBot.showSimuladosMenu()">
               <i class="fas fa-chart-line"></i> Simulados
             </button>
+            <button class="action-btn info" onclick="chatBot.showSimuladoModal()">
+              <i class="fas fa-calendar-alt"></i> Programar Simulado
+            </button>
+            <button class="action-btn info" onclick="chatBot.showRelatorioModal()">
+              <i class="fas fa-chart-bar"></i> Relatório
+            </button>
+            <button class="action-btn info" onclick="chatBot.trocarBaralhos()">
+              <i class="fas fa-sync-alt"></i> Trocar Baralhos
+            </button>
+            <button class="action-btn info" onclick="chatBot.showConfigModal()">
+              <i class="fas fa-cog"></i> Configurar
+            </button>
             <button class="action-btn info" onclick="chatBot.showHelp()">
               <i class="fas fa-question-circle"></i> Ajuda
+            </button>
+            <button class="action-btn info" onclick="chatBot.showInfo()">
+              <i class="fas fa-info"></i> Informações
+            </button>
+            <button class="action-btn reset" onclick="chatBot.showResetConfirmation()">
+              <i class="fas fa-exclamation-triangle"></i> Reset
             </button>
           </div>
         `, false);
@@ -3484,8 +5022,12 @@
           this.materiasPorDia = materiasPorDia;
           localStorage.setItem('studyFlow_materiasPorDia', materiasPorDia.toString());
           this.closeConfigModal();
-          this.addCompactMessage(`Configuração salva! Agora você verá ${materiasPorDia} matéria(s) por dia.`);
-          this.updateSidePanel();
+          this.typeMessage(`Configuração salva! Agora você verá ${materiasPorDia} matéria(s) por dia.`);
+          
+          // Atualizar painel lateral
+          if (window.UI_ENHANCER && window.UI_ENHANCER.updateSidePanel) {
+            window.UI_ENHANCER.updateSidePanel();
+          }
         } else {
           alert('Por favor, informe um número entre 1 e 5.');
         }
@@ -3516,7 +5058,7 @@
         
         localStorage.setItem('studyFlow_simuladoConfig', JSON.stringify(simuladoConfig));
         this.closeSimuladoModal();
-        this.addCompactMessage('Configuração de simulado salva!');
+        this.typeMessage('Configuração de simulado salva!');
       }
       
       showRelatorioModal() {
@@ -3613,13 +5155,90 @@
         const atualMinutes = atualTotais.totalTime % 60;
         
         return `
-          <div class="message-bubble bot-bubble">
-            <div class="message-content">
-              <strong>Relatório Periódico (${periodo} dias)</strong>
-              <div style="margin-top: 10px; font-size: 0.9rem">
-                <div>⏱️ <strong>Tempo Total:</strong> ${atualHours}h ${atualMinutes}m</div>
-                <div>🧩 <strong>Questões:</strong> ${atualTotais.totalQuestoes} (${atualAcertosPercent.toFixed(1)}% acertos)</div>
-                <div>🔁 <strong>Flashcards:</strong> ${atualTotais.totalFlashcards}</div>
+          <div class="message-card">
+            <div class="message-card-header">
+              <i class="fas fa-chart-bar"></i>
+              <div class="message-card-title">Relatório Periódico (${periodo} dias)</div>
+            </div>
+            <div class="message-card-content">
+              <div class="message-stats">
+                <div class="message-stat">
+                  <div class="message-stat-value">${atualHours}h ${atualMinutes}m</div>
+                  <div class="message-stat-label">Tempo Total</div>
+                </div>
+                <div class="message-stat">
+                  <div class="message-stat-value">${atualTotais.totalQuestoes}</div>
+                  <div class="message-stat-label">Questões</div>
+                </div>
+                <div class="message-stat">
+                  <div class="message-stat-value">${atualAcertosPercent.toFixed(1)}%</div>
+                  <div class="message-stat-label">Acertos</div>
+                </div>
+                <div class="message-stat">
+                  <div class="message-stat-value">${atualTotais.totalFlashcards}</div>
+                  <div class="message-stat-label">Flashcards</div>
+                </div>
+              </div>
+              
+              <div class="message-section">
+                <div class="message-section-title">Comparação com Período Anterior</div>
+                <div class="message-list">
+                  <div class="message-list-item">
+                    <div class="message-list-icon">⏱️</div>
+                    <div class="message-list-content">
+                      <div class="message-list-title">Horas estudadas</div>
+                      <div class="message-list-description">
+                        ${diffTime > 0 ? 
+                          `<span style="color: var(--success)">+${diffTime} min</span> em relação ao período anterior` : 
+                          diffTime < 0 ? 
+                          `<span style="color: var(--danger)">${diffTime} min</span> em relação ao período anterior` : 
+                          'Mesmo tempo de estudo que o período anterior'}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="message-list-item">
+                    <div class="message-list-icon">🧩</div>
+                    <div class="message-list-content">
+                      <div class="message-list-title">Questões resolvidas</div>
+                      <div class="message-list-description">
+                        ${diffQuestoes > 0 ? 
+                          `<span style="color: var(--success)">+${diffQuestoes} questões</span> em relação ao período anterior` : 
+                          diffQuestoes < 0 ? 
+                          `<span style="color: var(--danger)">${diffQuestoes} questões</span> em relação ao período anterior` : 
+                          'Mesma quantidade de questões que o período anterior'}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="message-list-item">
+                    <div class="message-list-icon">📊</div>
+                    <div class="message-list-content">
+                      <div class="message-list-title">Porcentagem de acertos</div>
+                      <div class="message-list-description">
+                        ${diffAcertosPercent > 0 ? 
+                          `<span style="color: var(--success)">+${diffAcertosPercent.toFixed(1)}%</span> em relação ao período anterior` : 
+                          diffAcertosPercent < 0 ? 
+                          `<span style="color: var(--danger)">${diffAcertosPercent.toFixed(1)}%</span> em relação ao período anterior` : 
+                          'Mesma porcentagem de acertos que o período anterior'}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="message-list-item">
+                    <div class="message-list-icon">🔁</div>
+                    <div class="message-list-content">
+                      <div class="message-list-title">Flashcards revisados</div>
+                      <div class="message-list-description">
+                        ${diffFlashcards > 0 ? 
+                          `<span style="color: var(--success)">+${diffFlashcards} flashcards</span> em relação ao período anterior` : 
+                          diffFlashcards < 0 ? 
+                          `<span style="color: var(--danger)">${diffFlashcards} flashcards</span> em relação ao período anterior` : 
+                          'Mesma quantidade de flashcards que o período anterior'}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -3639,24 +5258,79 @@
         return todayDecks.map(deck => deck.name);
       }
       
+      checkAlerts() {
+        const alertas = [];
+        const hoje = new Date();
+        
+        const revisoesAtrasadas = this.calculateOverdueReviews();
+        if (revisoesAtrasadas > 0) {
+          alertas.push({
+            tipo: 'alert-danger',
+            icone: 'exclamation-triangle',
+            mensagem: `Você tem ${revisoesAtrasadas} revisões atrasadas!`
+          });
+        }
+        
+        const dailyCompletedReviews = this.getModuleData('dailyCompletedReviews') || 0;
+        const dailyReviewGoal = this.getModuleData('dailyReviewGoal') || 5;
+        
+        const lastReviewDate = this.getModuleData('lastReviewDate');
+        const hojeStr = hoje.toISOString().split('T')[0];
+        
+        if (lastReviewDate !== hojeStr) {
+          this.setModuleData('dailyCompletedReviews', 0);
+          this.setModuleData('lastReviewDate', hojeStr);
+        } else if (dailyCompletedReviews < dailyReviewGoal / 2) {
+          alertas.push({
+            tipo: 'alert-warning',
+            icone: 'bullseye',
+            mensagem: `Você completou apenas ${dailyCompletedReviews} de ${dailyReviewGoal} revisões hoje.`
+          });
+        }
+        
+        const ultimoEstudo = localStorage.getItem('ultimoEstudo');
+        if (ultimoEstudo) {
+          const diasSemEstudo = Math.floor((hoje - new Date(ultimoEstudo)) / (1000 * 60 * 60 * 24));
+          if (diasSemEstudo >= 2) {
+            alertas.push({
+              tipo: 'alert-danger',
+              icone: 'calendar-times',
+              mensagem: `Você não estuda há ${diasSemEstudo} dias!`
+            });
+          }
+        }
+        
+        return alertas;
+      }
+      
       showEditalMenu() {
         const editalData = this.getEditalData();
         if (!editalData) {
-          this.addCompactMessage("Não encontrei dados do edital verticalizado. Verifique se você já importou um edital no módulo correspondente.");
+          this.typeMessage("Não encontrei dados do edital verticalizado. Verifique se você já importou um edital no módulo correspondente.");
           return;
         }
         
-        this.addCompactMessage(`
-          <strong>Progresso no Edital</strong><br>
-          <div class="quick-actions" style="margin-top: 8px">
-            <button class="action-btn primary" onclick="chatBot.showEditalCompleto()">
-              <i class="fas fa-chart-pie"></i> Todo o Edital
-            </button>
-            <button class="action-btn secondary" onclick="chatBot.showMateriasEdital()">
-              <i class="fas fa-book"></i> Matéria Específica
-            </button>
+        this.addBotMessage(`
+          <div class="message-card">
+            <div class="message-card-header">
+              <i class="fas fa-file-alt"></i>
+              <div class="message-card-title">Progresso no Edital</div>
+            </div>
+            <div class="message-card-content">
+              <div class="message-text">
+                Você quer ver seu progresso no edital completo ou em uma matéria específica?
+              </div>
+              <div class="quick-actions" style="margin-top: 12px">
+                <button class="action-btn primary" onclick="chatBot.showEditalCompleto()">
+                  <i class="fas fa-chart-pie"></i> Todo o Edital
+                </button>
+                <button class="action-btn secondary" onclick="chatBot.showMateriasEdital()">
+                  <i class="fas fa-book"></i> Matéria Específica
+                </button>
+              </div>
+            </div>
           </div>
-        `);
+        `, true, 'edital-menu');
       }
       
       getEditalData() {
@@ -3681,7 +5355,6 @@
             progresso: completedTopics
           };
         } catch (error) {
-          console.error('Erro ao buscar dados do edital:', error);
           return null;
         }
       }
@@ -3689,7 +5362,7 @@
       showEditalCompleto() {
         const editalData = this.getEditalData();
         if (!editalData) {
-          this.addCompactMessage("Não foi possível carregar os dados do edital.");
+          this.typeMessage("Não foi possível carregar os dados do edital.");
           return;
         }
         
@@ -3710,29 +5383,106 @@
         
         const porcentagemTotal = totalTopicos > 0 ? Math.round((topicosConcluidos / totalTopicos) * 100) : 0;
         
-        this.addCompactMessage(`
-          <strong>Progresso Geral do Edital</strong><br>
-          <div style="margin-top: 8px">
-            📊 <strong>${porcentagemTotal}% concluído</strong><br>
-            ✅ ${topicosConcluidos}/${totalTopicos} tópicos
+        const progressoDisciplinas = edital.disciplinas.map(disciplina => {
+          let topicosDisciplina = 0;
+          let concluidosDisciplina = 0;
+          
+          disciplina.topicos.forEach(topico => {
+            topicosDisciplina++;
+            const chaveTopico = `${disciplina.nome}-${topico}`;
+            if (progresso[chaveTopico]) {
+              concluidosDisciplina++;
+            }
+          });
+          
+          const porcentagem = topicosDisciplina > 0 ? Math.round((concluidosDisciplina / topicosDisciplina) * 100) : 0;
+          
+          return {
+            nome: disciplina.nome,
+            concluidos: concluidosDisciplina,
+            total: topicosDisciplina,
+            porcentagem: porcentagem
+          };
+        });
+        
+        progressoDisciplinas.sort((a, b) => a.porcentagem - b.porcentagem);
+        
+        let relatorioHTML = `
+          <div class="message-card">
+            <div class="message-card-header">
+              <i class="fas fa-chart-pie"></i>
+              <div class="message-card-title">Progresso Geral do Edital</div>
+            </div>
+            <div class="message-card-content">
+              <div class="message-stats">
+                <div class="message-stat">
+                  <div class="message-stat-value">${porcentagemTotal}%</div>
+                  <div class="message-stat-label">Concluído</div>
+                </div>
+                <div class="message-stat">
+                  <div class="message-stat-value">${topicosConcluidos}/${totalTopicos}</div>
+                  <div class="message-stat-label">Tópicos</div>
+                </div>
+              </div>
+              <div class="message-progress">
+                <div class="message-progress-bar">
+                  <div class="message-progress-fill" style="width: ${porcentagemTotal}%"></div>
+                </div>
+                <div class="message-progress-text">
+                  <span>0%</span>
+                  <span>${porcentagemTotal}%</span>
+                  <span>100%</span>
+                </div>
+              </div>
+              <div class="message-section">
+                <div class="message-section-title">Progresso por Disciplina</div>
+                <div class="message-list">
+        `;
+        
+        progressoDisciplinas.forEach(disciplina => {
+          const statusClass = disciplina.porcentagem >= 80 ? 'success' : disciplina.porcentagem >= 50 ? 'warning' : 'danger';
+          
+          relatorioHTML += `
+            <div class="message-list-item">
+              <div class="message-list-icon"><i class="fas fa-book"></i></div>
+              <div class="message-list-content">
+                <div class="message-list-title">${disciplina.nome}</div>
+                <div class="message-list-description">
+                  ${disciplina.concluidos}/${disciplina.total} tópicos
+                  <span class="message-badge message-badge-${statusClass}">${disciplina.porcentagem}%</span>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        
+        relatorioHTML += `
+                </div>
+              </div>
+            </div>
           </div>
-        `);
+        `;
+        
+        this.addBotMessage(relatorioHTML, true, 'edital-completo');
       }
       
       showMateriasEdital() {
         const editalData = this.getEditalData();
         if (!editalData) {
-          this.addCompactMessage("Não foi possível carregar os dados do edital.");
+          this.typeMessage("Não foi possível carregar os dados do edital.");
           return;
         }
         
         const { edital } = editalData;
         
         let materiasHTML = `
-          <div class="message-bubble bot-bubble">
-            <div class="message-content">
-              <strong>Selecione uma Matéria</strong>
-              <div class="quick-actions" style="margin-top: 10px">
+          <div class="message-card">
+            <div class="message-card-header">
+              <i class="fas fa-book"></i>
+              <div class="message-card-title">Selecione uma Matéria</div>
+            </div>
+            <div class="message-card-content">
+              <div class="quick-actions">
         `;
         
         edital.disciplinas.forEach(disciplina => {
@@ -3755,7 +5505,7 @@
       showEditalMateria(materiaNome) {
         const editalData = this.getEditalData();
         if (!editalData) {
-          this.addCompactMessage("Não foi possível carregar os dados do edital.");
+          this.typeMessage("Não foi possível carregar os dados do edital.");
           return;
         }
         
@@ -3763,12 +5513,13 @@
         const disciplina = edital.disciplinas.find(d => d.nome === materiaNome);
         
         if (!disciplina) {
-          this.addCompactMessage("Matéria não encontrada no edital.");
+          this.typeMessage("Matéria não encontrada no edital.");
           return;
         }
         
         let totalTopicos = 0;
         let topicosConcluidos = 0;
+        const topicosDetalhados = [];
         
         disciplina.topicos.forEach(topico => {
           totalTopicos++;
@@ -3778,37 +5529,107 @@
           if (concluido) {
             topicosConcluidos++;
           }
+          
+          topicosDetalhados.push({
+            nome: topico,
+            concluido: concluido
+          });
         });
         
         const porcentagem = totalTopicos > 0 ? Math.round((topicosConcluidos / totalTopicos) * 100) : 0;
         
-        this.addCompactMessage(`
-          <strong>${disciplina.nome}</strong><br>
-          <div style="margin-top: 8px">
-            📊 <strong>${porcentagem}% concluído</strong><br>
-            ✅ ${topicosConcluidos}/${totalTopicos} tópicos
+        let materiaHTML = `
+          <div class="message-card">
+            <div class="message-card-header">
+              <i class="fas fa-book-open"></i>
+              <div class="message-card-title">${disciplina.nome}</div>
+            </div>
+            <div class="message-card-content">
+              <div class="message-stats">
+                <div class="message-stat">
+                  <div class="message-stat-value">${porcentagem}%</div>
+                  <div class="message-stat-label">Concluído</div>
+                </div>
+                <div class="message-stat">
+                  <div class="message-stat-value">${topicosConcluidos}/${totalTopicos}</div>
+                  <div class="message-stat-label">Tópicos</div>
+                </div>
+              </div>
+              <div class="message-progress">
+                <div class="message-progress-bar">
+                  <div class="message-progress-fill" style="width: ${porcentagem}%"></div>
+                </div>
+                <div class="message-progress-text">
+                  <span>0%</span>
+                  <span>${porcentagem}%</span>
+                  <span>100%</span>
+                </div>
+              </div>
+              <div class="message-section">
+                <div class="message-section-title">Tópicos</div>
+                <div class="message-list">
+        `;
+        
+        topicosDetalhados.forEach(topico => {
+          const statusIcon = topico.concluido ? 'check-circle' : 'circle';
+          const statusColor = topico.concluido ? 'success' : 'gray';
+          
+          materiaHTML += `
+            <div class="message-list-item">
+              <div class="message-list-icon" style="color: var(--${statusColor})">
+                <i class="fas fa-${statusIcon}"></i>
+              </div>
+              <div class="message-list-content">
+                <div class="message-list-title">${topico.nome}</div>
+                <div class="message-list-description">
+                  ${topico.concluido ? 'Concluído' : 'Pendente'}
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        
+        materiaHTML += `
+                </div>
+              </div>
+            </div>
           </div>
-        `);
+        `;
+        
+        this.addBotMessage(materiaHTML, true, `edital-${materiaNome}`);
       }
       
       showSimuladosMenu() {
         const simuladosData = this.getSimuladosData();
         if (!simuladosData || simuladosData.simulados.length === 0) {
-          this.addCompactMessage("Não encontrei dados de simulados. Verifique se você já realizou algum simulado no módulo correspondente.");
+          this.typeMessage("Não encontrei dados de simulados. Verifique se você já realizou algum simulado no módulo correspondente.");
           return;
         }
         
-        this.addCompactMessage(`
-          <strong>Análise de Simulados</strong><br>
-          <div class="quick-actions" style="margin-top: 8px">
-            <button class="action-btn primary" onclick="chatBot.showUltimoSimuladoNota()">
-              <i class="fas fa-star"></i> Nota do Último
-            </button>
-            <button class="action-btn secondary" onclick="chatBot.showUltimoSimuladoData()">
-              <i class="fas fa-calendar"></i> Data do Último
-            </button>
+        this.addBotMessage(`
+          <div class="message-card">
+            <div class="message-card-header">
+              <i class="fas fa-chart-line"></i>
+              <div class="message-card-title">Análise de Simulados</div>
+            </div>
+            <div class="message-card-content">
+              <div class="message-text">
+                O que você gostaria de ver?
+              </div>
+              <div class="quick-actions" style="margin-top: 12px">
+                <button class="action-btn primary" onclick="chatBot.showUltimoSimuladoNota()">
+                  <i class="fas fa-star"></i> Nota do Último Simulado
+                </button>
+                <button class="action-btn secondary" onclick="chatBot.showUltimoSimuladoRelatorio()">
+                  <i class="fas fa-chart-bar"></i> Relatório Completo
+                </button>
+                <button class="action-btn info" onclick="chatBot.showUltimoSimuladoData()">
+                  <i class="fas fa-calendar"></i> Data do Último Simulado
+                </button>
+              </div>
+            </div>
           </div>
-        `);
+        `, true, 'simulados-menu');
       }
       
       getSimuladosData() {
@@ -3833,7 +5654,6 @@
             provaAtivaId: provaAtivaId
           };
         } catch (error) {
-          console.error('Erro ao buscar dados de simulados:', error);
           return null;
         }
       }
@@ -3841,29 +5661,190 @@
       showUltimoSimuladoNota() {
         const simuladosData = this.getSimuladosData();
         if (!simuladosData) {
-          this.addCompactMessage("Não foi possível carregar os dados dos simulados.");
+          this.typeMessage("Não foi possível carregar os dados dos simulados.");
           return;
         }
         
         const { ultimoSimulado, prova } = simuladosData;
         const dataFormatada = new Date(ultimoSimulado.date).toLocaleDateString('pt-BR');
-        const porcentagem = parseFloat(ultimoSimulado.totalPercentage);
         
-        this.addCompactMessage(`
-          <strong>Nota do Último Simulado</strong><br>
-          <div style="margin-top: 8px">
-            ⭐ <strong>${ultimoSimulado.totalScore} pontos</strong><br>
-            📊 ${ultimoSimulado.totalPercentage}% de acertos<br>
-            📅 ${dataFormatada}<br>
-            ⏱️ ${ultimoSimulado.totalTime} minutos
+        const porcentagem = parseFloat(ultimoSimulado.totalPercentage);
+        let classificacao = '';
+        let corClassificacao = '';
+        
+        if (porcentagem >= 90) {
+          classificacao = 'EXCELENTE';
+          corClassificacao = 'success';
+        } else if (porcentagem >= 80) {
+          classificacao = 'ÓTIMO';
+          corClassificacao = 'primary';
+        } else if (porcentagem >= 66) {
+          classificacao = 'BOM';
+          corClassificacao = 'secondary';
+        } else if (porcentagem >= 51) {
+          classificacao = 'MÉDIO';
+          corClassificacao = 'warning';
+        } else if (porcentagem >= 31) {
+          classificacao = 'FRACO';
+          corClassificacao = 'warning';
+        } else {
+          classificacao = 'CRÍTICO';
+          corClassificacao = 'danger';
+        }
+        
+        const notaHTML = `
+          <div class="message-card">
+            <div class="message-card-header">
+              <i class="fas fa-star"></i>
+              <div class="message-card-title">Nota do Último Simulado</div>
+            </div>
+            <div class="message-card-content">
+              <div class="message-stats">
+                <div class="message-stat">
+                  <div class="message-stat-value">${ultimoSimulado.totalScore}</div>
+                  <div class="message-stat-label">Pontuação</div>
+                </div>
+                <div class="message-stat">
+                  <div class="message-stat-value">${ultimoSimulado.totalPercentage}%</div>
+                  <div class="message-stat-label">Acertos</div>
+                </div>
+              </div>
+              <div class="message-alert message-alert-${corClassificacao}">
+                <i class="fas fa-${porcentagem >= 66 ? 'check' : 'exclamation'}-circle"></i>
+                <div><strong>Classificação: ${classificacao}</strong></div>
+              </div>
+              <div class="message-list">
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-calendar"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Data</div>
+                    <div class="message-list-description">${dataFormatada}</div>
+                  </div>
+                </div>
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-clock"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Tempo Total</div>
+                    <div class="message-list-description">${ultimoSimulado.totalTime} minutos</div>
+                  </div>
+                </div>
+                ${prova ? `
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-file-alt"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Prova</div>
+                    <div class="message-list-description">${prova.nomeConcurso} - ${prova.nomeBanca}</div>
+                  </div>
+                </div>
+                ` : ''}
+              </div>
+            </div>
           </div>
-        `);
+        `;
+        
+        this.addBotMessage(notaHTML, true, 'ultimo-simulado-nota');
+      }
+      
+      showUltimoSimuladoRelatorio() {
+        const simuladosData = this.getSimuladosData();
+        if (!simuladosData) {
+          this.typeMessage("Não foi possível carregar os dados dos simulados.");
+          return;
+        }
+        
+        const { ultimoSimulado, prova } = simuladosData;
+        const dataFormatada = new Date(ultimoSimulado.date).toLocaleDateString('pt-BR');
+        
+        const disciplinas = [];
+        
+        if (prova && prova.disciplinas) {
+          Object.keys(prova.disciplinas).forEach(categoria => {
+            Object.keys(prova.disciplinas[categoria]).forEach(disciplina => {
+              if (ultimoSimulado.details[disciplina]) {
+                disciplinas.push({
+                  nome: disciplina,
+                  categoria: categoria,
+                  detalhes: ultimoSimulado.details[disciplina],
+                  tempo: ultimoSimulado.time[disciplina] || 0
+                });
+              }
+            });
+          });
+        } else {
+          Object.keys(ultimoSimulado.details).forEach(disciplina => {
+            disciplinas.push({
+              nome: disciplina,
+              categoria: 'GERAL',
+              detalhes: ultimoSimulado.details[disciplina],
+              tempo: ultimoSimulado.time[disciplina] || 0
+            });
+          });
+        }
+        
+        let relatorioHTML = `
+          <div class="message-card">
+            <div class="message-card-header">
+              <i class="fas fa-chart-bar"></i>
+              <div class="message-card-title">Relatório Completo - ${dataFormatada}</div>
+            </div>
+            <div class="message-card-content">
+              <div class="message-stats">
+                <div class="message-stat">
+                  <div class="message-stat-value">${ultimoSimulado.totalScore}</div>
+                  <div class="message-stat-label">Pontuação</div>
+                </div>
+                <div class="message-stat">
+                  <div class="message-stat-value">${ultimoSimulado.totalPercentage}%</div>
+                  <div class="message-stat-label">Acertos</div>
+                </div>
+                <div class="message-stat">
+                  <div class="message-stat-value">${ultimoSimulado.totalTime}</div>
+                  <div class="message-stat-label">Minutos</div>
+                </div>
+              </div>
+              <div class="message-section">
+                <div class="message-section-title">Desempenho por Disciplina</div>
+                <div class="message-list">
+        `;
+        
+        disciplinas.forEach(disciplina => {
+          const porcentagem = parseFloat(disciplina.detalhes.percentage);
+          let statusClass = '';
+          if (porcentagem >= 80) statusClass = 'success';
+          else if (porcentagem >= 60) statusClass = 'warning';
+          else statusClass = 'danger';
+          
+          relatorioHTML += `
+            <div class="message-list-item">
+              <div class="message-list-icon"><i class="fas fa-book"></i></div>
+              <div class="message-list-content">
+                <div class="message-list-title">${disciplina.nome}</div>
+                <div class="message-list-description">
+                  ${disciplina.detalhes.correct} acertos de ${disciplina.detalhes.correct + disciplina.detalhes.errors}
+                  <span class="message-badge message-badge-${statusClass}">${disciplina.detalhes.percentage}%</span>
+                </div>
+                <div class="message-list-description">
+                  Pontuação: ${disciplina.detalhes.score} • Tempo: ${disciplina.tempo} min
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        
+        relatorioHTML += `
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        this.addBotMessage(relatorioHTML, true, 'ultimo-simulado-relatorio');
       }
       
       showUltimoSimuladoData() {
         const simuladosData = this.getSimuladosData();
         if (!simuladosData) {
-          this.addCompactMessage("Não foi possível carregar os dados dos simulados.");
+          this.typeMessage("Não foi possível carregar os dados dos simulados.");
           return;
         }
         
@@ -3875,18 +5856,402 @@
         const diffTime = Math.abs(hoje - dataSimulado);
         const diffDias = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         
-        this.addCompactMessage(`
-          <strong>Data do Último Simulado</strong><br>
-          <div style="margin-top: 8px">
-            📅 ${dataFormatada}<br>
-            ⏳ Há ${diffDias} dia(s)<br>
-            📊 Total: ${simulados.length} simulados
+        const dataHTML = `
+          <div class="message-card">
+            <div class="message-card-header">
+              <i class="fas fa-calendar"></i>
+              <div class="message-card-title">Data do Último Simulado</div>
+            </div>
+            <div class="message-card-content">
+              <div class="message-alert message-alert-info">
+                <i class="fas fa-info-circle"></i>
+                <div>Seu último simulado foi realizado há <strong>${diffDias} dia(s)</strong></div>
+              </div>
+              <div class="message-list">
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-calendar-day"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Data</div>
+                    <div class="message-list-description">${dataFormatada}</div>
+                  </div>
+                </div>
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-history"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Tempo Decorrido</div>
+                    <div class="message-list-description">${diffDias} dia(s)</div>
+                  </div>
+                </div>
+                <div class="message-list-item">
+                  <div class="message-list-icon"><i class="fas fa-chart-line"></i></div>
+                  <div class="message-list-content">
+                    <div class="message-list-title">Total de Simulados</div>
+                    <div class="message-list-description">${simulados.length} realizados</div>
+                  </div>
+                </div>
+              </div>
+              ${diffDias > 30 ? `
+              <div class="message-alert message-alert-warning">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>Faz mais de 30 dias desde seu último simulado. Considere realizar um novo para avaliar seu progresso.</div>
+              </div>
+              ` : ''}
+            </div>
           </div>
-        `);
+        `;
+        
+        this.addBotMessage(dataHTML, true, 'ultimo-simulado-data');
+      }
+      
+      addDateDivider() {
+        const hoje = this.getDynamicDateObject();
+        const dataFormatada = this.formatDynamicDate(hoje);
+        
+        const chatMessages = document.getElementById('chatMessages');
+        const dateDiv = document.createElement('div');
+        dateDiv.className = 'chat-date';
+        dateDiv.innerHTML = `<span>${dataFormatada}</span>`;
+        chatMessages.appendChild(dateDiv);
       }
     }
     
     let chatBot;
+    
+    /* UI ENHANCEMENTS START */
+    window.UI_ENHANCER = {
+      init: function() {
+        this.initSidePanel();
+        this.updateSidePanel();
+        this.bindEvents();
+      },
+      
+      initSidePanel: function() {
+        const sidePanel = document.getElementById('sidePanel');
+        const sidePanelToggle = document.getElementById('sidePanelToggle');
+        const mobilePanelToggle = document.getElementById('mobilePanelToggle');
+        
+        // Verificar se está em tela pequena
+        if (window.innerWidth <= 900) {
+          sidePanel.classList.add('collapsed');
+        }
+        
+        // Alternar painel lateral
+        sidePanelToggle.addEventListener('click', () => {
+          sidePanel.classList.toggle('collapsed');
+          this.updateToggleIcon();
+        });
+        
+        // Botão mobile para alternar
+        mobilePanelToggle.addEventListener('click', () => {
+          sidePanel.classList.toggle('collapsed');
+          this.updateToggleIcon();
+        });
+        
+        this.updateToggleIcon();
+      },
+      
+      updateToggleIcon: function() {
+        const sidePanel = document.getElementById('sidePanel');
+        const sidePanelToggle = document.getElementById('sidePanelToggle');
+        const mobilePanelToggle = document.getElementById('mobilePanelToggle');
+        
+        if (sidePanel.classList.contains('collapsed')) {
+          sidePanelToggle.innerHTML = '<i class="fas fa-chevron-left"></i>';
+          mobilePanelToggle.innerHTML = '<i class="fas fa-chart-bar"></i>';
+          mobilePanelToggle.setAttribute('aria-label', 'Abrir painel de resumo');
+        } else {
+          sidePanelToggle.innerHTML = '<i class="fas fa-chevron-right"></i>';
+          mobilePanelToggle.innerHTML = '<i class="fas fa-times"></i>';
+          mobilePanelToggle.setAttribute('aria-label', 'Fechar painel de resumo');
+        }
+      },
+      
+      bindEvents: function() {
+        // Atualizar painel quando houver mudanças no localStorage
+        window.addEventListener('storage', (e) => {
+          if (e.key && e.key.includes('dailyActivities') || 
+              e.key === 'studyFlow_partialRegistration' ||
+              e.key === 'ultimoEstudo') {
+            this.updateSidePanel();
+          }
+        });
+        
+        // Atualizar painel ao redimensionar a janela
+        window.addEventListener('resize', () => {
+          const sidePanel = document.getElementById('sidePanel');
+          if (window.innerWidth > 900) {
+            sidePanel.classList.remove('collapsed');
+          } else {
+            sidePanel.classList.add('collapsed');
+          }
+          this.updateToggleIcon();
+        });
+      },
+      
+      updateSidePanel: function() {
+        if (!chatBot) return;
+        
+        const hoje = chatBot.getDynamicDateObject();
+        const hojeStr = chatBot.getDynamicDateString();
+        const dataFormatada = chatBot.formatDynamicDate(hoje);
+        
+        // Atualizar data
+        document.getElementById('sidePanelDate').textContent = dataFormatada;
+        
+        // Buscar dados do dia
+        const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+        const partialRegistration = JSON.parse(localStorage.getItem('studyFlow_partialRegistration')) || {
+          date: null,
+          activities: {},
+          completed: false
+        };
+        
+        // Combinar atividades registradas
+        let atividades = {
+          questoes: [],
+          anki: [],
+          teoria: []
+        };
+        
+        if (partialRegistration.date === hojeStr) {
+          atividades.questoes = atividades.questoes.concat(partialRegistration.activities.questoes || []);
+          atividades.anki = atividades.anki.concat(partialRegistration.activities.anki || []);
+          atividades.teoria = atividades.teoria.concat(partialRegistration.activities.teoria || []);
+        }
+        
+        atividades.questoes = atividades.questoes.concat(dailyActivities.activities.questoes || []);
+        atividades.anki = atividades.anki.concat(dailyActivities.activities.anki || []);
+        atividades.teoria = atividades.teoria.concat(dailyActivities.activities.teoria || []);
+        
+        // Remover duplicatas
+        const uniqueQuestoes = [];
+        const uniqueAnki = [];
+        const uniqueTeoria = [];
+        
+        atividades.questoes.forEach(q => {
+          if (!uniqueQuestoes.find(uq => uq.assunto === q.assunto)) {
+            uniqueQuestoes.push(q);
+          }
+        });
+        
+        atividades.anki.forEach(a => {
+          if (!uniqueAnki.find(ua => ua.deck === a.deck)) {
+            uniqueAnki.push(a);
+          }
+        });
+        
+        atividades.teoria.forEach(t => {
+          if (!uniqueTeoria.find(ut => ut.materia === t.materia)) {
+            uniqueTeoria.push(t);
+          }
+        });
+        
+        atividades.questoes = uniqueQuestoes;
+        atividades.anki = uniqueAnki;
+        atividades.teoria = uniqueTeoria;
+        
+        // Calcular totais
+        let totalTime = 0;
+        let totalQuestoes = 0;
+        let totalAcertos = 0;
+        let totalAnkiDecks = 0;
+        let totalAnkiCards = 0;
+        let totalTeoria = 0;
+        
+        atividades.questoes.forEach(q => {
+          totalTime += q.tempo;
+          totalQuestoes += q.feitas;
+          totalAcertos += (q.feitas - q.erradas);
+        });
+        
+        atividades.anki.forEach(a => {
+          totalTime += a.tempo;
+          totalAnkiDecks++;
+          totalAnkiCards += a.cards;
+        });
+        
+        atividades.teoria.forEach(t => {
+          totalTime += t.tempo;
+          totalTeoria++;
+        });
+        
+        // Calcular progresso
+        const todayTasks = chatBot.getTodayTasks();
+        const totalTasks = todayTasks.questoes.length + todayTasks.anki.length + todayTasks.teoria.length;
+        const completedTasks = atividades.questoes.length + atividades.anki.length + atividades.teoria.length;
+        const progressPercent = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+        
+        // Atualizar barra de progresso
+        const progressFill = document.getElementById('progressFill');
+        progressFill.style.width = `${progressPercent}%`;
+        progressFill.setAttribute('aria-valuenow', progressPercent);
+        
+        document.getElementById('progressCompleted').textContent = `${completedTasks} atividades`;
+        document.getElementById('progressTotal').textContent = `${completedTasks} de ${totalTasks}`;
+        
+        // Atualizar estatísticas
+        const statsContainer = document.getElementById('sidePanelStats');
+        const taxaAcerto = totalQuestoes > 0 ? Math.round((totalAcertos / totalQuestoes) * 100) : 0;
+        
+        statsContainer.innerHTML = `
+          <div class="stat-card tooltip">
+            <div class="stat-value">${totalTime}</div>
+            <div class="stat-label">Minutos</div>
+            <span class="tooltip-text">Tempo total estudado hoje</span>
+          </div>
+          <div class="stat-card tooltip">
+            <div class="stat-value">${taxaAcerto}%</div>
+            <div class="stat-label">Acertos</div>
+            <span class="tooltip-text">Taxa de acerto em questões</span>
+          </div>
+          <div class="stat-card tooltip">
+            <div class="stat-value">${totalAnkiCards}</div>
+            <div class="stat-label">Cards</div>
+            <span class="tooltip-text">Flashcards revisados</span>
+          </div>
+          <div class="stat-card tooltip">
+            <div class="stat-value">${totalTeoria}</div>
+            <div class="stat-label">Matérias</div>
+            <span class="tooltip-text">Estudos teóricos</span>
+          </div>
+        `;
+        
+        // Atualizar atividades
+        const activitiesContainer = document.getElementById('sidePanelActivities');
+        activitiesContainer.innerHTML = '';
+        
+        // Adicionar questões
+        atividades.questoes.forEach(q => {
+          const acertos = q.feitas - q.erradas;
+          const taxa = q.feitas > 0 ? Math.round((acertos / q.feitas) * 100) : 0;
+          
+          const activityCard = document.createElement('div');
+          activityCard.className = 'activity-card completed';
+          activityCard.innerHTML = `
+            <div class="check-animation">
+              <i class="fas fa-check"></i>
+            </div>
+            <div class="activity-header">
+              <div class="activity-title">
+                <i class="fas fa-book"></i>
+                <span>${q.assunto}</span>
+              </div>
+              <div class="activity-status status-completed">Concluído</div>
+            </div>
+            <div class="activity-details">
+              ${q.feitas} questões • ${taxa}% acerto • ${q.tempo} min
+            </div>
+          `;
+          activitiesContainer.appendChild(activityCard);
+        });
+        
+        // Adicionar Anki
+        atividades.anki.forEach(a => {
+          const activityCard = document.createElement('div');
+          activityCard.className = 'activity-card completed';
+          activityCard.innerHTML = `
+            <div class="check-animation">
+              <i class="fas fa-check"></i>
+            </div>
+            <div class="activity-header">
+              <div class="activity-title">
+                <i class="fas fa-layer-group"></i>
+                <span>${a.deck}</span>
+              </div>
+              <div class="activity-status status-completed">Concluído</div>
+            </div>
+            <div class="activity-details">
+              ${a.cards} cards revisados • ${a.tempo} min
+            </div>
+          `;
+          activitiesContainer.appendChild(activityCard);
+        });
+        
+        // Adicionar teoria
+        atividades.teoria.forEach(t => {
+          const activityCard = document.createElement('div');
+          activityCard.className = 'activity-card completed';
+          activityCard.innerHTML = `
+            <div class="check-animation">
+              <i class="fas fa-check"></i>
+            </div>
+            <div class="activity-header">
+              <div class="activity-title">
+                <i class="fas fa-book-open"></i>
+                <span>${t.materia}</span>
+              </div>
+              <div class="activity-status status-completed">Concluído</div>
+            </div>
+            <div class="activity-details">
+              ${t.conteudo || t.pagina || 'Estudo concluído'} • ${t.tempo} min
+            </div>
+          `;
+          activitiesContainer.appendChild(activityCard);
+        });
+        
+        // Adicionar atividades pendentes
+        const pendingTasks = chatBot.countPendingTasks(todayTasks, atividades, true);
+        if (pendingTasks > 0 && !chatBot.isDayFinished()) {
+          const pendingCard = document.createElement('div');
+          pendingCard.className = 'activity-card pending';
+          pendingCard.innerHTML = `
+            <div class="activity-header">
+              <div class="activity-title">
+                <i class="fas fa-clock"></i>
+                <span>${pendingTasks} atividades pendentes</span>
+              </div>
+              <div class="activity-status status-pending">Pendente</div>
+            </div>
+            <div class="activity-details">
+              Clique em "Registrar Atividades" para completar
+            </div>
+          `;
+          activitiesContainer.appendChild(pendingCard);
+        }
+        
+        // Atualizar status do dia
+        const dayStatus = document.getElementById('dayStatus');
+        if (chatBot.isDayFinished()) {
+          dayStatus.className = 'day-status completed';
+          dayStatus.innerHTML = `
+            <div class="day-status-text">
+              <i class="fas fa-check-circle"></i>
+              <span>Dia finalizado</span>
+            </div>
+            <div class="tooltip">
+              <i class="fas fa-info-circle" style="color: var(--success)"></i>
+              <span class="tooltip-text">Você finalizou o dia hoje</span>
+            </div>
+          `;
+        } else if (completedTasks > 0) {
+          dayStatus.className = 'day-status pending';
+          dayStatus.innerHTML = `
+            <div class="day-status-text">
+              <i class="fas fa-clock"></i>
+              <span>Dia em andamento</span>
+            </div>
+            <div class="tooltip">
+              <i class="fas fa-info-circle" style="color: var(--gray)"></i>
+              <span class="tooltip-text">${completedTasks}/${totalTasks} atividades concluídas</span>
+            </div>
+          `;
+        } else {
+          dayStatus.className = 'day-status pending';
+          dayStatus.innerHTML = `
+            <div class="day-status-text">
+              <i class="fas fa-clock"></i>
+              <span>Dia não iniciado</span>
+            </div>
+            <div class="tooltip">
+              <i class="fas fa-info-circle" style="color: var(--gray)"></i>
+              <span class="tooltip-text">Comece registrando suas atividades</span>
+            </div>
+          `;
+        }
+      }
+    };
+    /* UI ENHANCEMENTS END */
+    
     document.addEventListener('DOMContentLoaded', function() {
       chatBot = new StudyFlowChatBot();
     });
