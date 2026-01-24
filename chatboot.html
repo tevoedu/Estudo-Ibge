@@ -1171,8 +1171,6 @@
       color: var(--success) !important;
       opacity: 0.8 !important;
     }
-
-    /* UI ENHANCEMENTS START */
     
     /* Painel Lateral - Resumo do Dia */
     .side-panel {
@@ -1189,7 +1187,7 @@
       z-index: 100;
       display: flex;
       flex-direction: column;
-      transition: var(--transition);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       transform: translateX(0);
     }
     
@@ -1198,13 +1196,15 @@
     }
     
     .side-panel-header {
-      padding: 1.2rem 1.5rem;
+      padding: 1rem 1.5rem;
       border-bottom: 1px solid var(--light-gray);
       display: flex;
       justify-content: space-between;
       align-items: center;
       background-color: var(--primary);
       color: white;
+      position: relative;
+      z-index: 10;
     }
     
     .side-panel-header h3 {
@@ -1220,18 +1220,29 @@
       background: transparent;
       border: none;
       color: white;
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: var(--transition);
+      font-size: 1.1rem;
+      position: relative;
     }
     
     .side-panel-toggle:hover {
       background-color: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+    
+    .side-panel-toggle:active {
+      transform: scale(0.95);
+    }
+    
+    .side-panel.collapsed .side-panel-toggle i {
+      transform: rotate(180deg);
     }
     
     .side-panel-content {
@@ -1394,6 +1405,7 @@
     
     .activity-card.pending {
       border-left-color: var(--warning);
+      background-color: rgba(255, 152, 0, 0.05);
     }
     
     .activity-header {
@@ -1499,8 +1511,8 @@
     /* Botão FAB para reabrir painel */
     .panel-fab {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
+      bottom: 30px;
+      right: 30px;
       width: 56px;
       height: 56px;
       border-radius: 50%;
@@ -1515,6 +1527,9 @@
       box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
       transition: var(--transition);
       font-size: 1.2rem;
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
     }
     
     .panel-fab:hover {
@@ -1523,22 +1538,19 @@
       box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4);
     }
     
-    .panel-fab:active {
-      transform: scale(0.95);
-    }
-    
     .panel-fab.hidden {
       opacity: 0;
       visibility: hidden;
       transform: scale(0.8);
+      pointer-events: none;
     }
     
     .mobile-toggle {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 50px;
-      height: 50px;
+      bottom: 30px;
+      right: 30px;
+      width: 56px;
+      height: 56px;
       border-radius: 50%;
       background-color: var(--primary);
       color: white;
@@ -1550,6 +1562,7 @@
       z-index: 99;
       box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
       transition: var(--transition);
+      font-size: 1.2rem;
     }
     
     .mobile-toggle:hover {
@@ -1590,6 +1603,7 @@
         width: 100%;
         max-width: 100%;
         transform: translateX(100%);
+        box-shadow: -2px 0 20px rgba(0, 0, 0, 0.2);
       }
       
       .side-panel.collapsed {
@@ -1611,9 +1625,58 @@
       .chatbot-container {
         width: 100%;
       }
+      
+      .side-panel-toggle {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+      
+      .side-panel-header {
+        padding: 1rem;
+      }
     }
     
-    /* UI ENHANCEMENTS END */
+    /* Feedback tátil para o botão */
+    .side-panel-toggle:active {
+      transform: scale(0.95);
+      transition: transform 0.1s;
+    }
+    
+    /* Efeito de onda no clique */
+    .side-panel-toggle {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .side-panel-toggle::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.5);
+      opacity: 0;
+      border-radius: 100%;
+      transform: scale(1, 1) translate(-50%, -50%);
+      transform-origin: 50% 50%;
+    }
+    
+    .side-panel-toggle:focus:not(:active)::after {
+      animation: ripple 1s ease-out;
+    }
+    
+    @keyframes ripple {
+      0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(20, 20);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1647,13 +1710,11 @@
       </div>
       
       <div class="side-panel-stats" id="sidePanelStats">
-        <!-- Dinamicamente preenchido -->
       </div>
       
       <div class="side-panel-activities">
         <h4><i class="fas fa-tasks"></i> Atividades de Hoje</h4>
         <div id="sidePanelActivities">
-          <!-- Dinamicamente preenchido -->
         </div>
       </div>
       
@@ -1882,7 +1943,6 @@
         
         this.checkPartialRegistration();
         
-        // Inicializar painel lateral
         if (window.UI_ENHANCER && window.UI_ENHANCER.init) {
           window.UI_ENHANCER.init();
         }
@@ -2463,7 +2523,6 @@
         
         this.addYesterdayButtonIfNeeded();
         
-        // Atualizar painel lateral
         if (window.UI_ENHANCER && window.UI_ENHANCER.updateSidePanel) {
           window.UI_ENHANCER.updateSidePanel();
         }
@@ -2516,7 +2575,6 @@
           this.registerHomeSession(`Questões - ${assuntoId}`, parseInt(tempo), specificDate);
           localStorage.setItem('ultimoEstudo', new Date().toISOString());
           
-          // Atualizar painel lateral
           if (window.UI_ENHANCER && window.UI_ENHANCER.updateSidePanel) {
             window.UI_ENHANCER.updateSidePanel();
           }
@@ -2542,7 +2600,6 @@
           
           localStorage.setItem('ultimoEstudo', new Date().toISOString());
           
-          // Atualizar painel lateral
           if (window.UI_ENHANCER && window.UI_ENHANCER.updateSidePanel) {
             window.UI_ENHANCER.updateSidePanel();
           }
@@ -2560,7 +2617,6 @@
         
         localStorage.setItem('ultimoEstudo', new Date().toISOString());
         
-        // Atualizar painel lateral
         if (window.UI_ENHANCER && window.UI_ENHANCER.updateSidePanel) {
           window.UI_ENHANCER.updateSidePanel();
         }
@@ -2864,36 +2920,6 @@
                (dailyActivities.activities.questoes?.length > 0 ||
                 dailyActivities.activities.anki?.length > 0 ||
                 dailyActivities.activities.teoria?.length > 0);
-      } 
-      
-      showDailySummary() { 
-        const hoje = this.getDynamicDateObject();
-        const hojeStr = this.getDynamicDateString();
-        
-        this.checkSimuladoDay();
-        
-        this.updateAnkiProgress(); 
-        
-        if (this.isDayFinished()) {
-          this.showTodaySummary(hojeStr);
-          return;
-        }
-        
-        if (this.hasPartialRegistration()) {
-          this.showPartialSummary(hojeStr, true);
-          return;
-        }
-        
-        if (this.hasStudiedToday()) { 
-          this.showTodaySummary(hojeStr); 
-        } else { 
-          this.showPendingTasks(hojeStr); 
-        } 
-        
-        // Atualizar painel lateral
-        if (window.UI_ENHANCER && window.UI_ENHANCER.updateSidePanel) {
-          window.UI_ENHANCER.updateSidePanel();
-        }
       } 
       
       checkSimuladoDay() {
@@ -4171,7 +4197,6 @@
         
         this.typeMessage(`Dia ${hojeStr} finalizado com sucesso!`);
         
-        // Atualizar painel lateral
         if (window.UI_ENHANCER && window.UI_ENHANCER.updateSidePanel) {
           window.UI_ENHANCER.updateSidePanel();
         }
@@ -4186,7 +4211,6 @@
       }
       
       showRegistrationSummary(savedCount, totalTime, activities, isYesterday = false) {
-        // Mensagem curta no chat
         const chatMessages = document.getElementById('chatMessages');
         const messageContainer = document.createElement('div');
         messageContainer.className = 'message-container bot-container';
@@ -4211,12 +4235,10 @@
         chatMessages.appendChild(messageContainer);
         chatMessages.scrollTop = chatMessages.scrollHeight;
         
-        // Atualizar painel lateral apenas se não for de ontem
         if (!isYesterday) {
           if (window.UI_ENHANCER && window.UI_ENHANCER.updateSidePanel) {
             window.UI_ENHANCER.updateSidePanel();
             
-            // Animar cards correspondentes
             setTimeout(() => {
               activities.questoes.forEach(q => {
                 const card = document.querySelector(`[data-id="${q.assunto}"]`);
@@ -4293,7 +4315,6 @@
         }
         localStorage.setItem('theme', this.currentTheme);
         
-        // Atualizar tema do painel lateral
         if (window.UI_ENHANCER && window.UI_ENHANCER.updateSidePanel) {
           window.UI_ENHANCER.updateSidePanel();
         }
@@ -4580,7 +4601,6 @@
 
         this.typeMessage(`Baralhos trocados! Agora são os baralhos do bloco ${ankiData.blockIndex + 1} de ${totalBlocks}.`);
         
-        // Atualizar painel lateral
         if (window.UI_ENHANCER && window.UI_ENHANCER.updateSidePanel) {
           window.UI_ENHANCER.updateSidePanel();
         }
@@ -5066,7 +5086,6 @@
           this.closeConfigModal();
           this.typeMessage(`Configuração salva! Agora você verá ${materiasPorDia} matéria(s) por dia.`);
           
-          // Atualizar painel lateral
           if (window.UI_ENHANCER && window.UI_ENHANCER.updateSidePanel) {
             window.UI_ENHANCER.updateSidePanel();
           }
@@ -5959,13 +5978,14 @@
     
     let chatBot;
     
-    /* UI ENHANCEMENTS START */
     window.UI_ENHANCER = {
       init: function() {
         this.initSidePanel();
         this.updateSidePanel();
         this.bindEvents();
         this.setupActivityListeners();
+        
+        this.loadTodayData();
       },
       
       initSidePanel: function() {
@@ -5974,7 +5994,6 @@
         const panelFab = document.getElementById('panelFab');
         const mobilePanelToggle = document.getElementById('mobilePanelToggle');
         
-        // Verificar se está em tela pequena
         if (window.innerWidth <= 900) {
           sidePanel.classList.add('collapsed');
           panelFab.classList.add('hidden');
@@ -5982,13 +6001,11 @@
           panelFab.classList.remove('hidden');
         }
         
-        // Estado do painel no localStorage
         const panelState = localStorage.getItem('ui_enhancer.panel.visible');
         if (panelState === 'false' && window.innerWidth > 900) {
           sidePanel.classList.add('collapsed');
         }
         
-        // Alternar painel lateral
         sidePanelToggle.addEventListener('click', () => {
           sidePanel.classList.toggle('collapsed');
           this.updateToggleIcon();
@@ -5996,7 +6013,6 @@
           this.savePanelState();
         });
         
-        // Botão FAB para alternar
         panelFab.addEventListener('click', () => {
           sidePanel.classList.remove('collapsed');
           this.updateToggleIcon();
@@ -6004,7 +6020,6 @@
           this.savePanelState();
         });
         
-        // Botão mobile para alternar
         mobilePanelToggle.addEventListener('click', () => {
           sidePanel.classList.toggle('collapsed');
           this.updateToggleIcon();
@@ -6052,12 +6067,10 @@
       },
       
       setupActivityListeners: function() {
-        // Monitorar eventos de atividade
         if (typeof window['registerActivity'] === 'function') {
           const originalRegister = window['registerActivity'];
           window['registerActivity'] = function(...args) {
             const result = originalRegister.apply(this, args);
-            // Atualizar painel após registro
             setTimeout(() => {
               window.UI_ENHANCER.updateSidePanel();
             }, 100);
@@ -6065,7 +6078,6 @@
           };
         }
         
-        // Monitorar mudanças no localStorage
         window.addEventListener('storage', (e) => {
           if (e.key && e.key.includes('dailyActivities') || 
               e.key === 'studyFlow_partialRegistration' ||
@@ -6076,7 +6088,6 @@
           }
         });
         
-        // Atualizar painel ao redimensionar a janela
         window.addEventListener('resize', () => {
           const sidePanel = document.getElementById('sidePanel');
           const panelFab = document.getElementById('panelFab');
@@ -6092,21 +6103,54 @@
           this.updateFabVisibility();
         });
         
-        // Atualizar painel quando o chat for atualizado
-        const originalAddMessage = chatBot?.addMessageToChat;
-        if (originalAddMessage) {
-          chatBot.addMessageToChat = function(...args) {
-            const result = originalAddMessage.apply(this, args);
-            // Verificar se é uma mensagem de resumo e suprimir se o painel estiver visível
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden) {
+            this.updateSidePanel();
+          }
+        });
+        
+        if (typeof chatBot !== 'undefined' && chatBot.addBotMessage) {
+          const originalAddBotMessage = chatBot.addBotMessage;
+          chatBot.addBotMessage = function(content, saveToHistory = true, messageId = null) {
             const sidePanel = document.getElementById('sidePanel');
-            const content = args[0];
-            if (content && content.includes('Resumo do Dia') && !sidePanel.classList.contains('collapsed')) {
-              // Não adicionar mensagem de resumo ao chat se o painel estiver visível
+            const isSummaryMessage = content && (content.includes('Resumo do Dia') || 
+                                                content.includes('Resumo do Dia -') ||
+                                                content.includes('Resumo do Dia -'));
+            
+            if (isSummaryMessage && sidePanel && !sidePanel.classList.contains('collapsed')) {
+              if (messageId && chatBot.messageIds) {
+                chatBot.messageIds.add(messageId);
+              }
               return;
             }
-            return result;
+            
+            return originalAddBotMessage.call(this, content, saveToHistory, messageId);
           };
         }
+      },
+      
+      loadTodayData: function() {
+        if (typeof chatBot !== 'undefined') {
+          this.updateSidePanel();
+        } else if (typeof window['getDailySummary'] === 'function') {
+          window.getDailySummary().then(data => {
+            this.processDailyData(data);
+          }).catch(() => {
+            this.updateSidePanel();
+          });
+        } else if (typeof window['fetchActivities'] === 'function') {
+          window.fetchActivities().then(data => {
+            this.processDailyData(data);
+          }).catch(() => {
+            this.updateSidePanel();
+          });
+        } else {
+          this.updateSidePanel();
+        }
+      },
+      
+      processDailyData: function(data) {
+        this.updateSidePanel();
       },
       
       updateSidePanel: function() {
@@ -6116,10 +6160,8 @@
         const hojeStr = chatBot.getDynamicDateString();
         const dataFormatada = chatBot.formatDynamicDate(hoje);
         
-        // Atualizar data
         document.getElementById('sidePanelDate').textContent = dataFormatada;
         
-        // Buscar dados do dia
         const dailyActivities = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
         const partialRegistration = JSON.parse(localStorage.getItem('studyFlow_partialRegistration')) || {
           date: null,
@@ -6127,7 +6169,6 @@
           completed: false
         };
         
-        // Combinar atividades registradas
         let atividades = {
           questoes: [],
           anki: [],
@@ -6144,7 +6185,6 @@
         atividades.anki = atividades.anki.concat(dailyActivities.activities.anki || []);
         atividades.teoria = atividades.teoria.concat(dailyActivities.activities.teoria || []);
         
-        // Remover duplicatas
         const uniqueQuestoes = [];
         const uniqueAnki = [];
         const uniqueTeoria = [];
@@ -6171,7 +6211,6 @@
         atividades.anki = uniqueAnki;
         atividades.teoria = uniqueTeoria;
         
-        // Calcular totais
         let totalTime = 0;
         let totalQuestoes = 0;
         let totalAcertos = 0;
@@ -6196,13 +6235,11 @@
           totalTeoria++;
         });
         
-        // Calcular progresso
         const todayTasks = chatBot.getTodayTasks();
         const totalTasks = todayTasks.questoes.length + todayTasks.anki.length + todayTasks.teoria.length;
         const completedTasks = atividades.questoes.length + atividades.anki.length + atividades.teoria.length;
         const progressPercent = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
         
-        // Atualizar barra de progresso
         const progressFill = document.getElementById('progressFill');
         progressFill.style.width = `${progressPercent}%`;
         progressFill.setAttribute('aria-valuenow', progressPercent);
@@ -6210,7 +6247,6 @@
         document.getElementById('progressCompleted').textContent = `${completedTasks} atividades`;
         document.getElementById('progressTotal').textContent = `${completedTasks} de ${totalTasks}`;
         
-        // Atualizar estatísticas
         const statsContainer = document.getElementById('sidePanelStats');
         const taxaAcerto = totalQuestoes > 0 ? Math.round((totalAcertos / totalQuestoes) * 100) : 0;
         
@@ -6237,31 +6273,69 @@
           </div>
         `;
         
-        // Atualizar atividades
         const activitiesContainer = document.getElementById('sidePanelActivities');
         activitiesContainer.innerHTML = '';
         
-        // Adicionar atividades pendentes primeiro
-        const pendingTasks = chatBot.countPendingTasks(todayTasks, atividades, true);
-        if (pendingTasks > 0 && !chatBot.isDayFinished()) {
-          const pendingCard = document.createElement('div');
-          pendingCard.className = 'activity-card pending';
-          pendingCard.innerHTML = `
-            <div class="activity-header">
-              <div class="activity-title">
-                <i class="fas fa-clock"></i>
-                <span>${pendingTasks} atividades pendentes</span>
+        todayTasks.questoes.forEach(q => {
+          if (!chatBot.isQuestaoRegistered(q.id)) {
+            const activityCard = document.createElement('div');
+            activityCard.className = 'activity-card pending';
+            activityCard.innerHTML = `
+              <div class="activity-header">
+                <div class="activity-title">
+                  <i class="fas fa-book"></i>
+                  <span>${q.nome}</span>
+                </div>
+                <div class="activity-status status-pending">Pendente</div>
               </div>
-              <div class="activity-status status-pending">Pendente</div>
-            </div>
-            <div class="activity-details">
-              Clique em "Registrar Atividades" para completar
-            </div>
-          `;
-          activitiesContainer.appendChild(pendingCard);
-        }
+              <div class="activity-details">
+                ${q.disciplina || 'Questões'} - Revisão programada
+              </div>
+            `;
+            activitiesContainer.appendChild(activityCard);
+          }
+        });
         
-        // Adicionar questões
+        todayTasks.anki.forEach(a => {
+          if (!chatBot.isAnkiRegistered(a.id)) {
+            const activityCard = document.createElement('div');
+            activityCard.className = 'activity-card pending';
+            activityCard.innerHTML = `
+              <div class="activity-header">
+                <div class="activity-title">
+                  <i class="fas fa-layer-group"></i>
+                  <span>${a.nome}</span>
+                </div>
+                <div class="activity-status status-pending">Pendente</div>
+              </div>
+              <div class="activity-details">
+                Baralho Anki - Revisão programada
+              </div>
+            `;
+            activitiesContainer.appendChild(activityCard);
+          }
+        });
+        
+        todayTasks.teoria.forEach(t => {
+          if (!chatBot.isTeoriaRegistered(t)) {
+            const activityCard = document.createElement('div');
+            activityCard.className = 'activity-card pending';
+            activityCard.innerHTML = `
+              <div class="activity-header">
+                <div class="activity-title">
+                  <i class="fas fa-book-open"></i>
+                  <span>${t}</span>
+                </div>
+                <div class="activity-status status-pending">Pendente</div>
+              </div>
+              <div class="activity-details">
+                Estudo teórico programado
+              </div>
+            `;
+            activitiesContainer.appendChild(activityCard);
+          }
+        });
+        
         atividades.questoes.forEach(q => {
           const acertos = q.feitas - q.erradas;
           const taxa = q.feitas > 0 ? Math.round((acertos / q.feitas) * 100) : 0;
@@ -6286,7 +6360,6 @@
           activitiesContainer.appendChild(activityCard);
         });
         
-        // Adicionar Anki
         atividades.anki.forEach(a => {
           const activityCard = document.createElement('div');
           activityCard.className = 'activity-card completed';
@@ -6308,7 +6381,6 @@
           activitiesContainer.appendChild(activityCard);
         });
         
-        // Adicionar teoria
         atividades.teoria.forEach(t => {
           const activityCard = document.createElement('div');
           activityCard.className = 'activity-card completed';
@@ -6330,7 +6402,6 @@
           activitiesContainer.appendChild(activityCard);
         });
         
-        // Atualizar status do dia
         const dayStatus = document.getElementById('dayStatus');
         if (chatBot.isDayFinished()) {
           dayStatus.className = 'day-status completed';
@@ -6372,7 +6443,6 @@
       },
       
       bindEvents: function() {
-        // Atualizar painel quando houver mudanças no localStorage
         window.addEventListener('storage', (e) => {
           if (e.key && e.key.includes('dailyActivities') || 
               e.key === 'studyFlow_partialRegistration' ||
@@ -6381,7 +6451,6 @@
           }
         });
         
-        // Atualizar painel ao redimensionar a janela
         window.addEventListener('resize', () => {
           const sidePanel = document.getElementById('sidePanel');
           if (window.innerWidth > 900) {
@@ -6394,7 +6463,6 @@
         });
       }
     };
-    /* UI ENHANCEMENTS END */
     
     document.addEventListener('DOMContentLoaded', function() {
       chatBot = new StudyFlowChatBot();
