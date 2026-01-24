@@ -1179,7 +1179,9 @@
       position: fixed;
       top: 0;
       right: 0;
-      width: 320px;
+      width: 28%;
+      min-width: 320px;
+      max-width: 400px;
       height: 100vh;
       background-color: var(--light);
       color: var(--dark);
@@ -1494,6 +1496,43 @@
       gap: 8px;
     }
     
+    /* Botão FAB para reabrir painel */
+    .panel-fab {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 99;
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+      transition: var(--transition);
+      font-size: 1.2rem;
+    }
+    
+    .panel-fab:hover {
+      transform: scale(1.1);
+      background-color: var(--primary-dark);
+      box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4);
+    }
+    
+    .panel-fab:active {
+      transform: scale(0.95);
+    }
+    
+    .panel-fab.hidden {
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.8);
+    }
+    
     .mobile-toggle {
       position: fixed;
       bottom: 20px;
@@ -1548,7 +1587,8 @@
     
     @media (max-width: 900px) {
       .side-panel {
-        width: 280px;
+        width: 100%;
+        max-width: 100%;
         transform: translateX(100%);
       }
       
@@ -1564,6 +1604,10 @@
         display: flex;
       }
       
+      .panel-fab {
+        display: none;
+      }
+      
       .chatbot-container {
         width: 100%;
       }
@@ -1573,6 +1617,10 @@
   </style>
 </head>
 <body>
+  <button class="panel-fab" id="panelFab" aria-label="Abrir painel de resumo" title="Abrir painel de resumo">
+    <i class="fas fa-chart-bar"></i>
+  </button>
+  
   <button class="mobile-toggle" id="mobilePanelToggle" aria-label="Abrir painel de resumo">
     <i class="fas fa-chart-bar"></i>
   </button>
@@ -1580,7 +1628,7 @@
   <aside id="sidePanel" class="side-panel" aria-label="Resumo do dia" role="complementary">
     <header class="side-panel-header">
       <h3><i class="fas fa-calendar-day"></i> Resumo do Dia</h3>
-      <button class="side-panel-toggle" id="sidePanelToggle" aria-label="Fechar painel">
+      <button class="side-panel-toggle" id="sidePanelToggle" aria-label="Fechar painel" aria-expanded="true">
         <i class="fas fa-chevron-right"></i>
       </button>
     </header>
@@ -1951,9 +1999,6 @@
       addQuickActions() {
         const quickActionsHTML = `
           <div class="quick-actions">
-            <button class="action-btn primary" onclick="chatBot.showDailySummary()">
-              <i class="fas fa-calendar-day"></i> Resumo do Dia
-            </button>
             <button class="action-btn secondary" onclick="chatBot.openRegisterModal()">
               <i class="fas fa-plus-circle"></i> Registrar Atividade
             </button>
@@ -4949,9 +4994,6 @@
       showQuickActions() {
         this.addBotMessage(`
           <div class="quick-actions">
-            <button class="action-btn primary" onclick="chatBot.showDailySummary()">
-              <i class="fas fa-calendar-day"></i> Resumo do Dia
-            </button>
             <button class="action-btn secondary" onclick="chatBot.openRegisterModal()">
               <i class="fas fa-plus-circle"></i> Registrar
             </button>
@@ -5923,15 +5965,26 @@
         this.initSidePanel();
         this.updateSidePanel();
         this.bindEvents();
+        this.setupActivityListeners();
       },
       
       initSidePanel: function() {
         const sidePanel = document.getElementById('sidePanel');
         const sidePanelToggle = document.getElementById('sidePanelToggle');
+        const panelFab = document.getElementById('panelFab');
         const mobilePanelToggle = document.getElementById('mobilePanelToggle');
         
         // Verificar se está em tela pequena
         if (window.innerWidth <= 900) {
+          sidePanel.classList.add('collapsed');
+          panelFab.classList.add('hidden');
+        } else {
+          panelFab.classList.remove('hidden');
+        }
+        
+        // Estado do painel no localStorage
+        const panelState = localStorage.getItem('ui_enhancer.panel.visible');
+        if (panelState === 'false' && window.innerWidth > 900) {
           sidePanel.classList.add('collapsed');
         }
         
@@ -5939,15 +5992,28 @@
         sidePanelToggle.addEventListener('click', () => {
           sidePanel.classList.toggle('collapsed');
           this.updateToggleIcon();
+          this.updateFabVisibility();
+          this.savePanelState();
+        });
+        
+        // Botão FAB para alternar
+        panelFab.addEventListener('click', () => {
+          sidePanel.classList.remove('collapsed');
+          this.updateToggleIcon();
+          this.updateFabVisibility();
+          this.savePanelState();
         });
         
         // Botão mobile para alternar
         mobilePanelToggle.addEventListener('click', () => {
           sidePanel.classList.toggle('collapsed');
           this.updateToggleIcon();
+          this.updateFabVisibility();
+          this.savePanelState();
         });
         
         this.updateToggleIcon();
+        this.updateFabVisibility();
       },
       
       updateToggleIcon: function() {
@@ -5957,21 +6023,55 @@
         
         if (sidePanel.classList.contains('collapsed')) {
           sidePanelToggle.innerHTML = '<i class="fas fa-chevron-left"></i>';
+          sidePanelToggle.setAttribute('aria-expanded', 'false');
           mobilePanelToggle.innerHTML = '<i class="fas fa-chart-bar"></i>';
           mobilePanelToggle.setAttribute('aria-label', 'Abrir painel de resumo');
         } else {
           sidePanelToggle.innerHTML = '<i class="fas fa-chevron-right"></i>';
+          sidePanelToggle.setAttribute('aria-expanded', 'true');
           mobilePanelToggle.innerHTML = '<i class="fas fa-times"></i>';
           mobilePanelToggle.setAttribute('aria-label', 'Fechar painel de resumo');
         }
       },
       
-      bindEvents: function() {
-        // Atualizar painel quando houver mudanças no localStorage
+      updateFabVisibility: function() {
+        const sidePanel = document.getElementById('sidePanel');
+        const panelFab = document.getElementById('panelFab');
+        
+        if (sidePanel.classList.contains('collapsed') && window.innerWidth > 900) {
+          panelFab.classList.remove('hidden');
+        } else {
+          panelFab.classList.add('hidden');
+        }
+      },
+      
+      savePanelState: function() {
+        const sidePanel = document.getElementById('sidePanel');
+        const isVisible = !sidePanel.classList.contains('collapsed');
+        localStorage.setItem('ui_enhancer.panel.visible', isVisible);
+      },
+      
+      setupActivityListeners: function() {
+        // Monitorar eventos de atividade
+        if (typeof window['registerActivity'] === 'function') {
+          const originalRegister = window['registerActivity'];
+          window['registerActivity'] = function(...args) {
+            const result = originalRegister.apply(this, args);
+            // Atualizar painel após registro
+            setTimeout(() => {
+              window.UI_ENHANCER.updateSidePanel();
+            }, 100);
+            return result;
+          };
+        }
+        
+        // Monitorar mudanças no localStorage
         window.addEventListener('storage', (e) => {
           if (e.key && e.key.includes('dailyActivities') || 
               e.key === 'studyFlow_partialRegistration' ||
-              e.key === 'ultimoEstudo') {
+              e.key === 'ultimoEstudo' ||
+              e.key === 'StudyFlow_activeCycle' ||
+              e.key === 'ciclos_focus_v1') {
             this.updateSidePanel();
           }
         });
@@ -5979,13 +6079,34 @@
         // Atualizar painel ao redimensionar a janela
         window.addEventListener('resize', () => {
           const sidePanel = document.getElementById('sidePanel');
+          const panelFab = document.getElementById('panelFab');
+          
           if (window.innerWidth > 900) {
             sidePanel.classList.remove('collapsed');
+            panelFab.classList.add('hidden');
           } else {
             sidePanel.classList.add('collapsed');
+            panelFab.classList.add('hidden');
           }
           this.updateToggleIcon();
+          this.updateFabVisibility();
         });
+        
+        // Atualizar painel quando o chat for atualizado
+        const originalAddMessage = chatBot?.addMessageToChat;
+        if (originalAddMessage) {
+          chatBot.addMessageToChat = function(...args) {
+            const result = originalAddMessage.apply(this, args);
+            // Verificar se é uma mensagem de resumo e suprimir se o painel estiver visível
+            const sidePanel = document.getElementById('sidePanel');
+            const content = args[0];
+            if (content && content.includes('Resumo do Dia') && !sidePanel.classList.contains('collapsed')) {
+              // Não adicionar mensagem de resumo ao chat se o painel estiver visível
+              return;
+            }
+            return result;
+          };
+        }
       },
       
       updateSidePanel: function() {
@@ -6120,6 +6241,26 @@
         const activitiesContainer = document.getElementById('sidePanelActivities');
         activitiesContainer.innerHTML = '';
         
+        // Adicionar atividades pendentes primeiro
+        const pendingTasks = chatBot.countPendingTasks(todayTasks, atividades, true);
+        if (pendingTasks > 0 && !chatBot.isDayFinished()) {
+          const pendingCard = document.createElement('div');
+          pendingCard.className = 'activity-card pending';
+          pendingCard.innerHTML = `
+            <div class="activity-header">
+              <div class="activity-title">
+                <i class="fas fa-clock"></i>
+                <span>${pendingTasks} atividades pendentes</span>
+              </div>
+              <div class="activity-status status-pending">Pendente</div>
+            </div>
+            <div class="activity-details">
+              Clique em "Registrar Atividades" para completar
+            </div>
+          `;
+          activitiesContainer.appendChild(pendingCard);
+        }
+        
         // Adicionar questões
         atividades.questoes.forEach(q => {
           const acertos = q.feitas - q.erradas;
@@ -6189,26 +6330,6 @@
           activitiesContainer.appendChild(activityCard);
         });
         
-        // Adicionar atividades pendentes
-        const pendingTasks = chatBot.countPendingTasks(todayTasks, atividades, true);
-        if (pendingTasks > 0 && !chatBot.isDayFinished()) {
-          const pendingCard = document.createElement('div');
-          pendingCard.className = 'activity-card pending';
-          pendingCard.innerHTML = `
-            <div class="activity-header">
-              <div class="activity-title">
-                <i class="fas fa-clock"></i>
-                <span>${pendingTasks} atividades pendentes</span>
-              </div>
-              <div class="activity-status status-pending">Pendente</div>
-            </div>
-            <div class="activity-details">
-              Clique em "Registrar Atividades" para completar
-            </div>
-          `;
-          activitiesContainer.appendChild(pendingCard);
-        }
-        
         // Atualizar status do dia
         const dayStatus = document.getElementById('dayStatus');
         if (chatBot.isDayFinished()) {
@@ -6248,6 +6369,29 @@
             </div>
           `;
         }
+      },
+      
+      bindEvents: function() {
+        // Atualizar painel quando houver mudanças no localStorage
+        window.addEventListener('storage', (e) => {
+          if (e.key && e.key.includes('dailyActivities') || 
+              e.key === 'studyFlow_partialRegistration' ||
+              e.key === 'ultimoEstudo') {
+            this.updateSidePanel();
+          }
+        });
+        
+        // Atualizar painel ao redimensionar a janela
+        window.addEventListener('resize', () => {
+          const sidePanel = document.getElementById('sidePanel');
+          if (window.innerWidth > 900) {
+            sidePanel.classList.remove('collapsed');
+          } else {
+            sidePanel.classList.add('collapsed');
+          }
+          this.updateToggleIcon();
+          this.updateFabVisibility();
+        });
       }
     };
     /* UI ENHANCEMENTS END */
