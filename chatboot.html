@@ -1613,6 +1613,33 @@
       }
     }
     
+    /* Botão Finalizar Dia - Verde */
+    .action-btn.finalizar-dia {
+      background-color: var(--success) !important;
+      color: white !important;
+      border: none;
+    }
+    
+    .action-btn.finalizar-dia:hover {
+      background-color: #3d8b40 !important;
+      transform: translateY(-2px);
+    }
+    
+    .action-btn.finalizar-dia-success {
+      animation: pulseSuccess 0.5s ease;
+    }
+    
+    @keyframes pulseSuccess {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    /* Remover botão "Marcar como concluído" dos cards pendentes */
+    .complete-btn {
+      display: none !important;
+    }
+    
     /* UI ENHANCEMENTS END */
   </style>
 </head>
@@ -4997,6 +5024,9 @@
             <button class="action-btn secondary" onclick="chatBot.openRegisterModal()">
               <i class="fas fa-plus-circle"></i> Registrar
             </button>
+            <button class="action-btn finalizar-dia" onclick="window.UI_ENHANCER.callFinalizeDay()">
+              <i class="fas fa-check-double"></i> Finalizar Dia
+            </button>
             <button class="action-btn info" onclick="chatBot.openYesterdayModal()">
               <i class="fas fa-history"></i> Registrar Atividades de Ontem
             </button>
@@ -5966,6 +5996,7 @@
         this.updateSidePanel();
         this.bindEvents();
         this.setupActivityListeners();
+        this.addFinalizarDiaButton();
         
         // Carregar automaticamente as atividades do dia ao abrir o site
         this.loadDailyActivitiesOnOpen();
@@ -6170,6 +6201,156 @@
         }
       },
       
+      addFinalizarDiaButton: function() {
+        // Verificar se há um candidato para a função de finalizar dia
+        const candidates = ['finalizeDay', 'finishDay', 'completeDay', 'endDay', 'closeDay'];
+        const foundCandidate = candidates.find(name => typeof window[name] === 'function');
+        
+        if (!foundCandidate) {
+          // Se não houver candidato global, verificar se chatBot tem finalizeDay
+          if (!chatBot || typeof chatBot.finalizeDay !== 'function') {
+            console.warn('Nenhuma função candidata encontrada para Finalizar Dia');
+            return;
+          }
+        }
+        
+        // Adicionar botão Finalizar Dia aos quick-actions
+        const originalShowQuickActions = chatBot.showQuickActions;
+        if (originalShowQuickActions) {
+          chatBot.showQuickActions = function() {
+            const quickActionsHTML = `
+              <div class="quick-actions">
+                <button class="action-btn secondary" onclick="chatBot.openRegisterModal()">
+                  <i class="fas fa-plus-circle"></i> Registrar
+                </button>
+                <button class="action-btn finalizar-dia" onclick="window.UI_ENHANCER.callFinalizeDay()" 
+                        aria-label="Finalizar Dia" title="Finalizar Dia" role="button" tabindex="0">
+                  <i class="fas fa-check-double"></i> Finalizar Dia
+                </button>
+                <button class="action-btn info" onclick="chatBot.openYesterdayModal()">
+                  <i class="fas fa-history"></i> Registrar Atividades de Ontem
+                </button>
+                <button class="action-btn info" onclick="chatBot.showEditalMenu()">
+                  <i class="fas fa-file-alt"></i> Edital
+                </button>
+                <button class="action-btn info" onclick="chatBot.showSimuladosMenu()">
+                  <i class="fas fa-chart-line"></i> Simulados
+                </button>
+                <button class="action-btn info" onclick="chatBot.showSimuladoModal()">
+                  <i class="fas fa-calendar-alt"></i> Programar Simulado
+                </button>
+                <button class="action-btn info" onclick="chatBot.showRelatorioModal()">
+                  <i class="fas fa-chart-bar"></i> Relatório
+                </button>
+                <button class="action-btn info" onclick="chatBot.trocarBaralhos()">
+                  <i class="fas fa-sync-alt"></i> Trocar Baralhos
+                </button>
+                <button class="action-btn info" onclick="chatBot.showConfigModal()">
+                  <i class="fas fa-cog"></i> Configurar
+                </button>
+                <button class="action-btn info" onclick="chatBot.showHelp()">
+                  <i class="fas fa-question-circle"></i> Ajuda
+                </button>
+                <button class="action-btn info" onclick="chatBot.showInfo()">
+                  <i class="fas fa-info"></i> Informações
+                </button>
+                <button class="action-btn reset" onclick="chatBot.showResetConfirmation()">
+                  <i class="fas fa-exclamation-triangle"></i> Reset
+                </button>
+              </div>
+            `;
+            this.addBotMessage(quickActionsHTML, false);
+          };
+        }
+      },
+      
+      callFinalizeDay: function() {
+        // Encontrar a função candidata
+        const candidates = ['finalizeDay', 'finishDay', 'completeDay', 'endDay', 'closeDay'];
+        let finalizeFunc = null;
+        let foundCandidate = null;
+        
+        // Primeiro procurar no escopo global
+        for (const name of candidates) {
+          if (typeof window[name] === 'function') {
+            finalizeFunc = window[name];
+            foundCandidate = name;
+            break;
+          }
+        }
+        
+        // Se não encontrou no global, verificar no chatBot
+        if (!finalizeFunc && chatBot && typeof chatBot.finalizeDay === 'function') {
+          finalizeFunc = chatBot.finalizeDay.bind(chatBot);
+          foundCandidate = 'chatBot.finalizeDay';
+        }
+        
+        if (!finalizeFunc) {
+          console.error('Nenhuma função Finalizar Dia encontrada');
+          return;
+        }
+        
+        // Chamar a função com feedback visual
+        const button = event?.target?.closest('.action-btn.finalizar-dia');
+        if (button) {
+          button.classList.add('action-btn.finalizar-dia-success');
+          button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Finalizando...';
+          button.disabled = true;
+        }
+        
+        try {
+          const result = finalizeFunc();
+          
+          if (result && typeof result.then === 'function') {
+            // É uma Promise
+            result.then(() => {
+              if (button) {
+                button.innerHTML = '<i class="fas fa-check"></i> Dia Finalizado!';
+                setTimeout(() => {
+                  button.innerHTML = '<i class="fas fa-check-double"></i> Finalizar Dia';
+                  button.classList.remove('action-btn.finalizar-dia-success');
+                  button.disabled = false;
+                }, 2000);
+              }
+              // Atualizar painel lateral
+              this.updateSidePanel();
+            }).catch(error => {
+              console.error('Erro ao finalizar dia:', error);
+              if (button) {
+                button.innerHTML = '<i class="fas fa-exclamation-circle"></i> Erro';
+                button.classList.remove('action-btn.finalizar-dia-success');
+                setTimeout(() => {
+                  button.innerHTML = '<i class="fas fa-check-double"></i> Finalizar Dia';
+                  button.disabled = false;
+                }, 2000);
+              }
+            });
+          } else {
+            // Não é uma Promise
+            if (button) {
+              button.innerHTML = '<i class="fas fa-check"></i> Dia Finalizado!';
+              setTimeout(() => {
+                button.innerHTML = '<i class="fas fa-check-double"></i> Finalizar Dia';
+                button.classList.remove('action-btn.finalizar-dia-success');
+                button.disabled = false;
+              }, 2000);
+            }
+            // Atualizar painel lateral
+            this.updateSidePanel();
+          }
+        } catch (error) {
+          console.error('Erro ao chamar função Finalizar Dia:', error);
+          if (button) {
+            button.innerHTML = '<i class="fas fa-exclamation-circle"></i> Erro';
+            button.classList.remove('action-btn.finalizar-dia-success');
+            setTimeout(() => {
+              button.innerHTML = '<i class="fas fa-check-double"></i> Finalizar Dia';
+              button.disabled = false;
+            }, 2000);
+          }
+        }
+      },
+      
       updateSidePanel: function() {
         if (!chatBot) return;
         
@@ -6321,9 +6502,6 @@
               </div>
               <div class="activity-details">
                 ${questao.disciplina || 'Questões'}
-                <button class="complete-btn" style="margin-top: 8px; padding: 4px 8px; background: var(--warning); color: white; border: none; border-radius: 4px; font-size: 0.7rem; cursor: pointer;" onclick="window.UI_ENHANCER.markActivityComplete('questoes', '${questao.id}')">
-                  <i class="fas fa-check"></i> Marcar como concluído
-                </button>
               </div>
             `;
             activitiesContainer.appendChild(pendingCard);
@@ -6343,9 +6521,6 @@
               </div>
               <div class="activity-details">
                 Revisão de flashcards
-                <button class="complete-btn" style="margin-top: 8px; padding: 4px 8px; background: var(--warning); color: white; border: none; border-radius: 4px; font-size: 0.7rem; cursor: pointer;" onclick="window.UI_ENHANCER.markActivityComplete('anki', '${deck.id}')">
-                  <i class="fas fa-check"></i> Marcar como concluído
-                </button>
               </div>
             `;
             activitiesContainer.appendChild(pendingCard);
@@ -6365,9 +6540,6 @@
               </div>
               <div class="activity-details">
                 Estudo teórico
-                <button class="complete-btn" style="margin-top: 8px; padding: 4px 8px; background: var(--warning); color: white; border: none; border-radius: 4px; font-size: 0.7rem; cursor: pointer;" onclick="window.UI_ENHANCER.markActivityComplete('teoria', '${materia}')">
-                  <i class="fas fa-check"></i> Marcar como concluído
-                </button>
               </div>
             `;
             activitiesContainer.appendChild(pendingCard);
@@ -6522,82 +6694,6 @@
         }
         
         return pending;
-      },
-      
-      markActivityComplete: function(type, id) {
-        // Usar função existente se disponível
-        if (typeof window['completeActivity'] === 'function') {
-          window.completeActivity(type, id);
-        } else if (typeof window['registerActivity'] === 'function') {
-          // Tentar usar registerActivity como fallback
-          window.registerActivity(type, id, {completed: true});
-        } else if (chatBot) {
-          // Usar lógica do chatBot para marcar como concluído
-          const hojeStr = chatBot.getDynamicDateString();
-          
-          // Criar um registro básico para a atividade
-          const activityData = {
-            type: type,
-            data: {}
-          };
-          
-          if (type === 'questoes') {
-            activityData.data = {
-              assunto: id,
-              feitas: 1,
-              erradas: 0,
-              tempo: 5
-            };
-          } else if (type === 'anki') {
-            activityData.data = {
-              deck: id,
-              tempo: 5,
-              cards: 1
-            };
-          } else if (type === 'teoria') {
-            activityData.data = {
-              materia: id,
-              conteudo: 'Concluído via painel',
-              tempo: 5
-            };
-          }
-          
-          // Salvar no registro parcial
-          chatBot.saveToPartialRegistration(activityData);
-          
-          // Animar o card
-          const cards = document.querySelectorAll('.activity-card.pending');
-          cards.forEach(card => {
-            if (card.querySelector('.activity-title span').textContent.includes(id)) {
-              card.classList.remove('pending');
-              card.classList.add('completed');
-              
-              // Adicionar animação de check
-              const checkAnimation = card.querySelector('.check-animation') || document.createElement('div');
-              checkAnimation.className = 'check-animation';
-              checkAnimation.innerHTML = '<i class="fas fa-check"></i>';
-              if (!card.querySelector('.check-animation')) {
-                card.appendChild(checkAnimation);
-              }
-              
-              // Remover botão de completar
-              const completeBtn = card.querySelector('.complete-btn');
-              if (completeBtn) completeBtn.remove();
-              
-              // Atualizar status
-              const statusEl = card.querySelector('.activity-status');
-              if (statusEl) {
-                statusEl.className = 'activity-status status-completed';
-                statusEl.textContent = 'Concluído';
-              }
-            }
-          });
-        }
-        
-        // Atualizar painel
-        setTimeout(() => {
-          this.updateSidePanel();
-        }, 300);
       },
       
       bindEvents: function() {
