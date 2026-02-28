@@ -741,6 +741,7 @@
       border-top: 1px solid var(--border-light);
       gap: 8px;
       align-items: center;
+      position: relative;
     }
     .chatbot-input input {
       flex: 1;
@@ -757,6 +758,40 @@
       border-color: var(--accent-solid);
       box-shadow: 0 0 0 3px var(--accent-soft);
       background-color: var(--bg-elevated);
+    }
+
+    /* autocomplete suggestions */
+    .autocomplete-suggestions {
+      position: absolute;
+      bottom: 100%;
+      left: 1.75rem;
+      right: 1.75rem;
+      background-color: var(--bg-elevated);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 1000;
+      display: none;
+      margin-bottom: 8px;
+    }
+    .autocomplete-suggestions.show {
+      display: block;
+    }
+    .autocomplete-item {
+      padding: 10px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border-light);
+      color: var(--text-primary);
+      transition: background 0.1s;
+    }
+    .autocomplete-item:last-child {
+      border-bottom: none;
+    }
+    .autocomplete-item:hover,
+    .autocomplete-item.selected {
+      background-color: var(--accent-soft);
     }
 
     .input-actions {
@@ -1310,6 +1345,65 @@
       padding: 0.3rem 0.5rem;
       border-radius: var(--radius-md);
     }
+
+    /* toast notifications */
+    .toast-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+    .toast {
+      background-color: var(--bg-elevated);
+      color: var(--text-primary);
+      border-left: 4px solid var(--accent-solid);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 260px;
+      max-width: 320px;
+      animation: toastIn 0.3s ease, toastOut 0.3s ease 4.7s forwards;
+      pointer-events: auto;
+    }
+    .toast.success {
+      border-left-color: var(--success);
+    }
+    .toast.warning {
+      border-left-color: var(--warning);
+    }
+    .toast.info {
+      border-left-color: var(--info);
+    }
+    .toast-icon {
+      font-size: 1.4rem;
+    }
+    .toast-content {
+      flex: 1;
+    }
+    .toast-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 2px;
+    }
+    .toast-message {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes toastOut {
+      from { opacity: 1; transform: translateX(0); }
+      to { opacity: 0; transform: translateX(30px); }
+    }
   </style>
 </head>
 <body>
@@ -1351,7 +1445,10 @@
               <i class="far fa-smile"></i>
             </button>
           </div>
-          <input type="text" id="messageInput" placeholder="Digite uma mensagem...">
+          <div style="position: relative; flex: 1;">
+            <input type="text" id="messageInput" placeholder="Digite uma mensagem...">
+            <div id="autocompleteSuggestions" class="autocomplete-suggestions"></div>
+          </div>
           <button class="send-btn" id="sendMessage">
             <i class="fas fa-paper-plane"></i>
           </button>
@@ -1548,9 +1645,492 @@
     </div>
   </div>
 
-  <!-- METRICS MODAL REMOVED -->
+  <!-- toast container for achievements and notifications -->
+  <div class="toast-container" id="toastContainer"></div>
 
   <script>
+    // =========================================================================
+    // NOVO MOTOR DE INTENÇÕES, AUTOCOMPLETE, CONQUISTAS, NOTIFICAÇÕES, ADAPTER
+    // =========================================================================
+    (function() {
+      // ---------- CONSTANTES ----------
+      const INTENTS = [
+        { id: 'today_time', keywords: ['tempo hoje', 'estudei hoje', 'hoje tempo', 'minutos hoje'], example: 'Quanto tempo estudei hoje?' },
+        { id: 'week_time', keywords: ['tempo semana', 'estudei semana', 'semana tempo'], example: 'Quanto estudei na semana?' },
+        { id: 'today_questions', keywords: ['questões hoje', 'feitas hoje', 'resolvidas hoje'], example: 'Quantas questões fiz hoje?' },
+        { id: 'streak', keywords: ['sequência', 'dias seguidos', 'streak'], example: 'Qual minha sequência de estudos?' },
+        { id: 'progress', keywords: ['progresso', 'meta', 'andamento'], example: 'Como está meu progresso na meta?' },
+        { id: 'simulated', keywords: ['simulado', 'nota simulado', 'ultimo simulado'], example: 'Minha nota no último simulado?' },
+        { id: 'register', keywords: ['registrar', 'adicionar atividade'], example: 'Quero registrar uma atividade' },
+        { id: 'config', keywords: ['configurar', 'configuração', 'config'], example: 'Abrir configurações' },
+        { id: 'help', keywords: ['ajuda', 'comandos', 'o que faz'], example: 'Preciso de ajuda' },
+        { id: 'edital', keywords: ['edital', 'progresso edital'], example: 'Ver meu edital' },
+        { id: 'finalize_day', keywords: ['finalizar dia', 'encerrar dia'], example: 'Finalizar o dia' },
+        { id: 'yesterday', keywords: ['ontem', 'atividades ontem'], example: 'Registrar atividades de ontem' }
+      ];
+
+      const AUTOCOMPLETE_PHRASES = INTENTS.map(i => i.example).filter(Boolean);
+
+      const RESPONSE_TEMPLATES = {
+        today_time: [
+          'Hoje você estudou {{time}} minutos.',
+          'Até agora, {{time}} minutos de estudo hoje.',
+          'Seu tempo de estudo hoje: {{time}} minutos.'
+        ],
+        week_time: [
+          'Nesta semana você estudou {{time}} minutos.',
+          'Total da semana: {{time}} minutos.',
+          'Você acumulou {{time}} minutos na semana.'
+        ],
+        today_questions: [
+          'Você resolveu {{count}} questões hoje.',
+          'Hoje: {{count}} questões feitas.',
+          'Total de questões de hoje: {{count}}.'
+        ],
+        streak: [
+          'Sua sequência atual é de {{streak}} dias.',
+          'Você estuda há {{streak}} dias seguidos!',
+          'Streak: {{streak}} dias.'
+        ],
+        progress: [
+          'Você completou {{completed}} de {{total}} atividades ({{percent}}%).',
+          'Progresso diário: {{completed}}/{{total}} – {{percent}}%.',
+          'Meta: {{percent}}% concluída ({{completed}} de {{total}}).'
+        ],
+        simulated: [
+          'Seu último simulado: {{score}} pontos ({{percent}}%).',
+          'Nota do último simulado: {{score}} – {{percent}}% de acerto.',
+          'No último simulado você fez {{score}} pontos ({{percent}}%).'
+        ],
+        register: [
+          'Claro! Abrindo o registro de atividades...',
+          'Vamos registrar? A janela de atividades está aberta.',
+          'Ok, pode preencher os dados da sua sessão.'
+        ],
+        config: [
+          'Abrindo configurações...',
+          'Configurações carregadas.',
+          'Vamos ajustar seus estudos?'
+        ],
+        help: [
+          'Posso te ajudar com resumos, registro, edital, simulados e mais. Digite um comando ou use os botões.',
+          'Precisa de ajuda? Temos várias funções: resumo, registrar, edital, simulados, configurações.'
+        ],
+        edital: [
+          'Aqui está seu progresso no edital...',
+          'Carregando dados do edital...',
+          'Seu edital:'
+        ],
+        finalize_day: [
+          'Finalizando o dia...',
+          'Dia encerrado. Parabéns pelo esforço!',
+          'Tudo pronto. Até amanhã!'
+        ],
+        yesterday: [
+          'Abrindo atividades de ontem...',
+          'Vamos registrar o que ficou pendente de ontem.'
+        ],
+        fallback: [
+          'Desculpe, não entendi. Tente perguntar sobre tempo, questões, streak ou use os botões.',
+          'Não consegui compreender. Posso ajudar com: tempo de estudo, questões, streak, simulados?',
+          'Hmm, não entendi. Que tal "Quanto tempo estudei hoje?" ou "Registrar atividade"?'
+        ]
+      };
+
+      // ---------- GLOBAL CHATSYSTEM ----------
+      window.ChatSystem = window.ChatSystem || {};
+
+      // ---------- EVENT BUS ----------
+      ChatSystem.EventBus = {
+        events: {},
+        on(event, callback) {
+          if (!this.events[event]) this.events[event] = [];
+          this.events[event].push(callback);
+        },
+        off(event, callback) {
+          if (!this.events[event]) return;
+          this.events[event] = this.events[event].filter(cb => cb !== callback);
+        },
+        emit(event, data) {
+          if (!this.events[event]) return;
+          this.events[event].forEach(cb => cb(data));
+        }
+      };
+
+      // ---------- STATE ADAPTER (leitura dos dados existentes) ----------
+      ChatSystem.StateAdapter = {
+        getTodayTime() {
+          const hojeStr = chatBot ? chatBot.getDynamicDateString() : new Date().toISOString().split('T')[0];
+          let total = 0;
+          // atividades diárias
+          const daily = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+          const acts = daily.activities || {};
+          if (acts.questoes) acts.questoes.forEach(q => total += q.tempo || 0);
+          if (acts.anki) acts.anki.forEach(a => total += a.tempo || 0);
+          if (acts.teoria) acts.teoria.forEach(t => total += t.tempo || 0);
+          // registro parcial
+          const partial = JSON.parse(localStorage.getItem('studyFlow_partialRegistration')) || {};
+          if (partial.date === hojeStr && partial.activities) {
+            const p = partial.activities;
+            if (p.questoes) p.questoes.forEach(q => total += q.tempo || 0);
+            if (p.anki) p.anki.forEach(a => total += a.tempo || 0);
+            if (p.teoria) p.teoria.forEach(t => total += t.tempo || 0);
+          }
+          return total;
+        },
+        getTotalTime() {
+          let total = 0;
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith('dailyActivities_')) {
+              try {
+                const data = JSON.parse(localStorage.getItem(key));
+                const acts = data.activities || {};
+                if (acts.questoes) acts.questoes.forEach(q => total += q.tempo || 0);
+                if (acts.anki) acts.anki.forEach(a => total += a.tempo || 0);
+                if (acts.teoria) acts.teoria.forEach(t => total += t.tempo || 0);
+              } catch (e) {}
+            }
+          }
+          return total;
+        },
+        getTodayQuestions() {
+          const hojeStr = chatBot ? chatBot.getDynamicDateString() : new Date().toISOString().split('T')[0];
+          let count = 0;
+          const daily = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+          const acts = daily.activities || {};
+          if (acts.questoes) acts.questoes.forEach(q => count += q.feitas || 0);
+          const partial = JSON.parse(localStorage.getItem('studyFlow_partialRegistration')) || {};
+          if (partial.date === hojeStr && partial.activities && partial.activities.questoes) {
+            partial.activities.questoes.forEach(q => count += q.feitas || 0);
+          }
+          return count;
+        },
+        getStreak() {
+          // calcula streak de dias com qualquer atividade
+          let streak = 0;
+          let current = new Date();
+          while (true) {
+            const dateStr = current.toISOString().split('T')[0];
+            const daily = JSON.parse(localStorage.getItem(`dailyActivities_${dateStr}`)) || { activities: {} };
+            const partial = JSON.parse(localStorage.getItem('studyFlow_partialRegistration')) || {};
+            const hasActivity = (daily.activities && (daily.activities.questoes?.length || daily.activities.anki?.length || daily.activities.teoria?.length)) ||
+                                (partial.date === dateStr && partial.activities && (partial.activities.questoes?.length || partial.activities.anki?.length || partial.activities.teoria?.length));
+            if (!hasActivity) break;
+            streak++;
+            current.setDate(current.getDate() - 1);
+          }
+          return streak;
+        },
+        getMetaStatus() {
+          const hojeStr = chatBot ? chatBot.getDynamicDateString() : new Date().toISOString().split('T')[0];
+          const total = chatBot ? chatBot.getTotalTasksForDay(hojeStr) : 0;
+          let completed = 0;
+          const daily = JSON.parse(localStorage.getItem(`dailyActivities_${hojeStr}`)) || { activities: {} };
+          const partial = JSON.parse(localStorage.getItem('studyFlow_partialRegistration')) || {};
+          if (daily.activities) {
+            completed += (daily.activities.questoes?.length || 0) + (daily.activities.anki?.length || 0) + (daily.activities.teoria?.length || 0);
+          }
+          if (partial.date === hojeStr && partial.activities) {
+            completed += (partial.activities.questoes?.length || 0) + (partial.activities.anki?.length || 0) + (partial.activities.teoria?.length || 0);
+          }
+          return { total, completed, percent: total > 0 ? Math.round((completed/total)*100) : 0 };
+        },
+        getSimulados() {
+          try {
+            return JSON.parse(localStorage.getItem('simulados')) || [];
+          } catch (e) {
+            return [];
+          }
+        }
+      };
+
+      // ---------- INTENT ENGINE ----------
+      ChatSystem.IntentEngine = {
+        detectIntent(text) {
+          if (!text || text.length < 3) return { id: null, score: 0 };
+
+          // normalização
+          const normalize = (str) => {
+            return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+          };
+          const normalized = normalize(text);
+          const words = normalized.split(/\s+/).filter(w => w.length > 1);
+
+          let bestIntent = null;
+          let bestScore = 0;
+
+          INTENTS.forEach(intent => {
+            let score = 0;
+            // score por palavra-chave
+            intent.keywords.forEach(kw => {
+              const nkw = normalize(kw);
+              if (normalized.includes(nkw)) {
+                score += 20;
+              }
+              // substring bonus
+              words.forEach(word => {
+                if (nkw.includes(word) && word.length > 2) score += 5;
+                if (word.includes(nkw)) score += 10;
+              });
+            });
+            // regex bonus simples (ex: quanto tempo)
+            if (/quanto\s*tempo/i.test(text) && intent.id === 'today_time') score += 15;
+            if (/quantas\s*questões/i.test(text) && intent.id === 'today_questions') score += 15;
+            if (/sequência|streak|dias seguidos/i.test(text) && intent.id === 'streak') score += 15;
+            if (/meta|progresso|andamento/i.test(text) && intent.id === 'progress') score += 10;
+            if (/simulado|nota/i.test(text) && intent.id === 'simulated') score += 15;
+
+            if (score > bestScore) {
+              bestScore = score;
+              bestIntent = intent.id;
+            }
+          });
+
+          // limite mínimo
+          const MIN_SCORE = 25;
+          if (bestScore < MIN_SCORE) return { id: null, score: bestScore };
+
+          return { id: bestIntent, score: bestScore };
+        }
+      };
+
+      // ---------- RESPONSE GENERATOR ----------
+      ChatSystem.ResponseGenerator = {
+        generate(intentId, context = {}) {
+          const templates = RESPONSE_TEMPLATES[intentId] || RESPONSE_TEMPLATES.fallback;
+          let template = templates[Math.floor(Math.random() * templates.length)];
+
+          // placeholders comuns
+          if (context.time !== undefined) template = template.replace('{{time}}', context.time);
+          if (context.count !== undefined) template = template.replace('{{count}}', context.count);
+          if (context.streak !== undefined) template = template.replace('{{streak}}', context.streak);
+          if (context.completed !== undefined) template = template.replace('{{completed}}', context.completed);
+          if (context.total !== undefined) template = template.replace('{{total}}', context.total);
+          if (context.percent !== undefined) template = template.replace('{{percent}}', context.percent);
+          if (context.score !== undefined) template = template.replace('{{score}}', context.score);
+
+          return template;
+        }
+      };
+
+      // ---------- AUTOCOMPLETE ----------
+      ChatSystem.Autocomplete = {
+        suggestions: AUTOCOMPLETE_PHRASES,
+        inputElement: null,
+        suggestionBox: null,
+        selectedIndex: -1,
+        init(inputId, suggestionBoxId) {
+          this.inputElement = document.getElementById(inputId);
+          this.suggestionBox = document.getElementById(suggestionBoxId);
+          if (!this.inputElement || !this.suggestionBox) return;
+
+          this.inputElement.addEventListener('input', () => this.onInput());
+          this.inputElement.addEventListener('keydown', (e) => this.onKeyDown(e));
+          this.suggestionBox.addEventListener('click', (e) => {
+            if (e.target.classList.contains('autocomplete-item')) {
+              this.inputElement.value = e.target.textContent;
+              this.hide();
+              // opcional: disparar envio? Não, apenas preenche.
+            }
+          });
+          document.addEventListener('click', (e) => {
+            if (e.target !== this.inputElement && !this.suggestionBox.contains(e.target)) {
+              this.hide();
+            }
+          });
+        },
+        onInput() {
+          const val = this.inputElement.value.trim();
+          if (val.length < 2) {
+            this.hide();
+            return;
+          }
+          const matches = this.suggestions.filter(s => s.toLowerCase().includes(val.toLowerCase())).slice(0, 5);
+          this.showSuggestions(matches);
+        },
+        showSuggestions(matches) {
+          if (matches.length === 0) {
+            this.hide();
+            return;
+          }
+          this.suggestionBox.innerHTML = matches.map((m, i) => `<div class="autocomplete-item" data-index="${i}">${m}</div>`).join('');
+          this.suggestionBox.classList.add('show');
+          this.selectedIndex = -1;
+        },
+        hide() {
+          this.suggestionBox.classList.remove('show');
+          this.selectedIndex = -1;
+        },
+        onKeyDown(e) {
+          const items = this.suggestionBox.querySelectorAll('.autocomplete-item');
+          if (items.length === 0) return;
+
+          if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            this.selectedIndex = (this.selectedIndex + 1) % items.length;
+            this.updateSelected(items);
+          } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            this.selectedIndex = (this.selectedIndex - 1 + items.length) % items.length;
+            this.updateSelected(items);
+          } else if (e.key === 'Enter' && this.selectedIndex >= 0) {
+            e.preventDefault();
+            this.inputElement.value = items[this.selectedIndex].textContent;
+            this.hide();
+            // opcional: enviar mensagem automaticamente? Não, só preenche.
+          } else if (e.key === 'Escape') {
+            this.hide();
+          }
+        },
+        updateSelected(items) {
+          items.forEach((item, i) => {
+            if (i === this.selectedIndex) item.classList.add('selected');
+            else item.classList.remove('selected');
+          });
+          if (this.selectedIndex >= 0) {
+            items[this.selectedIndex].scrollIntoView({ block: 'nearest' });
+          }
+        }
+      };
+
+      // ---------- ACHIEVEMENT SYSTEM ----------
+      ChatSystem.AchievementSystem = {
+        storageKey: 'studyFlow_achievements',
+        achievements: [
+          { id: 'first_activity', name: 'Primeiro Passo', description: 'Registrou a primeira atividade', condition: (stats) => stats.totalActivities >= 1 },
+          { id: 'streak_3', name: 'Disciplina', description: '3 dias seguidos de estudo', condition: (stats) => stats.streak >= 3 },
+          { id: 'streak_7', name: 'Constante', description: '7 dias seguidos de estudo', condition: (stats) => stats.streak >= 7 },
+          { id: 'streak_30', name: 'Mestre da Consistência', description: '30 dias seguidos de estudo', condition: (stats) => stats.streak >= 30 },
+          { id: 'questions_100', name: 'Resolvedor', description: '100 questões resolvidas no total', condition: (stats) => stats.totalQuestions >= 100 },
+          { id: 'time_1000', name: 'Dedicado', description: '1000 minutos estudados', condition: (stats) => stats.totalTime >= 1000 },
+          { id: 'simulated_first', name: 'Simulado', description: 'Realizou o primeiro simulado', condition: (stats) => stats.simuladoCount >= 1 }
+        ],
+        unlocked: [],
+        load() {
+          try {
+            this.unlocked = JSON.parse(localStorage.getItem(this.storageKey)) || [];
+          } catch {
+            this.unlocked = [];
+          }
+        },
+        save() {
+          localStorage.setItem(this.storageKey, JSON.stringify(this.unlocked));
+        },
+        checkAll() {
+          this.load();
+          const stats = this.gatherStats();
+          let newlyUnlocked = [];
+          this.achievements.forEach(ach => {
+            if (!this.unlocked.includes(ach.id) && ach.condition(stats)) {
+              this.unlocked.push(ach.id);
+              newlyUnlocked.push(ach);
+            }
+          });
+          if (newlyUnlocked.length > 0) {
+            this.save();
+            newlyUnlocked.forEach(ach => {
+              ChatSystem.EventBus.emit('achievement:unlocked', ach);
+            });
+          }
+        },
+        gatherStats() {
+          const adapter = ChatSystem.StateAdapter;
+          const streak = adapter.getStreak();
+          const totalTime = adapter.getTotalTime();
+          let totalQuestions = 0;
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith('dailyActivities_')) {
+              try {
+                const data = JSON.parse(localStorage.getItem(key));
+                const acts = data.activities || {};
+                if (acts.questoes) acts.questoes.forEach(q => totalQuestions += q.feitas || 0);
+              } catch (e) {}
+            }
+          }
+          const simulados = adapter.getSimulados();
+          const simuladoCount = simulados.length;
+          const totalActivities = 0; // não vamos contar agora, mas pode ser refinado
+          return { streak, totalTime, totalQuestions, simuladoCount, totalActivities };
+        }
+      };
+
+      // ---------- NOTIFICATION SYSTEM (toast) ----------
+      ChatSystem.NotificationSystem = {
+        showToast(title, message, type = 'info') {
+          const container = document.getElementById('toastContainer');
+          if (!container) return;
+          const toast = document.createElement('div');
+          toast.className = `toast ${type}`;
+          let icon = 'info-circle';
+          if (type === 'success') icon = 'check-circle';
+          else if (type === 'warning') icon = 'exclamation-triangle';
+          toast.innerHTML = `
+            <div class="toast-icon"><i class="fas fa-${icon}"></i></div>
+            <div class="toast-content">
+              <div class="toast-title">${title}</div>
+              <div class="toast-message">${message}</div>
+            </div>
+          `;
+          container.appendChild(toast);
+          setTimeout(() => {
+            toast.remove();
+          }, 5000);
+        },
+        init() {
+          // escuta eventos
+          ChatSystem.EventBus.on('achievement:unlocked', (ach) => {
+            this.showToast('🏆 Conquista desbloqueada!', ach.name, 'success');
+          });
+          ChatSystem.EventBus.on('activity:registered', (data) => {
+            // notificação opcional, mas pode ser silenciosa
+            // this.showToast('Atividade registrada', 'Continue assim!', 'success');
+          });
+          ChatSystem.EventBus.on('day:finished', () => {
+            this.showToast('Dia finalizado', 'Parabéns por concluir o dia!', 'success');
+          });
+          ChatSystem.EventBus.on('goal:achieved', (goal) => {
+            this.showToast('Meta atingida', `Você alcançou ${goal}`, 'success');
+          });
+          ChatSystem.EventBus.on('record:broken', (record) => {
+            this.showToast('🎉 Novo recorde!', record, 'success');
+          });
+          ChatSystem.EventBus.on('inactivity:detected', () => {
+            this.showToast('Sentimos sua falta', 'Que tal voltar aos estudos?', 'warning');
+          });
+        }
+      };
+
+      // ---------- INIT ----------
+      ChatSystem.init = function() {
+        // autocomplete
+        this.Autocomplete.init('messageInput', 'autocompleteSuggestions');
+
+        // conectar botão enviar (já existe no chatBot, mas vamos reforçar)
+        const sendBtn = document.getElementById('sendMessage');
+        const input = document.getElementById('messageInput');
+        if (sendBtn) {
+          // já existe listener no chatBot, mas podemos manter
+        }
+
+        // registrar listeners de eventos nos métodos originais (serão chamados após modificações)
+        this.AchievementSystem.load();
+        this.NotificationSystem.init();
+
+        // verificar conquistas inicialmente (após carregar)
+        setTimeout(() => {
+          this.AchievementSystem.checkAll();
+        }, 1000);
+      };
+
+      // Modificar métodos originais para emitir eventos (será feito após definição do chatBot)
+      // Isso será feito depois que a classe StudyFlowChatBot for definida, por isso vamos sobrescrever depois.
+    })();
+
+    // =========================================================================
+    // CÓDIGO ORIGINAL (StudyFlowChatBot) – INÍCIO
+    // =========================================================================
     class StudyFlowChatBot {
       constructor() {
         this.currentTheme = localStorage.getItem('theme') || 'light';
@@ -4787,26 +5367,111 @@
       }
       
       processUserMessage(message) {
-        const lowerMessage = message.toLowerCase();
-        
-        if (lowerMessage.includes('resumo') || lowerMessage.includes('como estou') || lowerMessage.includes('tarefas')) {
-          this.showDailySummary();
-        } else if (lowerMessage.includes('registrar') || lowerMessage.includes('adicionar')) {
-          this.openRegisterModal();
-        } else if (lowerMessage.includes('configurar') || lowerMessage.includes('config')) {
-          this.showConfigModal();
-        } else if (lowerMessage.includes('ajuda') || lowerMessage.includes('comandos')) {
-          this.showHelp();
-        } else if (lowerMessage.includes('info') || lowerMessage.includes('sobre')) {
-          this.showInfo();
-        } else if (lowerMessage.includes('edital')) {
-          this.showEditalMenu();
-        } else if (lowerMessage.includes('simulado')) {
-          this.showSimuladosMenu();
-        } else if (lowerMessage.includes('reset')) {
-          this.showResetConfirmation();
+        // Usar motor de intenções
+        const intent = ChatSystem.IntentEngine.detectIntent(message);
+        if (intent.id) {
+          // obter dados do adaptador
+          const adapter = ChatSystem.StateAdapter;
+          let context = {};
+          let response = '';
+          switch (intent.id) {
+            case 'today_time':
+              context.time = adapter.getTodayTime();
+              response = ChatSystem.ResponseGenerator.generate('today_time', context);
+              break;
+            case 'week_time':
+              // calcular tempo da semana (últimos 7 dias)
+              let weekTime = 0;
+              for (let i = 0; i < 7; i++) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                const ds = d.toISOString().split('T')[0];
+                const daily = JSON.parse(localStorage.getItem(`dailyActivities_${ds}`)) || { activities: {} };
+                const acts = daily.activities || {};
+                if (acts.questoes) acts.questoes.forEach(q => weekTime += q.tempo || 0);
+                if (acts.anki) acts.anki.forEach(a => weekTime += a.tempo || 0);
+                if (acts.teoria) acts.teoria.forEach(t => weekTime += t.tempo || 0);
+              }
+              context.time = weekTime;
+              response = ChatSystem.ResponseGenerator.generate('week_time', context);
+              break;
+            case 'today_questions':
+              context.count = adapter.getTodayQuestions();
+              response = ChatSystem.ResponseGenerator.generate('today_questions', context);
+              break;
+            case 'streak':
+              context.streak = adapter.getStreak();
+              response = ChatSystem.ResponseGenerator.generate('streak', context);
+              break;
+            case 'progress':
+              const meta = adapter.getMetaStatus();
+              context.completed = meta.completed;
+              context.total = meta.total;
+              context.percent = meta.percent;
+              response = ChatSystem.ResponseGenerator.generate('progress', context);
+              break;
+            case 'simulated':
+              const sims = adapter.getSimulados();
+              if (sims.length > 0) {
+                const last = sims.sort((a,b) => new Date(b.date) - new Date(a.date))[0];
+                context.score = last.totalScore;
+                context.percent = last.totalPercentage;
+              } else {
+                context.score = '0';
+                context.percent = '0';
+              }
+              response = ChatSystem.ResponseGenerator.generate('simulated', context);
+              break;
+            case 'register':
+              response = ChatSystem.ResponseGenerator.generate('register');
+              this.openRegisterModal();
+              break;
+            case 'config':
+              response = ChatSystem.ResponseGenerator.generate('config');
+              this.showConfigModal();
+              break;
+            case 'help':
+              response = ChatSystem.ResponseGenerator.generate('help');
+              this.showHelp();
+              break;
+            case 'edital':
+              response = ChatSystem.ResponseGenerator.generate('edital');
+              this.showEditalMenu();
+              break;
+            case 'finalize_day':
+              response = ChatSystem.ResponseGenerator.generate('finalize_day');
+              this.finalizeDay();
+              break;
+            case 'yesterday':
+              response = ChatSystem.ResponseGenerator.generate('yesterday');
+              this.openYesterdayModal();
+              break;
+            default:
+              response = ChatSystem.ResponseGenerator.generate('fallback');
+          }
+          if (response) this.typeMessage(response);
         } else {
-          this.typeMessage("Entendi sua mensagem! Posso te ajudar com:\n\n• <strong>Resumo do dia</strong>\n• <strong>Registrar atividades</strong>\n• <strong>Edital</strong>\n• <strong>Simulados</strong>\n• <strong>Configurações</strong>\n• <strong>Ajuda e informações</strong>\n\nO que você gostaria de fazer?");
+          // fallback para comandos antigos
+          const lowerMessage = message.toLowerCase();
+          if (lowerMessage.includes('resumo') || lowerMessage.includes('como estou') || lowerMessage.includes('tarefas')) {
+            this.showDailySummary();
+          } else if (lowerMessage.includes('registrar') || lowerMessage.includes('adicionar')) {
+            this.openRegisterModal();
+          } else if (lowerMessage.includes('configurar') || lowerMessage.includes('config')) {
+            this.showConfigModal();
+          } else if (lowerMessage.includes('ajuda') || lowerMessage.includes('comandos')) {
+            this.showHelp();
+          } else if (lowerMessage.includes('info') || lowerMessage.includes('sobre')) {
+            this.showInfo();
+          } else if (lowerMessage.includes('edital')) {
+            this.showEditalMenu();
+          } else if (lowerMessage.includes('simulado')) {
+            this.showSimuladosMenu();
+          } else if (lowerMessage.includes('reset')) {
+            this.showResetConfirmation();
+          } else {
+            this.typeMessage(ChatSystem.ResponseGenerator.generate('fallback'));
+          }
         }
       }
       
@@ -6064,6 +6729,8 @@
           chatBot.saveToPartialRegistration = function(activity) {
             const result = originalSave.apply(this, arguments);
             document.dispatchEvent(new CustomEvent('activity:registered'));
+            ChatSystem.EventBus.emit('activity:registered', activity);
+            ChatSystem.AchievementSystem.checkAll();
             return result;
           };
         }
@@ -6125,6 +6792,8 @@
       callFinalizeDay: function() {
         if (chatBot && typeof chatBot.finalizeDay === 'function') {
           chatBot.finalizeDay();
+          ChatSystem.EventBus.emit('day:finished');
+          ChatSystem.AchievementSystem.checkAll();
         }
       },
       
@@ -6483,6 +7152,17 @@
     
     document.addEventListener('DOMContentLoaded', function() {
       chatBot = new StudyFlowChatBot();
+      
+      // Inicializar o ChatSystem e conectar eventos
+      if (window.ChatSystem) {
+        // Emitir eventos nos lugares apropriados (já feito no saveToPartialRegistration e finalizeDay)
+        // Iniciar autocomplete e notificações
+        ChatSystem.init();
+        
+        // Verificar conquistas iniciais
+        ChatSystem.AchievementSystem.checkAll();
+      }
+      
       if (window.UI_ENHANCER && window.UI_ENHANCER.updateSidePanel) {
         window.UI_ENHANCER.updateSidePanel();
       }
