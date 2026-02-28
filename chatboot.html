@@ -1266,167 +1266,49 @@
       gap: 4px;
     }
 
-    /* ========== NEW STYLES FOR METRICS PANEL & CHARTS ========== */
-    .metrics-tabs {
-      display: flex;
+    /* strategy cards for config */
+    .strategy-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1rem;
-      border-bottom: 1px solid var(--border-light);
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
+      margin: 1rem 0;
     }
-    .metrics-tab {
-      padding: 0.5rem 0;
-      background: none;
-      border: none;
-      border-bottom: 3px solid transparent;
-      font-weight: 600;
-      color: var(--text-tertiary);
+    .strategy-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 1rem;
       cursor: pointer;
       transition: var(--transition-micro);
-    }
-    .metrics-tab.active {
-      border-bottom-color: var(--accent-solid);
-      color: var(--accent-solid);
-    }
-
-    .period-selector {
       display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-      background: var(--bg-inset);
-      padding: 0.5rem 1rem;
-      border-radius: var(--radius-full);
-      width: fit-content;
+      gap: 12px;
     }
-    .period-selector select {
-      background: var(--bg-elevated);
-      border: 1px solid var(--border-light);
-      border-radius: var(--radius-full);
-      padding: 0.4rem 1rem;
-      color: var(--text-primary);
-      font-size: 0.9rem;
+    .strategy-card.selected {
+      border-color: var(--accent-solid);
+      background: var(--accent-soft);
     }
-
-    .charts-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-    .chart-card {
-      background: var(--bg-elevated);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow-sm);
-    }
-    .chart-card h4 {
-      margin-bottom: 1rem;
-      font-size: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      color: var(--text-secondary);
-    }
-    .chart-container {
-      position: relative;
-      height: 200px;
-      width: 100%;
-    }
-    .donut-container {
-      height: 150px;
-      width: 150px;
-      margin: 0 auto;
-    }
-
-    .stats-mini-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0.8rem;
-      margin-bottom: 1.5rem;
-    }
-    .stat-mini-card {
-      background: var(--bg-inset);
-      border-radius: var(--radius-md);
-      padding: 1rem 0.5rem;
-      text-align: center;
-      border: 1px solid var(--border-light);
-    }
-    .stat-mini-value {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--accent-solid);
-    }
-    .stat-mini-label {
-      font-size: 0.7rem;
-      color: var(--text-tertiary);
-      text-transform: uppercase;
-    }
-
-    .heatmap-container {
-      margin-top: 1rem;
-      overflow-x: auto;
-      padding-bottom: 1rem;
-    }
-    .heatmap-grid {
-      display: grid;
-      grid-template-columns: 30px repeat(53, 12px);
-      gap: 2px;
-      font-size: 9px;
-      color: var(--text-tertiary);
-      align-items: center;
-    }
-    .heatmap-row {
-      display: contents;
-    }
-    .heatmap-day-label {
-      text-align: right;
-      padding-right: 4px;
-      font-weight: 500;
-    }
-    .heatmap-month-label {
-      grid-column: 2 / span 53;
-      display: flex;
-      justify-content: space-around;
-      margin-bottom: 4px;
-      font-weight: 600;
-      color: var(--text-secondary);
-    }
-    .heatmap-cell {
-      width: 12px;
-      height: 12px;
-      border-radius: 3px;
-      background-color: var(--bg-inset);
-      transition: 0.1s;
-    }
-    .heatmap-cell[data-intensity="1"] { background-color: #cdd9ff; }
-    .heatmap-cell[data-intensity="2"] { background-color: #9aa9ff; }
-    .heatmap-cell[data-intensity="3"] { background-color: #6c7aff; }
-    .heatmap-cell[data-intensity="4"] { background-color: #4f5bff; }
-    .dark-theme .heatmap-cell[data-intensity="1"] { background-color: #2c3142; }
-    .dark-theme .heatmap-cell[data-intensity="2"] { background-color: #4c5780; }
-    .dark-theme .heatmap-cell[data-intensity="3"] { background-color: #6c7aff; }
-    .dark-theme .heatmap-cell[data-intensity="4"] { background-color: #818cff; }
-
-    .streak-container {
-      display: flex;
-      gap: 2rem;
-      margin-top: 1rem;
-      justify-content: center;
-    }
-    .streak-badge {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--bg-inset);
-      padding: 0.5rem 1.2rem;
-      border-radius: var(--radius-full);
-    }
-    .streak-number {
+    .strategy-icon {
       font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--warning);
+      color: var(--accent-solid);
+    }
+    .strategy-content {
+      flex: 1;
+    }
+    .strategy-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .strategy-desc {
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+      margin-bottom: 4px;
+    }
+    .strategy-impact {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      background: var(--bg-inset);
+      padding: 0.3rem 0.5rem;
+      border-radius: var(--radius-md);
     }
   </style>
 </head>
@@ -1446,10 +1328,7 @@
       <button class="panel-toggle-btn" id="panelToggleBtn" aria-label="Alternar painel lateral">
         <i class="fas fa-chart-bar"></i>
       </button>
-      <!-- NEW METRICS BUTTON -->
-      <button class="header-btn" id="metricsBtn" aria-label="Painel de Métricas">
-        <i class="fas fa-chart-pie"></i>
-      </button>
+      <!-- METRICS BUTTON REMOVED -->
       <button class="header-btn" id="themeToggle">
         <i class="fas fa-moon"></i>
       </button>
@@ -1669,18 +1548,7 @@
     </div>
   </div>
 
-  <!-- NEW METRICS MODAL -->
-  <div class="modal" id="metricsModal">
-    <div class="modal-content" style="max-width: 1200px;">
-      <div class="modal-header">
-        <h3><i class="fas fa-chart-pie"></i> Painel de Métricas</h3>
-        <button class="close-modal" id="closeMetricsModal">&times;</button>
-      </div>
-      <div class="modal-body" id="metricsModalBody">
-        <!-- content populated by JS -->
-      </div>
-    </div>
-  </div>
+  <!-- METRICS MODAL REMOVED -->
 
   <script>
     class StudyFlowChatBot {
@@ -1934,9 +1802,7 @@
         document.getElementById('closeWithoutAction').addEventListener('click', () => {
           document.getElementById('postSaveModal').style.display = 'none';
         });
-        // NEW: metrics button
-        document.getElementById('metricsBtn').addEventListener('click', () => this.openMetricsModal());
-        document.getElementById('closeMetricsModal').addEventListener('click', () => this.closeMetricsModal());
+        // METRICS EVENT LISTENERS REMOVED
 
         window.addEventListener('click', (e) => {
           const registerModal = document.getElementById('registerModal');
@@ -1945,7 +1811,6 @@
           const simuladoModal = document.getElementById('simuladoModal');
           const relatorioModal = document.getElementById('relatorioModal');
           const postSaveModal = document.getElementById('postSaveModal');
-          const metricsModal = document.getElementById('metricsModal');
           
           if (e.target === registerModal) this.closeRegisterModal();
           if (e.target === yesterdayModal) this.closeYesterdayModal();
@@ -1953,393 +1818,88 @@
           if (e.target === simuladoModal) this.closeSimuladoModal();
           if (e.target === relatorioModal) this.closeRelatorioModal();
           if (e.target === postSaveModal) document.getElementById('postSaveModal').style.display = 'none';
-          if (e.target === metricsModal) this.closeMetricsModal();
         });
       }
 
-      // NEW: open metrics modal
-      openMetricsModal() {
-        document.getElementById('metricsModal').style.display = 'flex';
-        this.updateMetricsContent();
-      }
-
-      closeMetricsModal() {
-        document.getElementById('metricsModal').style.display = 'none';
-      }
-
-      // NEW: get aggregated data for a date range
-      getRangeData(days) {
-        const hoje = new Date();
-        let totalQuestoes = 0, totalAcertos = 0, totalErros = 0, totalTime = 0, totalAnkiCards = 0;
-        const dailyData = []; // for charts
-
-        for (let i = days - 1; i >= 0; i--) {
-          const date = new Date(hoje);
-          date.setDate(hoje.getDate() - i);
-          const dateStr = date.toISOString().split('T')[0];
-          const daily = JSON.parse(localStorage.getItem(`dailyActivities_${dateStr}`)) || { activities: {} };
-          const partial = this.partialRegistration.date === dateStr ? this.partialRegistration.activities : {};
-          
-          let dayQuestoes = 0, dayAcertos = 0, dayTime = 0, dayAnkiCards = 0;
-          
-          const combine = (arr) => arr.forEach(q => {
-            dayQuestoes += q.feitas || 0;
-            dayAcertos += (q.feitas - q.erradas) || 0;
-            dayTime += q.tempo || 0;
-          });
-          
-          if (daily.activities.questoes) combine(daily.activities.questoes);
-          if (partial.questoes) combine(partial.questoes);
-          
-          if (daily.activities.anki) {
-            daily.activities.anki.forEach(a => {
-              dayAnkiCards += a.cards || 0;
-              dayTime += a.tempo || 0;
-            });
-          }
-          if (partial.anki) {
-            partial.anki.forEach(a => {
-              dayAnkiCards += a.cards || 0;
-              dayTime += a.tempo || 0;
-            });
-          }
-          
-          if (daily.activities.teoria) {
-            daily.activities.teoria.forEach(t => dayTime += t.tempo || 0);
-          }
-          if (partial.teoria) {
-            partial.teoria.forEach(t => dayTime += t.tempo || 0);
-          }
-          
-          totalQuestoes += dayQuestoes;
-          totalAcertos += dayAcertos;
-          totalErros += dayQuestoes - dayAcertos;
-          totalTime += dayTime;
-          totalAnkiCards += dayAnkiCards;
-          
-          dailyData.push({
-            date: dateStr,
-            questoes: dayQuestoes,
-            acertos: dayAcertos,
-            tempo: dayTime,
-            ankiCards: dayAnkiCards
-          });
-        }
-        const accuracy = totalQuestoes > 0 ? (totalAcertos / totalQuestoes * 100).toFixed(1) : 0;
-        return { totalQuestoes, totalAcertos, totalErros, totalTime, totalAnkiCards, accuracy, dailyData };
-      }
-
-      // NEW: generate GitHub-style heatmap
-      generateHeatmap() {
-        const today = new Date();
-        const startDate = new Date(today);
-        startDate.setDate(today.getDate() - 364); // 52 weeks * 7 days = 364 days
-        const days = [];
-        for (let i = 0; i < 365; i++) {
-          const date = new Date(startDate);
-          date.setDate(startDate.getDate() + i);
-          const dateStr = date.toISOString().split('T')[0];
-          const daily = JSON.parse(localStorage.getItem(`dailyActivities_${dateStr}`)) || { activities: {} };
-          const partial = this.partialRegistration.date === dateStr ? this.partialRegistration.activities : {};
-          
-          let activityCount = 0;
-          if (daily.activities.questoes) activityCount += daily.activities.questoes.length;
-          if (daily.activities.anki) activityCount += daily.activities.anki.length;
-          if (daily.activities.teoria) activityCount += daily.activities.teoria.length;
-          if (partial.questoes) activityCount += partial.questoes.length;
-          if (partial.anki) activityCount += partial.anki.length;
-          if (partial.teoria) activityCount += partial.teoria.length;
-          
-          let intensity = 0;
-          if (activityCount > 0) intensity = Math.min(4, Math.ceil(activityCount / 2) || 1);
-          days.push({ date: dateStr, intensity, count: activityCount });
-        }
-
-        // Build grid: 53 columns (weeks) x 7 rows
-        let gridHTML = '<div class="heatmap-grid">';
-        // Month labels
-        const months = [];
-        for (let i = 0; i < 12; i++) {
-          const monthDate = new Date(startDate);
-          monthDate.setMonth(startDate.getMonth() + i);
-          months.push(monthDate.toLocaleString('pt-BR', { month: 'short' }).replace('.', ''));
-        }
-        gridHTML += '<div style="grid-column:1;"></div>';
-        for (let w = 0; w < 53; w++) {
-          const monthIndex = Math.floor((w * 7 + 3) / 30); // approximate
-          gridHTML += `<div style="text-align:center; font-size:8px;">${months[monthIndex] || ''}</div>`;
-        }
-        // Day rows
-        const dayNames = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
-        for (let row = 0; row < 7; row++) {
-          gridHTML += `<div class="heatmap-day-label">${dayNames[row]}</div>`;
-          for (let col = 0; col < 53; col++) {
-            const dayIndex = col * 7 + row;
-            if (dayIndex < days.length) {
-              const d = days[dayIndex];
-              gridHTML += `<div class="heatmap-cell" data-intensity="${d.intensity}" title="${new Date(d.date).toLocaleDateString('pt-BR')} | Atividades: ${d.count}"></div>`;
-            } else {
-              gridHTML += `<div class="heatmap-cell" data-intensity="0"></div>`;
-            }
-          }
-        }
-        gridHTML += '</div>';
-        return gridHTML;
-      }
-
-      // NEW: update metrics content with dynamic charts and heatmap
-      updateMetricsContent() {
-        const modalBody = document.getElementById('metricsModalBody');
-        const self = this;
-        
-        // Create tabs
-        let html = `
-          <div class="metrics-tabs">
-            <button class="metrics-tab active" data-tab="overview">Visão Geral</button>
-            <button class="metrics-tab" data-tab="activity">Mapa de Atividade</button>
-            <button class="metrics-tab" data-tab="theoretical">Estudos Teóricos</button>
-            <button class="metrics-tab" data-tab="projections">Projeções</button>
-          </div>
-          <div id="metricsTabContent">
-            <!-- Overview tab -->
-            <div class="metrics-tab-pane active">
-              <div class="period-selector">
-                <label>Período:</label>
-                <select id="periodSelect">
-                  <option value="7">Últimos 7 dias</option>
-                  <option value="30">Últimos 30 dias</option>
-                  <option value="90">Últimos 90 dias</option>
-                  <option value="365">Total (1 ano)</option>
-                </select>
-              </div>
-              <div id="overviewCharts">
-                <!-- dynamic charts -->
-              </div>
-            </div>
-            <!-- Activity map tab (only heatmap) -->
-            <div class="metrics-tab-pane" style="display:none;">
-              <h4 style="margin-bottom:1rem;">Mapa de Atividade (GitHub style)</h4>
-              <div class="heatmap-container" id="heatmapContainer"></div>
-              <div class="streak-container" id="streakContainer"></div>
-            </div>
-            <!-- Theoretical tab -->
-            <div class="metrics-tab-pane" style="display:none;">
-              <h4>Últimos Estudos Teóricos</h4>
-              <div id="theoreticalList"></div>
-            </div>
-            <!-- Projections tab -->
-            <div class="metrics-tab-pane" style="display:none;">
-              <div id="projectionsContent"></div>
-            </div>
-          </div>
-        `;
-        modalBody.innerHTML = html;
-
-        // Populate theoretical list
+      // NEW: show theoretical study summary
+      showTeoriaSummary() {
         const teoriaProgress = this.getModuleData('teoriaProgress') || {};
-        let theoHTML = '<div class="message-list">';
-        Object.entries(teoriaProgress).slice(-10).reverse().forEach(([materia, data]) => {
-          theoHTML += `
-            <div class="message-list-item">
-              <div class="message-list-icon"><i class="fas fa-book-open"></i></div>
-              <div class="message-list-content">
-                <div class="message-list-title">${materia}</div>
-                <div class="message-list-description">${data.conteudo || data.pagina || '—'} • ${data.tempoEstudado || 0} min • ${new Date(data.ultimaAtualizacao).toLocaleDateString('pt-BR')}</div>
+        const estudos = Object.entries(teoriaProgress).map(([materia, data]) => ({
+          materia,
+          ...data,
+          dataFormatada: new Date(data.ultimaAtualizacao).toLocaleDateString('pt-BR'),
+          horaFormatada: new Date(data.ultimaAtualizacao).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+        })).sort((a, b) => new Date(b.ultimaAtualizacao) - new Date(a.ultimaAtualizacao));
+
+        if (estudos.length === 0) {
+          this.addBotMessage(`
+            <div class="message-card">
+              <div class="message-card-header">
+                <i class="fas fa-book-open"></i>
+                <div class="message-card-title">Estudos Teóricos</div>
+              </div>
+              <div class="message-card-content">
+                <div class="message-alert message-alert-info">
+                  <i class="fas fa-info-circle"></i>
+                  <div>Nenhum estudo teórico registrado ainda.</div>
+                </div>
               </div>
             </div>
-          `;
-        });
-        theoHTML += '</div>';
-        document.getElementById('theoreticalList').innerHTML = theoHTML || '<p class="message-muted">Nenhum estudo teórico registrado.</p>';
+          `, true, 'teoria-summary');
+          return;
+        }
 
-        // Projections
-        const last30 = this.getRangeData(30);
-        const projHTML = `
+        const maisRecente = estudos[0];
+        const outros = estudos.slice(1);
+
+        let html = `
           <div class="message-card">
-            <div class="message-card-header"><i class="fas fa-chart-line"></i> Projeções Inteligentes</div>
+            <div class="message-card-header">
+              <i class="fas fa-book-open"></i>
+              <div class="message-card-title">Estudos Teóricos</div>
+            </div>
             <div class="message-card-content">
-              <p>Com base no seu ritmo dos últimos 30 dias:</p>
-              <ul style="list-style:none; padding:0;">
-                <li><i class="fas fa-check-circle" style="color:var(--success);"></i> Média de questões/dia: <strong>${(last30.totalQuestoes/30).toFixed(1)}</strong></li>
-                <li><i class="fas fa-check-circle" style="color:var(--success);"></i> Média de tempo/dia: <strong>${Math.floor(last30.totalTime/60/30)}h ${Math.round(last30.totalTime/30)%60}m</strong></li>
-                <li><i class="fas fa-check-circle" style="color:var(--success);"></i> Projeção de questões em 30 dias: <strong>${Math.round(last30.totalQuestoes)}</strong></li>
-              </ul>
-              <p class="message-muted">*Baseado apenas em dados registrados.</p>
-            </div>
-          </div>
-        `;
-        document.getElementById('projectionsContent').innerHTML = projHTML;
-
-        // Heatmap and streak
-        document.getElementById('heatmapContainer').innerHTML = this.generateHeatmap();
-        const streak = this.getStreakData();
-        document.getElementById('streakContainer').innerHTML = `
-          <div class="streak-badge"><i class="fas fa-fire" style="color:var(--warning);"></i> <span class="streak-number">${streak.current}</span> dias atual</div>
-          <div class="streak-badge"><i class="fas fa-trophy" style="color:var(--accent-solid);"></i> <span class="streak-number">${streak.best}</span> melhor streak</div>
+              <div class="message-section">
+                <div class="message-section-title">📌 Último Estudo</div>
+                <div class="message-alert message-alert-success" style="margin-bottom:1rem;">
+                  <i class="fas fa-clock"></i>
+                  <div>
+                    <strong>${maisRecente.materia}</strong><br>
+                    ${maisRecente.conteudo ? 'Conteúdo: ' + maisRecente.conteudo + '<br>' : ''}
+                    ${maisRecente.pagina ? 'Página: ' + maisRecente.pagina + '<br>' : ''}
+                    Tempo: ${maisRecente.tempoEstudado} min • ${maisRecente.dataFormatada} às ${maisRecente.horaFormatada}
+                  </div>
+                </div>
+              </div>
         `;
 
-        // Tab switching
-        const tabs = modalBody.querySelectorAll('.metrics-tab');
-        const panes = modalBody.querySelectorAll('.metrics-tab-pane');
-        tabs.forEach((tab, index) => {
-          tab.addEventListener('click', () => {
-            tabs.forEach(t => t.classList.remove('active'));
-            panes.forEach(p => p.style.display = 'none');
-            tab.classList.add('active');
-            panes[index].style.display = 'block';
-            if (index === 0) this.renderOverviewCharts(); // refresh charts when overview tab selected
+        if (outros.length > 0) {
+          html += `
+            <div class="message-section">
+              <div class="message-section-title">📚 Histórico de Estudos</div>
+              <div class="message-list">
+          `;
+          outros.forEach(est => {
+            html += `
+              <div class="message-list-item">
+                <div class="message-list-icon"><i class="fas fa-book"></i></div>
+                <div class="message-list-content">
+                  <div class="message-list-title">${est.materia}</div>
+                  <div class="message-list-description">
+                    ${est.conteudo ? est.conteudo + ' • ' : ''}${est.pagina ? est.pagina + ' • ' : ''}${est.tempoEstudado} min
+                  </div>
+                  <div class="message-list-description" style="font-size:0.7rem; color:var(--text-tertiary);">
+                    ${est.dataFormatada} às ${est.horaFormatada}
+                  </div>
+                </div>
+              </div>
+            `;
           });
-        });
-
-        // Period selector change
-        document.getElementById('periodSelect').addEventListener('change', () => this.renderOverviewCharts());
-
-        // Initial render
-        this.renderOverviewCharts();
-      }
-
-      renderOverviewCharts() {
-        const period = parseInt(document.getElementById('periodSelect').value);
-        const data = this.getRangeData(period);
-        const daily = data.dailyData;
-
-        // Mini stats
-        const statsHTML = `
-          <div class="stats-mini-grid">
-            <div class="stat-mini-card"><div class="stat-mini-value">${data.totalQuestoes}</div><div class="stat-mini-label">Questões</div></div>
-            <div class="stat-mini-card"><div class="stat-mini-value">${data.totalAcertos}</div><div class="stat-mini-label">Acertos</div></div>
-            <div class="stat-mini-card"><div class="stat-mini-value">${data.totalErros}</div><div class="stat-mini-label">Erros</div></div>
-            <div class="stat-mini-card"><div class="stat-mini-value">${data.accuracy}%</div><div class="stat-mini-label">Acurácia</div></div>
-          </div>
-        `;
-
-        // Chart containers
-        let chartsHTML = `
-          ${statsHTML}
-          <div class="charts-grid">
-            <div class="chart-card">
-              <h4><i class="fas fa-question-circle"></i> Questões vs Acertos por dia</h4>
-              <div class="chart-container"><canvas id="barChart"></canvas></div>
-            </div>
-            <div class="chart-card">
-              <h4><i class="fas fa-chart-pie"></i> Total de Acertos/Erros</h4>
-              <div class="donut-container"><canvas id="donutChart"></canvas></div>
-            </div>
-            <div class="chart-card">
-              <h4><i class="fas fa-clock"></i> Horas de estudo</h4>
-              <div class="chart-container"><canvas id="lineChart"></canvas></div>
-            </div>
-            <div class="chart-card">
-              <h4><i class="fas fa-layer-group"></i> Flashcards revisados</h4>
-              <div class="chart-container"><canvas id="ankiChart"></canvas></div>
-            </div>
-          </div>
-        `;
-        document.getElementById('overviewCharts').innerHTML = chartsHTML;
-
-        // Destroy existing charts if any
-        if (window.barChart) window.barChart.destroy();
-        if (window.donutChart) window.donutChart.destroy();
-        if (window.lineChart) window.lineChart.destroy();
-        if (window.ankiChart) window.ankiChart.destroy();
-
-        // Bar chart (questões vs acertos)
-        const ctxBar = document.getElementById('barChart').getContext('2d');
-        window.barChart = new Chart(ctxBar, {
-          type: 'bar',
-          data: {
-            labels: daily.map(d => d.date.slice(5)),
-            datasets: [
-              { label: 'Questões', data: daily.map(d => d.questoes), backgroundColor: 'rgba(79, 91, 255, 0.7)' },
-              { label: 'Acertos', data: daily.map(d => d.acertos), backgroundColor: 'rgba(46, 154, 110, 0.7)' }
-            ]
-          },
-          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } }
-        });
-
-        // Donut chart
-        const ctxDonut = document.getElementById('donutChart').getContext('2d');
-        window.donutChart = new Chart(ctxDonut, {
-          type: 'doughnut',
-          data: {
-            labels: ['Acertos', 'Erros'],
-            datasets: [{
-              data: [data.totalAcertos, data.totalErros],
-              backgroundColor: ['#2e9a6e', '#e55a6b']
-            }]
-          },
-          options: { cutout: '70%', responsive: true, maintainAspectRatio: true }
-        });
-
-        // Line chart (horas)
-        const ctxLine = document.getElementById('lineChart').getContext('2d');
-        window.lineChart = new Chart(ctxLine, {
-          type: 'line',
-          data: {
-            labels: daily.map(d => d.date.slice(5)),
-            datasets: [{ label: 'Minutos', data: daily.map(d => d.tempo), borderColor: '#4f5bff', backgroundColor: 'rgba(79,91,255,0.1)', fill: true, tension: 0.3 }]
-          },
-          options: { responsive: true, maintainAspectRatio: false }
-        });
-
-        // Anki bar chart
-        const ctxAnki = document.getElementById('ankiChart').getContext('2d');
-        window.ankiChart = new Chart(ctxAnki, {
-          type: 'bar',
-          data: {
-            labels: daily.map(d => d.date.slice(5)),
-            datasets: [{ label: 'Flashcards', data: daily.map(d => d.ankiCards), backgroundColor: 'rgba(204, 123, 43, 0.7)' }]
-          },
-          options: { responsive: true, maintainAspectRatio: false }
-        });
-      }
-
-      getStreakData() {
-        let currentStreak = 0;
-        let bestStreak = 0;
-        let tempStreak = 0;
-        const hoje = new Date();
-        for (let i = 0; i < 365; i++) {
-          const date = new Date(hoje);
-          date.setDate(hoje.getDate() - i);
-          const dateStr = date.toISOString().split('T')[0];
-          const daily = JSON.parse(localStorage.getItem(`dailyActivities_${dateStr}`)) || { activities: {} };
-          const partial = this.partialRegistration.date === dateStr ? this.partialRegistration.activities : {};
-          const hasActivity = 
-            (daily.activities.questoes && daily.activities.questoes.length) ||
-            (daily.activities.anki && daily.activities.anki.length) ||
-            (daily.activities.teoria && daily.activities.teoria.length) ||
-            (partial.questoes && partial.questoes.length) ||
-            (partial.anki && partial.anki.length) ||
-            (partial.teoria && partial.teoria.length);
-          if (hasActivity) {
-            tempStreak++;
-          } else {
-            if (tempStreak > bestStreak) bestStreak = tempStreak;
-            tempStreak = 0;
-          }
+          html += `</div></div>`;
         }
-        // current streak from today backward
-        tempStreak = 0;
-        for (let i = 0; i < 365; i++) {
-          const date = new Date(hoje);
-          date.setDate(hoje.getDate() - i);
-          const dateStr = date.toISOString().split('T')[0];
-          const daily = JSON.parse(localStorage.getItem(`dailyActivities_${dateStr}`)) || { activities: {} };
-          const partial = this.partialRegistration.date === dateStr ? this.partialRegistration.activities : {};
-          const hasActivity = 
-            (daily.activities.questoes && daily.activities.questoes.length) ||
-            (daily.activities.anki && daily.activities.anki.length) ||
-            (daily.activities.teoria && daily.activities.teoria.length) ||
-            (partial.questoes && partial.questoes.length) ||
-            (partial.anki && partial.anki.length) ||
-            (partial.teoria && partial.teoria.length);
-          if (hasActivity) tempStreak++;
-          else break;
-        }
-        currentStreak = tempStreak;
-        if (tempStreak > bestStreak) bestStreak = tempStreak;
-        return { current: currentStreak, best: bestStreak };
+
+        html += `</div></div>`;
+        this.addBotMessage(html, true, 'teoria-summary');
       }
       
       toggleSidePanel() {
@@ -2397,6 +1957,9 @@
             </button>
             <button class="action-btn info" onclick="chatBot.trocarBaralhos()">
               <i class="fas fa-sync-alt"></i> Trocar Baralhos
+            </button>
+            <button class="action-btn info" onclick="chatBot.showTeoriaSummary()">
+              <i class="fas fa-book-open"></i> Consultar Estudo Teórico
             </button>
             <button class="action-btn info" onclick="chatBot.showConfigModal()">
               <i class="fas fa-cog"></i> Configurar
@@ -3553,7 +3116,10 @@
               </button> 
               <button class="action-btn info" onclick="chatBot.trocarBaralhos()"> 
                 <i class="fas fa-sync-alt"></i> Trocar Baralhos 
-              </button> 
+              </button>
+              <button class="action-btn info" onclick="chatBot.showTeoriaSummary()">
+                <i class="fas fa-book-open"></i> Consultar Estudo Teórico
+              </button>
               <button class="action-btn info" onclick="chatBot.showHelp()"> 
                 <i class="fas fa-question-circle"></i> Preciso de Ajuda 
               </button> 
@@ -3917,6 +3483,9 @@
                 </button>
                 <button class="action-btn secondary" onclick="chatBot.finalizeDay()">
                   <i class="fas fa-check"></i> Finalizar Dia
+                </button>
+                <button class="action-btn info" onclick="chatBot.showTeoriaSummary()">
+                  <i class="fas fa-book-open"></i> Consultar Estudo Teórico
                 </button>
                 <button class="action-btn info" onclick="chatBot.showHelp()">
                   <i class="fas fa-question-circle"></i> Ajuda
@@ -5444,6 +5013,9 @@
             <button class="action-btn info" onclick="chatBot.trocarBaralhos()">
               <i class="fas fa-sync-alt"></i> Trocar Baralhos
             </button>
+            <button class="action-btn info" onclick="chatBot.showTeoriaSummary()">
+              <i class="fas fa-book-open"></i> Consultar Estudo Teórico
+            </button>
             <button class="action-btn info" onclick="chatBot.showConfigModal()">
               <i class="fas fa-cog"></i> Configurar
             </button>
@@ -6527,6 +6099,9 @@
                 </button>
                 <button class="action-btn info" onclick="chatBot.trocarBaralhos()">
                   <i class="fas fa-sync-alt"></i> Trocar Baralhos
+                </button>
+                <button class="action-btn info" onclick="chatBot.showTeoriaSummary()">
+                  <i class="fas fa-book-open"></i> Consultar Estudo Teórico
                 </button>
                 <button class="action-btn info" onclick="chatBot.showConfigModal()">
                   <i class="fas fa-cog"></i> Configurar
