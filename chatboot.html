@@ -2726,6 +2726,8 @@
           document.title = this.originalTitle;
           window.pomodoroJustFinished = false;
           window.lastPomodoroDuration = null;
+          localStorage.removeItem("pomodoroCompleted");
+          localStorage.removeItem("lastPomodoroDuration");
           this.chatBot.typeMessage("Pomodoro cancelado.");
         }
 
@@ -2840,6 +2842,8 @@
           const durationMinutes = realMinutes !== null ? realMinutes : Math.floor(this.duration / 60);
           window.pomodoroJustFinished = true;
           window.lastPomodoroDuration = durationMinutes;
+          localStorage.setItem("pomodoroCompleted", "true");
+          localStorage.setItem("lastPomodoroDuration", durationMinutes.toString());
 
           // Abrir modal de registro padrão
           if (this.chatBot) {
@@ -5488,8 +5492,10 @@
           const inputs = card.querySelectorAll('input');
           inputs.forEach(input => input.disabled = false);
 
-          // Preenchimento automático se vier do Pomodoro
-          if (window.pomodoroJustFinished && window.lastPomodoroDuration) {
+          // Preenchimento automático se vier do Pomodoro (persistido)
+          const pomodoroCompleted = localStorage.getItem("pomodoroCompleted");
+          const duration = localStorage.getItem("lastPomodoroDuration");
+          if (pomodoroCompleted === "true" && duration) {
             const id = card.getAttribute('data-id');
             const type = card.getAttribute('data-type');
             let tempoInput;
@@ -5501,7 +5507,7 @@
               tempoInput = document.getElementById(`teoria-tempo-${id}`);
             }
             if (tempoInput && tempoInput.value.trim() === '') {
-              tempoInput.value = window.lastPomodoroDuration;
+              tempoInput.value = duration;
             }
           }
         }
@@ -5619,6 +5625,8 @@
         // Limpar flags de pomodoro após salvar
         window.pomodoroJustFinished = false;
         window.lastPomodoroDuration = null;
+        localStorage.removeItem("pomodoroCompleted");
+        localStorage.removeItem("lastPomodoroDuration");
 
         this.closeRegisterModal();
         
@@ -5765,6 +5773,8 @@
         // Limpar flags de pomodoro ao fechar sem salvar
         window.pomodoroJustFinished = false;
         window.lastPomodoroDuration = null;
+        localStorage.removeItem("pomodoroCompleted");
+        localStorage.removeItem("lastPomodoroDuration");
         document.getElementById('registerModal').style.display = 'none';
       }
       
