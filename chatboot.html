@@ -1560,7 +1560,7 @@
       color: var(--text-tertiary);
     }
 
-    /* Pomodoro floating modal */
+    /* Pomodoro floating modal – melhorias arrastável/minimizar */
     .pomodoro-floating {
       position: fixed;
       bottom: 20px;
@@ -1573,10 +1573,38 @@
       width: 240px;
       padding: 1rem;
       animation: slideIn 0.3s ease;
+      cursor: default;
+      transition: width 0.2s, padding 0.2s;
+      user-select: none;
     }
     @keyframes slideIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+    .pomodoro-floating.minimized {
+      width: 120px;
+      padding: 0.5rem;
+    }
+    .pomodoro-floating.minimized .pomodoro-controls,
+    .pomodoro-floating.minimized .pomodoro-header span:not(.pomodoro-time),
+    .pomodoro-floating.minimized .pomodoro-close,
+    .pomodoro-floating.minimized #pomodoroMinimizeBtn {
+      display: none;
+    }
+    .pomodoro-floating.minimized .pomodoro-time {
+      font-size: 1.2rem;
+    }
+    .pomodoro-expand-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--accent-solid);
+      cursor: pointer;
+      font-size: 1rem;
+      margin-top: 4px;
+    }
+    .pomodoro-floating.minimized .pomodoro-expand-btn {
+      display: block;
     }
     .pomodoro-card {
       display: flex;
@@ -1589,6 +1617,8 @@
       align-items: center;
       font-weight: 600;
       color: var(--accent-solid);
+      cursor: move; /* indica que pode arrastar */
+      user-select: none;
     }
     .pomodoro-close {
       background: none;
@@ -1945,17 +1975,22 @@
     </div>
   </div>
 
-  <!-- Pomodoro floating modal (persistente) -->
+  <!-- Pomodoro floating modal (persistente) com novos botões: minimizar e concluir -->
   <div class="pomodoro-floating" id="pomodoroFloating" style="display: none;">
     <div class="pomodoro-card">
       <div class="pomodoro-header">
         <span><i class="fas fa-hourglass-half"></i> Pomodoro</span>
-        <button class="pomodoro-close" id="pomodoroCloseBtn">&times;</button>
+        <div style="display: flex; gap: 4px;">
+          <button id="pomodoroMinimizeBtn" class="pomodoro-btn" style="background: none; border: none; color: var(--text-tertiary);"><i class="fas fa-minus"></i></button>
+          <button class="pomodoro-close" id="pomodoroCloseBtn">&times;</button>
+        </div>
       </div>
       <div class="pomodoro-time" id="pomodoroTimeDisplay">25:00</div>
+      <button id="pomodoroExpandBtn" class="pomodoro-expand-btn" style="display: none;"><i class="fas fa-expand"></i></button>
       <div class="pomodoro-controls">
         <button id="pomodoroPauseBtn" class="pomodoro-btn"><i class="fas fa-pause"></i></button>
         <button id="pomodoroResumeBtn" class="pomodoro-btn" style="display: none;"><i class="fas fa-play"></i></button>
+        <button id="pomodoroCompleteBtn" class="pomodoro-btn"><i class="fas fa-check"></i></button>
         <button id="pomodoroCancelBtn" class="pomodoro-btn"><i class="fas fa-times"></i></button>
       </div>
     </div>
@@ -1984,7 +2019,7 @@
         { id: 'finalize_day', keywords: ['finalizar dia', 'encerrar dia'], example: 'Finalizar o dia' },
         { id: 'yesterday', keywords: ['ontem', 'atividades ontem'], example: 'Registrar atividades de ontem' },
         // NOVO: intenção para histórico
-        { id: 'historico', keywords: ['histórico', 'ultimos dias', 'resumo dos dias', 'últimos 7 dias'], example: 'Ver histórico dos últimos dias' }
+        { id: 'historico', keywords: ['histórico', 'ultimos dias', 'resumo dos dias', 'últimos 7 dias'], example: 'Ver histórico dos últimos 7 dias' }
       ];
 
       const AUTOCOMPLETE_PHRASES = INTENTS.map(i => i.example).filter(Boolean);
@@ -2522,7 +2557,7 @@
         }
       };
 
-      // ---------- POMODORO MANAGER (REFATORADO PARA USAR TIMESTAMP E PERSISTÊNCIA) ----------
+      // ---------- POMODORO MANAGER (REFATORADO PARA USAR TIMESTAMP, PERSISTÊNCIA, ARRASTÁVEL, MINIMIZAR, TÍTULO) ----------
       ChatSystem.PomodoroManager = class {
         constructor(chatBotInstance) {
           this.chatBot = chatBotInstance;
@@ -2532,14 +2567,21 @@
           this.duration = 25 * 60; // segundos
           this.remaining = 25 * 60;
           this.intervalId = null;
+          this.originalTitle = document.title;
+
           this.floatingModal = document.getElementById('pomodoroFloating');
           this.timeDisplay = document.getElementById('pomodoroTimeDisplay');
           this.pauseBtn = document.getElementById('pomodoroPauseBtn');
           this.resumeBtn = document.getElementById('pomodoroResumeBtn');
           this.cancelBtn = document.getElementById('pomodoroCancelBtn');
+          this.completeBtn = document.getElementById('pomodoroCompleteBtn');
           this.closeBtn = document.getElementById('pomodoroCloseBtn');
+          this.minimizeBtn = document.getElementById('pomodoroMinimizeBtn');
+          this.expandBtn = document.getElementById('pomodoroExpandBtn');
+          this.dragHandle = this.floatingModal.querySelector('.pomodoro-header');
 
           this.initListeners();
+          this.makeDraggable();
           this.restoreFromStorage();
           // Sincronizar entre abas
           window.addEventListener('storage', (e) => {
@@ -2553,7 +2595,48 @@
           this.pauseBtn.addEventListener('click', () => this.pause());
           this.resumeBtn.addEventListener('click', () => this.resume());
           this.cancelBtn.addEventListener('click', () => this.cancel());
+          this.completeBtn.addEventListener('click', () => this.complete());
           this.closeBtn.addEventListener('click', () => this.hideFloating());
+          this.minimizeBtn.addEventListener('click', () => this.toggleMinimize());
+          this.expandBtn.addEventListener('click', () => this.toggleMinimize());
+        }
+
+        makeDraggable() {
+          let offsetX, offsetY, mouseX, mouseY;
+          const dragStart = (e) => {
+            e.preventDefault();
+            const rect = this.floatingModal.getBoundingClientRect();
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+            document.addEventListener('mousemove', dragMove);
+            document.addEventListener('mouseup', dragEnd);
+          };
+          const dragMove = (e) => {
+            e.preventDefault();
+            const left = e.clientX - offsetX;
+            const top = e.clientY - offsetY;
+            this.floatingModal.style.left = left + 'px';
+            this.floatingModal.style.top = top + 'px';
+            this.floatingModal.style.bottom = 'auto';
+            this.floatingModal.style.right = 'auto';
+          };
+          const dragEnd = () => {
+            document.removeEventListener('mousemove', dragMove);
+            document.removeEventListener('mouseup', dragEnd);
+            // Salvar posição
+            const rect = this.floatingModal.getBoundingClientRect();
+            localStorage.setItem('pomodoroPosition', JSON.stringify({ left: rect.left, top: rect.top }));
+          };
+          this.dragHandle.addEventListener('mousedown', dragStart);
+        }
+
+        toggleMinimize() {
+          this.floatingModal.classList.toggle('minimized');
+          const isMinimized = this.floatingModal.classList.contains('minimized');
+          this.minimizeBtn.style.display = isMinimized ? 'none' : 'inline-block';
+          this.expandBtn.style.display = isMinimized ? 'inline-block' : 'none';
+          // Salvar estado
+          localStorage.setItem('pomodoroMinimized', isMinimized);
         }
 
         restoreFromStorage() {
@@ -2562,7 +2645,7 @@
             const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
             if (elapsed >= state.duration) {
               // Já terminou enquanto estávamos fora
-              this.finish(true); // silent finish (não tocar som novamente se já tocou)
+              this.finish(true, Math.floor(state.duration / 60)); // silent, tempo real = duração
             } else {
               this.active = true;
               this.paused = state.paused || false;
@@ -2616,6 +2699,7 @@
           this.paused = true;
           this.pauseBtn.style.display = 'none';
           this.resumeBtn.style.display = 'flex';
+          document.title = '⏸️ Pomodoro pausado - StudyFlow';
           this.saveState();
         }
 
@@ -2627,6 +2711,7 @@
           this.paused = false;
           this.pauseBtn.style.display = 'flex';
           this.resumeBtn.style.display = 'none';
+          // título será atualizado no próximo tick
           this.saveState();
         }
 
@@ -2638,7 +2723,17 @@
           this.stopTicking();
           this.hideFloating();
           this.clearState();
+          document.title = this.originalTitle;
+          window.pomodoroJustFinished = false;
+          window.lastPomodoroDuration = null;
           this.chatBot.typeMessage("Pomodoro cancelado.");
+        }
+
+        complete() {
+          if (!this.active) return;
+          const realSeconds = Math.floor((Date.now() - this.startTime) / 1000);
+          const realMinutes = Math.floor(realSeconds / 60);
+          this.finish(false, realMinutes);
         }
 
         startTicking() {
@@ -2664,6 +2759,7 @@
             this.finish();
           } else {
             this.updateDisplay();
+            this.updateTitle();
           }
         }
 
@@ -2674,10 +2770,38 @@
           this.timeDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
 
+        updateTitle() {
+          const mins = Math.floor(this.remaining / 60);
+          const secs = this.remaining % 60;
+          document.title = `⏳ ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')} - StudyFlow`;
+        }
+
         showFloating() {
           if (this.floatingModal) {
             this.floatingModal.style.display = 'block';
             this.updateDisplay();
+
+            // Restaurar posição
+            const savedPos = localStorage.getItem('pomodoroPosition');
+            if (savedPos) {
+              const { left, top } = JSON.parse(savedPos);
+              this.floatingModal.style.left = left + 'px';
+              this.floatingModal.style.top = top + 'px';
+              this.floatingModal.style.bottom = 'auto';
+              this.floatingModal.style.right = 'auto';
+            }
+
+            // Restaurar estado minimizado
+            const minimized = localStorage.getItem('pomodoroMinimized') === 'true';
+            if (minimized) {
+              this.floatingModal.classList.add('minimized');
+              this.minimizeBtn.style.display = 'none';
+              this.expandBtn.style.display = 'inline-block';
+            } else {
+              this.floatingModal.classList.remove('minimized');
+              this.minimizeBtn.style.display = 'inline-block';
+              this.expandBtn.style.display = 'none';
+            }
           }
         }
 
@@ -2703,16 +2827,17 @@
           }
         }
 
-        finish(silent = false) {
+        finish(silent = false, realMinutes = null) {
           if (!silent) this.playSound();
           this.active = false;
           this.paused = false;
           this.stopTicking();
           this.hideFloating();
           this.clearState();
+          document.title = this.originalTitle;
 
           // Armazenar tempo do pomodoro concluído para preenchimento automático
-          const durationMinutes = Math.floor(this.duration / 60);
+          const durationMinutes = realMinutes !== null ? realMinutes : Math.floor(this.duration / 60);
           window.pomodoroJustFinished = true;
           window.lastPomodoroDuration = durationMinutes;
 
