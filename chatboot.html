@@ -1745,6 +1745,40 @@
       align-items: center;
       justify-content: center;
     }
+
+    /* ---------- PIP MODE (janela flutuante) ---------- */
+    body.pip-mode .chatbot-header,
+    body.pip-mode .main-container,
+    body.pip-mode .modal,
+    body.pip-mode .toast-container,
+    body.pip-mode #sidePanel,
+    body.pip-mode .panel-resizer {
+      display: none !important;
+    }
+    body.pip-mode .pomodoro-floating {
+      display: block !important;
+      position: static !important;
+      width: 100% !important;
+      height: 100% !important;
+      border: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      background: var(--bg-surface) !important;
+      margin: 0 !important;
+      padding: 1rem !important;
+      transform: none !important;
+      animation: none !important;
+    }
+    body.pip-mode .pomodoro-floating .pomodoro-card {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    body.pip-mode .pomodoro-floating .pomodoro-header {
+      cursor: default;
+    }
   </style>
 </head>
 <body>
@@ -1773,9 +1807,9 @@
       <button class="header-btn" id="achievementsBtn" title="Conquistas">
         <i class="fas fa-trophy"></i>
       </button>
-      <!-- NOVO BOTÃO DE ESTATÍSTICAS -->
+      <!-- NOVO BOTÃO DE ESTATÍSTICAS apenas com ícone -->
       <button class="header-btn" id="statsBtn" title="Estatísticas">
-        <i class="fas fa-chart-pie"></i> Estatísticas
+        <i class="fas fa-chart-pie"></i>
       </button>
       <button class="header-btn" id="themeToggle">
         <i class="fas fa-moon"></i>
@@ -2103,12 +2137,13 @@
     </div>
   </div>
 
-  <!-- Pomodoro floating modal (persistente) com novos botões: minimizar e concluir -->
+  <!-- Pomodoro floating modal (persistente) com novos botões: minimizar, concluir e PIP -->
   <div class="pomodoro-floating" id="pomodoroFloating" style="display: none;">
     <div class="pomodoro-card">
       <div class="pomodoro-header">
         <span><i class="fas fa-hourglass-half"></i> Pomodoro</span>
         <div style="display: flex; gap: 4px;">
+          <button id="pomodoroPipBtn" class="pomodoro-btn" style="background: none; border: none; color: var(--text-tertiary);" title="Abrir em modo flutuante (PiP)"><i class="fas fa-external-link-alt"></i></button>
           <button id="pomodoroMinimizeBtn" class="pomodoro-btn" style="background: none; border: none; color: var(--text-tertiary);"><i class="fas fa-minus"></i></button>
           <button class="pomodoro-close" id="pomodoroCloseBtn">&times;</button>
         </div>
@@ -2290,86 +2325,37 @@
           }
           return count;
         },
-        // NOVO: streak persistente
+        // CORREÇÃO DO STREAK: baseado em datas (ignora horas)
         getStreak() {
-          let streak = parseInt(localStorage.getItem('studyFlow_streak')) || 0;
-          let lastDate = localStorage.getItem('studyFlow_lastActivityDate');
-          if (!lastDate) return 0;
-          
-          const hoje = new Date().toISOString().split('T')[0];
-          const ontem = new Date();
-          ontem.setDate(ontem.getDate() - 1);
-          const ontemStr = ontem.toISOString().split('T')[0];
-          
-          // Se a última atividade foi hoje ou ontem, o streak permanece.
-          // Se foi antes de ontem, zera.
-          if (lastDate === hoje || lastDate === ontemStr) {
-            return streak;
-          } else {
-            // última atividade foi antes de ontem -> streak deve ser zerado
-            // Mas também pode ser que nunca tenha atividade (streak 0)
-            // Para não perder o streak indevidamente, verificamos se há atividade hoje ou ontem.
-            // Se não houver, zera.
-            // Vamos recalcular dinamicamente baseado nas atividades reais
-            // para garantir consistência.
-            // Para simplificar, vamos recalcular percorrendo dias.
-            let calcStreak = 0;
-            let current = new Date();
-            while (true) {
-              const dateStr = current.toISOString().split('T')[0];
-              const daily = JSON.parse(localStorage.getItem(`dailyActivities_${dateStr}`)) || { activities: {} };
-              const partial = JSON.parse(localStorage.getItem('studyFlow_partialRegistration')) || {};
-              const hasActivity = (daily.activities && (daily.activities.questoes?.length || daily.activities.anki?.length || daily.activities.teoria?.length)) ||
-                                  (partial.date === dateStr && partial.activities && (partial.activities.questoes?.length || partial.activities.anki?.length || partial.activities.teoria?.length));
-              if (!hasActivity) break;
-              calcStreak++;
-              current.setDate(current.getDate() - 1);
-            }
-            // Atualiza o streak persistente com o valor calculado
-            localStorage.setItem('studyFlow_streak', calcStreak);
-            if (calcStreak > 0) {
-              // a última data é hoje - (calcStreak-1) dias? Na verdade, a última atividade é hoje se calcStreak>0
-              const lastActive = new Date();
-              lastActive.setDate(lastActive.getDate());
-              localStorage.setItem('studyFlow_lastActivityDate', lastActive.toISOString().split('T')[0]);
-            } else {
-              localStorage.removeItem('studyFlow_lastActivityDate');
-            }
-            return calcStreak;
+          let streak = 0;
+          let current = new Date();
+          while (true) {
+            const dateStr = current.toISOString().split('T')[0];
+            const daily = JSON.parse(localStorage.getItem(`dailyActivities_${dateStr}`)) || { activities: {} };
+            const partial = JSON.parse(localStorage.getItem('studyFlow_partialRegistration')) || {};
+            const hasActivity = (daily.activities && (daily.activities.questoes?.length || daily.activities.anki?.length || daily.activities.teoria?.length)) ||
+                                (partial.date === dateStr && partial.activities && (partial.activities.questoes?.length || partial.activities.anki?.length || partial.activities.teoria?.length));
+            if (!hasActivity) break;
+            streak++;
+            current.setDate(current.getDate() - 1);
           }
-        },
-        // NOVO: atualizar streak após registro
-        updateStreakAfterActivity() {
-          const hoje = new Date().toISOString().split('T')[0];
-          const lastDate = localStorage.getItem('studyFlow_lastActivityDate');
-          let streak = parseInt(localStorage.getItem('studyFlow_streak')) || 0;
-          
-          if (!lastDate) {
-            // primeira atividade
-            streak = 1;
-          } else {
-            const last = new Date(lastDate + 'T00:00:00');
-            const hojeDate = new Date(hoje + 'T00:00:00');
-            const diffTime = hojeDate - last;
-            const diffDays = diffTime / (1000 * 60 * 60 * 24);
-            
-            if (diffDays === 1) {
-              // atividade consecutiva
-              streak += 1;
-            } else if (diffDays > 1) {
-              // quebrou a sequência
-              streak = 1;
-            } // se diffDays === 0, mesma data, não altera streak
-          }
-          
+          // Persiste o streak calculado
           localStorage.setItem('studyFlow_streak', streak);
-          localStorage.setItem('studyFlow_lastActivityDate', hoje);
-          
-          // Verifica recorde
-          let maxStreak = parseInt(localStorage.getItem('studyFlow_maxStreak')) || 0;
-          if (streak > maxStreak) {
-            localStorage.setItem('studyFlow_maxStreak', streak);
+          if (streak > 0) {
+            const hoje = new Date().toISOString().split('T')[0];
+            localStorage.setItem('studyFlow_lastActivityDate', hoje);
+          } else {
+            localStorage.removeItem('studyFlow_lastActivityDate');
           }
+          return streak;
+        },
+        // Atualiza o streak após um registro (chamado nos saves)
+        updateStreakAfterActivity() {
+          // Apenas força o recálculo no próximo getStreak
+          // Mas também podemos atualizar a última data
+          const hoje = new Date().toISOString().split('T')[0];
+          localStorage.setItem('studyFlow_lastActivityDate', hoje);
+          // Não precisamos incrementar manualmente, o getStreak recalcula
         },
         getMetaStatus() {
           const hojeStr = chatBot ? chatBot.getDynamicDateString() : new Date().toISOString().split('T')[0];
@@ -2750,7 +2736,7 @@
         }
       };
 
-      // ---------- POMODORO MANAGER (REFATORADO PARA USAR TIMESTAMP, PERSISTÊNCIA, ARRASTÁVEL, MINIMIZAR, TÍTULO) ----------
+      // ---------- POMODORO MANAGER (REFATORADO PARA USAR TIMESTAMP, PERSISTÊNCIA, ARRASTÁVEL, MINIMIZAR, TÍTULO, PIP) ----------
       ChatSystem.PomodoroManager = class {
         constructor(chatBotInstance) {
           this.chatBot = chatBotInstance;
@@ -2761,6 +2747,8 @@
           this.remaining = 25 * 60;
           this.intervalId = null;
           this.originalTitle = document.title;
+          this.windowId = Math.random().toString(36).substring(2); // identificador único para broadcast
+          this.isPipWindow = new URLSearchParams(window.location.search).get('pip') === 'true';
 
           this.floatingModal = document.getElementById('pomodoroFloating');
           this.timeDisplay = document.getElementById('pomodoroTimeDisplay');
@@ -2771,17 +2759,93 @@
           this.closeBtn = document.getElementById('pomodoroCloseBtn');
           this.minimizeBtn = document.getElementById('pomodoroMinimizeBtn');
           this.expandBtn = document.getElementById('pomodoroExpandBtn');
+          this.pipBtn = document.getElementById('pomodoroPipBtn');
           this.dragHandle = this.floatingModal.querySelector('.pomodoro-header');
+
+          // BroadcastChannel para comunicação PiP
+          this.channel = new BroadcastChannel('pomodoro-pip');
+          this.channel.onmessage = (e) => this.handleBroadcastMessage(e.data);
 
           this.initListeners();
           this.makeDraggable();
           this.restoreFromStorage();
-          // Sincronizar entre abas
+          // Sincronizar entre abas (fallback)
           window.addEventListener('storage', (e) => {
             if (e.key === 'pomodoroState') {
               this.restoreFromStorage();
             }
           });
+
+          // Se for janela PiP, esconder elementos e enviar cancelamento ao fechar
+          if (this.isPipWindow) {
+            document.body.classList.add('pip-mode');
+            // Esconder botão PiP na própria janela PiP
+            if (this.pipBtn) this.pipBtn.style.display = 'none';
+            // Solicitar estado atual à janela principal
+            setTimeout(() => {
+              this.channel.postMessage({ action: 'sync-request', sender: this.windowId });
+            }, 500);
+            // Ao fechar a janela PiP, cancelar o Pomodoro na principal
+            window.addEventListener('beforeunload', () => {
+              this.channel.postMessage({ action: 'cancel', sender: this.windowId });
+            });
+          }
+        }
+
+        handleBroadcastMessage(data) {
+          if (data.sender === this.windowId) return; // ignorar mensagens da própria janela
+
+          switch (data.action) {
+            case 'start':
+              this.start(data.duration, true);
+              break;
+            case 'pause':
+              if (this.active && !this.paused) this.pause(true);
+              break;
+            case 'resume':
+              if (this.active && this.paused) this.resume(true);
+              break;
+            case 'cancel':
+              if (this.active) this.cancel(true);
+              break;
+            case 'complete':
+              if (this.active) this.complete(true);
+              break;
+            case 'sync-request':
+              // responder com estado atual
+              if (this.active) {
+                this.channel.postMessage({
+                  action: 'sync-state',
+                  sender: this.windowId,
+                  active: this.active,
+                  paused: this.paused,
+                  startTime: this.startTime,
+                  duration: this.duration,
+                  remaining: this.remaining
+                });
+              }
+              break;
+            case 'sync-state':
+              // sincronizar com estado recebido
+              if (!this.active && data.active) {
+                this.active = true;
+                this.paused = data.paused;
+                this.startTime = data.startTime;
+                this.duration = data.duration;
+                this.remaining = data.remaining;
+                this.showFloating();
+                this.startTicking();
+                this.updateButtons();
+              } else if (this.active && data.active) {
+                // atualizar estado se necessário
+                this.paused = data.paused;
+                this.startTime = data.startTime;
+                this.duration = data.duration;
+                this.remaining = data.remaining;
+                this.updateButtons();
+              }
+              break;
+          }
         }
 
         initListeners() {
@@ -2792,6 +2856,21 @@
           this.closeBtn.addEventListener('click', () => this.hideFloating());
           this.minimizeBtn.addEventListener('click', () => this.toggleMinimize());
           this.expandBtn.addEventListener('click', () => this.toggleMinimize());
+          if (this.pipBtn) {
+            this.pipBtn.addEventListener('click', () => this.openPipWindow());
+          }
+        }
+
+        openPipWindow() {
+          if (this.isPipWindow) return; // já está em PiP
+          const pipUrl = window.location.href + (window.location.href.includes('?') ? '&pip=true' : '?pip=true');
+          const pipWindow = window.open(pipUrl, 'pomodoroPip', 'width=300,height=200,resizable=yes,alwaysOnTop=yes');
+          if (pipWindow) {
+            // Foco na nova janela
+            pipWindow.focus();
+          } else {
+            alert('Permita pop-ups para abrir o modo flutuante.');
+          }
         }
 
         makeDraggable() {
@@ -2835,25 +2914,38 @@
         restoreFromStorage() {
           const state = JSON.parse(localStorage.getItem('pomodoroState') || '{}');
           if (state.active && state.startTime && state.duration) {
-            const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
-            if (elapsed >= state.duration) {
-              // Já terminou enquanto estávamos fora
-              this.finish(true, Math.floor(state.duration / 60)); // silent, tempo real = duração
-            } else {
+            // Se estava pausado, usar o remaining salvo; caso contrário, calcular elapsed
+            if (state.paused) {
               this.active = true;
-              this.paused = state.paused || false;
+              this.paused = true;
               this.startTime = state.startTime;
               this.duration = state.duration;
-              this.remaining = state.duration - elapsed;
+              this.remaining = state.remaining;
               this.showFloating();
-              this.startTicking();
+              this.updateButtons();
+              // Não iniciar ticking pois está pausado
+            } else {
+              const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+              if (elapsed >= state.duration) {
+                // Já terminou enquanto estávamos fora
+                this.finish(true, Math.floor(state.duration / 60)); // silent, tempo real = duração
+              } else {
+                this.active = true;
+                this.paused = false;
+                this.startTime = state.startTime;
+                this.duration = state.duration;
+                this.remaining = state.duration - elapsed;
+                this.showFloating();
+                this.startTicking();
+                this.updateButtons();
+              }
             }
           }
         }
 
         saveState() {
           const state = {
-            active: this.active && !this.paused,
+            active: this.active,
             paused: this.paused,
             startTime: this.startTime,
             duration: this.duration,
@@ -2866,9 +2958,19 @@
           localStorage.removeItem('pomodoroState');
         }
 
-        start(durationMinutes = 25) {
+        updateButtons() {
+          if (this.paused) {
+            this.pauseBtn.style.display = 'none';
+            this.resumeBtn.style.display = 'flex';
+          } else {
+            this.pauseBtn.style.display = 'flex';
+            this.resumeBtn.style.display = 'none';
+          }
+        }
+
+        start(durationMinutes = 25, fromBroadcast = false) {
           if (this.active) {
-            this.chatBot.typeMessage("Já existe um pomodoro em andamento. Finalize ou cancele antes de iniciar outro.");
+            if (!fromBroadcast) this.chatBot.typeMessage("Já existe um pomodoro em andamento. Finalize ou cancele antes de iniciar outro.");
             return;
           }
           this.duration = durationMinutes * 60;
@@ -2879,36 +2981,45 @@
           this.saveState();
           this.showFloating();
           this.startTicking();
-          this.chatBot.typeMessage(`⏳ Pomodoro de ${durationMinutes} minutos iniciado! Foque nos estudos.`);
-          if (Notification.permission === "granted") {
-            new Notification("StudyFlow - Pomodoro iniciado", {
-              body: `Foque por ${durationMinutes} minutos. Você será notificado ao final.`
-            });
+          this.updateButtons();
+          if (!fromBroadcast) {
+            this.chatBot.typeMessage(`⏳ Pomodoro de ${durationMinutes} minutos iniciado! Foque nos estudos.`);
+            if (Notification.permission === "granted") {
+              new Notification("StudyFlow - Pomodoro iniciado", {
+                body: `Foque por ${durationMinutes} minutos. Você será notificado ao final.`
+              });
+            }
+            // Broadcast para outras janelas
+            this.channel.postMessage({ action: 'start', duration: durationMinutes, sender: this.windowId });
           }
         }
 
-        pause() {
+        pause(fromBroadcast = false) {
           if (!this.active || this.paused) return;
           this.paused = true;
-          this.pauseBtn.style.display = 'none';
-          this.resumeBtn.style.display = 'flex';
+          this.updateButtons();
           document.title = '⏸️ Pomodoro pausado - StudyFlow';
           this.saveState();
+          if (!fromBroadcast) {
+            this.channel.postMessage({ action: 'pause', sender: this.windowId });
+          }
         }
 
-        resume() {
+        resume(fromBroadcast = false) {
           if (!this.active || !this.paused) return;
           // Recalcula startTime para que a diferença seja correta
           const elapsed = this.duration - this.remaining;
           this.startTime = Date.now() - elapsed * 1000;
           this.paused = false;
-          this.pauseBtn.style.display = 'flex';
-          this.resumeBtn.style.display = 'none';
+          this.updateButtons();
           // título será atualizado no próximo tick
           this.saveState();
+          if (!fromBroadcast) {
+            this.channel.postMessage({ action: 'resume', sender: this.windowId });
+          }
         }
 
-        cancel() {
+        cancel(fromBroadcast = false) {
           this.active = false;
           this.paused = false;
           this.startTime = null;
@@ -2921,14 +3032,17 @@
           window.lastPomodoroDuration = null;
           localStorage.removeItem("pomodoroCompleted");
           localStorage.removeItem("lastPomodoroDuration");
-          this.chatBot.typeMessage("Pomodoro cancelado.");
+          if (!fromBroadcast) {
+            this.chatBot.typeMessage("Pomodoro cancelado.");
+            this.channel.postMessage({ action: 'cancel', sender: this.windowId });
+          }
         }
 
-        complete() {
+        complete(fromBroadcast = false) {
           if (!this.active) return;
           const realSeconds = Math.floor((Date.now() - this.startTime) / 1000);
           const realMinutes = Math.floor(realSeconds / 60);
-          this.finish(false, realMinutes);
+          this.finish(false, realMinutes, fromBroadcast);
         }
 
         startTicking() {
@@ -2997,6 +3111,8 @@
               this.minimizeBtn.style.display = 'inline-block';
               this.expandBtn.style.display = 'none';
             }
+
+            this.updateButtons();
           }
         }
 
@@ -3022,7 +3138,7 @@
           }
         }
 
-        finish(silent = false, realMinutes = null) {
+        finish(silent = false, realMinutes = null, fromBroadcast = false) {
           if (!silent) this.playSound();
           this.active = false;
           this.paused = false;
@@ -3038,9 +3154,16 @@
           localStorage.setItem("pomodoroCompleted", "true");
           localStorage.setItem("lastPomodoroDuration", durationMinutes.toString());
 
-          // Abrir modal de registro padrão
-          if (this.chatBot) {
+          if (!fromBroadcast) {
+            this.channel.postMessage({ action: 'complete', sender: this.windowId });
+          }
+
+          // Abrir modal de registro padrão (apenas na janela principal, não na PiP)
+          if (this.chatBot && !this.isPipWindow) {
             this.chatBot.openRegisterModal();
+          } else if (this.isPipWindow) {
+            // Se for PiP, não abrir modal, apenas confiar que a principal abrirá
+            // (já enviamos broadcast, a principal receberá e abrirá)
           }
         }
       };
@@ -6138,9 +6261,29 @@
       setModuleData(key, data) {
         try {
           localStorage.setItem(key, JSON.stringify(data));
+          // Mantém consistência com profiles quando atualiza 'disciplines'
+          if (key === 'disciplines') {
+            this.syncProfilesWithDisciplines(data);
+          }
           return true;
         } catch (e) {
           return false;
+        }
+      }
+
+      // NOVO: sincroniza profiles com disciplines
+      syncProfilesWithDisciplines(disciplinesData) {
+        try {
+          const profiles = JSON.parse(localStorage.getItem('profiles')) || { active: 'Personalizado', data: {} };
+          const activeProfile = profiles.active;
+          if (profiles.data[activeProfile]) {
+            profiles.data[activeProfile] = disciplinesData;
+            localStorage.setItem('profiles', JSON.stringify(profiles));
+          } else {
+            console.warn('Active profile not found in profiles data');
+          }
+        } catch (e) {
+          console.error('Error syncing profiles with disciplines', e);
         }
       }
       
@@ -7956,7 +8099,9 @@
 
         // Preparar arrays para gráficos
         const labels = [];
-        const barData = [];
+        let feitasData = [];
+        let acertosData = [];
+        const barData = []; // para outras abas
         const donutData = {};
 
         for (let [dateStr, data] of dateMap) {
@@ -7985,7 +8130,8 @@
               totalQuestoes += q.feitas || 0;
               totalAcertos += (q.feitas - q.erradas) || 0;
             });
-            barData.push(totalQuestoes);
+            feitasData.push(totalQuestoes);
+            acertosData.push(totalAcertos);
             // Donut: acertos vs erros
             let totalErros = totalQuestoes - totalAcertos;
             donutData['Acertos'] = (donutData['Acertos'] || 0) + totalAcertos;
@@ -8012,31 +8158,65 @@
         // Renderizar gráfico de barras
         const barCtx = document.getElementById('barChart').getContext('2d');
         if (window.barChartInstance) window.barChartInstance.destroy();
-        window.barChartInstance = new Chart(barCtx, {
-          type: 'bar',
-          data: {
-            labels: labels,
-            datasets: [{
-              label: this.getBarLabel(),
-              data: barData,
-              backgroundColor: this.currentStatsTab === 'questions' ? '#3B82F6' : 
-                               this.currentStatsTab === 'theory' ? '#22C55E' : 
-                               this.currentStatsTab === 'anki' ? '#EF4444' : '#4F5BFF',
-              borderRadius: 6
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: { display: false }
+        
+        if (this.currentStatsTab === 'questions') {
+          window.barChartInstance = new Chart(barCtx, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  label: 'Feitas',
+                  data: feitasData,
+                  backgroundColor: '#3B82F6',
+                  borderRadius: 6
+                },
+                {
+                  label: 'Acertadas',
+                  data: acertosData,
+                  backgroundColor: '#22C55E',
+                  borderRadius: 6
+                }
+              ]
             },
-            scales: {
-              y: { beginAtZero: true, grid: { color: 'var(--border-light)' }, ticks: { color: 'var(--text-tertiary)' } },
-              x: { grid: { display: false }, ticks: { color: 'var(--text-tertiary)' } }
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: true, position: 'top', labels: { color: 'var(--text-primary)' } }
+              },
+              scales: {
+                y: { beginAtZero: true, grid: { color: 'var(--border-light)' }, ticks: { color: 'var(--text-tertiary)' } },
+                x: { grid: { display: false }, ticks: { color: 'var(--text-tertiary)' } }
+              }
             }
-          }
-        });
+          });
+        } else {
+          window.barChartInstance = new Chart(barCtx, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: this.getBarLabel(),
+                data: barData,
+                backgroundColor: this.currentStatsTab === 'theory' ? '#22C55E' : 
+                                 this.currentStatsTab === 'anki' ? '#EF4444' : '#4F5BFF',
+                borderRadius: 6
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false }
+              },
+              scales: {
+                y: { beginAtZero: true, grid: { color: 'var(--border-light)' }, ticks: { color: 'var(--text-tertiary)' } },
+                x: { grid: { display: false }, ticks: { color: 'var(--text-tertiary)' } }
+              }
+            }
+          });
+        }
 
         // Renderizar gráfico de rosca
         const donutCtx = document.getElementById('donutChart').getContext('2d');
